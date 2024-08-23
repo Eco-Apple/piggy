@@ -9,7 +9,7 @@ import Foundation
 
 struct ExpenseItem: Identifiable, Codable {
     var id = UUID()
-    var amount: Double
+    var amount: Decimal
     var reasonForExpense: String
     var createdDate: Date
     var updateDate: Date

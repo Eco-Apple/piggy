@@ -10,7 +10,7 @@ import SwiftUI
 struct AddExpenseView: View {
     @Environment(\.dismiss) var dismiss
     
-    @State var amount = 0.0
+    @State var amount: Decimal = 0.0
     @State var reasonForExpense = ""
     
     @State var isConfirmAlertPresented = false
@@ -20,8 +20,7 @@ struct AddExpenseView: View {
     var body: some View {
         NavigationStack {
             Form {
-                TextField("Amount", value: $amount, formatter: .currencyWithSeparator   )
-                    .keyboardType(.decimalPad)
+                CurrencyField("Amount", value: $amount)
                 TextField("Reason for expense", text: $reasonForExpense)
             }
             .navigationTitle("Add Expense")
