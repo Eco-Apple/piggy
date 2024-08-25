@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var isAddViewPresented = false
     @State private var expenses = Expenses()
     
     var body: some View {
@@ -16,7 +17,9 @@ struct HomeView: View {
                 if expenses.items.isNotEmpty{
                     List {
                         ForEach(expenses.items) { expense in
-                            ExpenseView(expense)
+                            NavigationLink(value: expense) {
+                                ExpensListItemView(expense)
+                            }
                         }
                         .onDelete(perform: { indexSet in
                             expenses.items.remove(atOffsets: indexSet)
@@ -31,13 +34,18 @@ struct HomeView: View {
             .navigationTitle("Budget Tracker")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink {
-                        AddExpenseView(expenses: expenses)
-                    } label: {
-                        Image(systemName: "plus")
+                    Button("Add button", systemImage: "plus") {
+                        isAddViewPresented = true
                     }
                 }
             }
+            .sheet(isPresented: $isAddViewPresented) {
+                AddExpenseView(expenses: $expenses)
+            }
+            .navigationDestination(for: ExpenseItem.self) { item in
+                ExpenseView(expenses: $expenses, item: item)
+            }
+            
 
         }
     }
