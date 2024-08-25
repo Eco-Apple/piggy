@@ -10,12 +10,11 @@ import SwiftUI
 struct ExpenseView: View {
     @Environment(\.dismiss) var dismiss
     
-    @Binding var expenses: Expenses
-    var item: ExpenseItem
-    
     @State private var name: String = ""
     @State private var description: String = ""
     @State private var amount: Decimal = 0.0
+    
+    @Bindable var expense: Expense
     
     var currencySymbol = Locale.current.currencySymbol ?? ""
     
@@ -34,16 +33,10 @@ struct ExpenseView: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save") {
-                    
-                    if let i = expenses.items.firstIndex(of: item) {
-                        var expense = item
-                        expense.name = name
-                        expense.description = description
-                        expense.amount = amount
-                        expense.updateDate = Date()
-                        expenses.items[i] = expense
-                    }
-                    
+                    expense.name = name
+                    expense.desc = description
+                    expense.amount = amount
+                    expense.updateDate = Date()
                     dismiss()
                 }
                 .disabled(isSaveDisabled())
@@ -56,21 +49,27 @@ struct ExpenseView: View {
         }
     }
     
-    init(expenses: Binding<Expenses>, item: ExpenseItem) {
-        self._expenses = expenses
-        self.item = item
+    init(_ expense: Expense) {
+        self.expense = expense
         
-        self._name = State(initialValue: item.name)
-        self._description = State(initialValue: item.description)
-        self._amount = State(initialValue: item.amount)
+        self._name = State(initialValue: expense.name)
+        self._description = State(initialValue: expense.desc)
+        self._amount = State(initialValue: expense.amount)
     }
     
     func isSaveDisabled() -> Bool{
-        name == item.name && description == item.description && amount == item.amount
+        if name == expense.name && description == expense.desc && amount == expense.amount {
+            return true
+        }
+        if name.isEmpty || description.isEmpty || amount <= 0 {
+            return true
+        }
+        
+        return false
     }
+    
 }
 
 #Preview {
-    @State var expenses = Expenses()
-    return ExpenseView(expenses: $expenses, item: ExpenseItem(name: "Test", description: "Test", amount: 10, createdDate: Date(), updateDate: Date()))
+    return ExpenseView(Expense(name: "Book", desc: "Buying book", amount: 150.0, createdDate: Date(), updateDate: Date()))
 }

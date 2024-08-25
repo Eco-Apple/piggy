@@ -5,25 +5,31 @@
 //  Created by Jerico Villaraza on 8/1/24.
 //
 
+import SwiftData
 import SwiftUI
 
 struct HomeView: View {
+    @Environment(\.modelContext) var modelContext
+    @Query var expenses: [Expense]
+    
     @State private var isAddViewPresented = false
-    @State private var expenses = Expenses()
     
     var body: some View {
         NavigationStack {
             VStack {
-                if expenses.items.isNotEmpty{
+                if expenses.isNotEmpty{
                     List {
-                        ForEach(expenses.items) { expense in
+                        ForEach(expenses) { expense in
                             NavigationLink(value: expense) {
-                                ExpensListItemView(expense)
+                                ExpensListItemView(expense: expense)
                             }
                         }
-                        .onDelete(perform: { indexSet in
-                            expenses.items.remove(atOffsets: indexSet)
-                        })
+                        .onDelete { offsets in
+                            for index in offsets {
+                                let expense = expenses[index]
+                                modelContext.delete(expense)
+                            }
+                        }
                     }
                 } else {
                     Text("No expenses")
@@ -40,10 +46,10 @@ struct HomeView: View {
                 }
             }
             .sheet(isPresented: $isAddViewPresented) {
-                AddExpenseView(expenses: $expenses)
+                AddExpenseView()
             }
-            .navigationDestination(for: ExpenseItem.self) { item in
-                ExpenseView(expenses: $expenses, item: item)
+            .navigationDestination(for: Expense.self) { expense in
+                ExpenseView(expense)
             }
             
 

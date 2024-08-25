@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AddExpenseView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.modelContext) var modelContext
     
     @State var name: String = ""
     @State var description: String = ""
@@ -16,7 +17,6 @@ struct AddExpenseView: View {
     
     @State var isConfirmAlertPresented: Bool = false
     
-    @Binding var expenses: Expenses
     
     var currencySymbol = Locale.current.currencySymbol ?? ""
     
@@ -49,9 +49,9 @@ struct AddExpenseView: View {
                     title: Text("Add Item"),
                     message: Text("Are you sure do you want this expense ?"),
                     primaryButton: .default(Text("Yes")) {
-                        let expense = ExpenseItem(name: name, description: description, amount: amount, createdDate: Date(), updateDate: Date())
+                        let newExpense = Expense(name: name, desc: description, amount: amount, createdDate: Date(), updateDate: Date())
                         
-                        expenses.items.append(expense)
+                        modelContext.insert(newExpense)
                         dismiss()
                     },
                     secondaryButton: .cancel()
@@ -66,6 +66,5 @@ struct AddExpenseView: View {
 }
 
 #Preview {
-    @State var expenses = Expenses()
-    return AddExpenseView(expenses: $expenses)
+    return AddExpenseView()
 }
