@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct ExpenseView: View {
+struct ExpensListItemView: View {
     var expenseItem: ExpenseItem
     
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(expenseItem.reasonForExpense)
+                Text(expenseItem.name)
                     .font(.headline)
                 Text(expenseItem.createdDate.formattedDate)
                     .font(.caption)
@@ -30,5 +30,5 @@ struct ExpenseView: View {
 }
 
 #Preview {
-    ExpenseView(ExpenseItem(amount: 40, reasonForExpense: "Test", createdDate: Date(), updateDate: Date()))
+    ExpensListItemView(ExpenseItem(name: "Test", description: "...", amount: 40, createdDate: Date(), updateDate: Date()))
 }

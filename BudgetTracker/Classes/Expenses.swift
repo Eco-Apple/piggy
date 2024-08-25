@@ -7,6 +7,7 @@
 
 import Foundation
 
+//TODO: Improve this to use SwiftData instead of UserDefaults
 @Observable
 class Expenses {
     var items = [ExpenseItem]() {
