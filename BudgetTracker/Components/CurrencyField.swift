@@ -19,7 +19,7 @@ struct CurrencyField: View {
         TextField(title, text: $text)
             .keyboardType(.decimalPad)
             .onChange(of: text) { oldValue, newValue in
-                var new = newValue.replacingOccurrences(of: currencySymbol, with: "")
+                let new = newValue.replacingOccurrences(of: currencySymbol, with: "")
                 
                 if let formattedString = new.toDecimalWithCommaSeparator {
                     text = currencySymbol + formattedString
