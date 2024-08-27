@@ -15,9 +15,6 @@ struct AddExpenseView: View {
     @State var description: String = ""
     @State var amount: Decimal = 0.0
     
-    @State var isConfirmAlertPresented: Bool = false
-    
-    
     var currencySymbol = Locale.current.currencySymbol ?? ""
     
     var body: some View {
@@ -35,7 +32,10 @@ struct AddExpenseView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Confirm") {
-                        isConfirmAlertPresented = true
+                        let newExpense = Expense(name: name, desc: description, amount: amount, createdDate: Date(), updateDate: Date())
+                        
+                        modelContext.insert(newExpense)
+                        dismiss()
                     }.disabled(isConfirmDisabled())
                 }
                 ToolbarItem(placement: .cancellationAction) {
@@ -43,21 +43,7 @@ struct AddExpenseView: View {
                         dismiss()
                     }
                 }
-            }
-            .alert(isPresented: $isConfirmAlertPresented){
-                Alert(
-                    title: Text("Add Item"),
-                    message: Text("Are you sure do you want this expense ?"),
-                    primaryButton: .default(Text("Yes")) {
-                        let newExpense = Expense(name: name, desc: description, amount: amount, createdDate: Date(), updateDate: Date())
-                        
-                        modelContext.insert(newExpense)
-                        dismiss()
-                    },
-                    secondaryButton: .cancel()
-                )
-            }
-        }
+            }        }
     }
     
     func isConfirmDisabled() -> Bool {

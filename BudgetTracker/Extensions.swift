@@ -7,6 +7,12 @@
 
 import Foundation
 
+extension Array where Element: Expense {
+    func filterByDate(of date: Date) -> [Expense] {
+        let current = Calendar.current
+        return self.filter { current.startOfDay(for: $0.createdDate) == current.startOfDay(for: date) }
+    }
+}
 
 extension Collection {
     var isNotEmpty: Bool {
@@ -69,12 +75,39 @@ extension String {
 }
 
 extension Date {
-    var formattedDate: String {
+    enum DateStyle {
+        case dateOnly
+        case timeOnly
+        case dateAndTime
+    }
+
+    func format(_ dateStyle: DateStyle, descriptive: Bool = false) -> String {
         let formatter = DateFormatter()
         
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
+        let calendar = Calendar.current
         
-        return formatter.string(from: self)
+        if descriptive {
+            if calendar.startOfDay(for: self) == calendar.startOfDay(for: Date.now) {
+                return "Today"
+            }
+            
+            if calendar.startOfDay(for: self) == calendar.startOfDay(for: Calendar.current.date(byAdding: .day, value: -1, to: Date.now)!) {
+                return "Yesterday"
+            }
+        }
+        
+        switch dateStyle {
+        case .dateAndTime:
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .short
+            return formatter.string(from: self)
+        case .dateOnly:
+            formatter.dateStyle = .medium
+            return formatter.string(from: self)
+        case .timeOnly:
+            formatter.timeStyle = .short
+            return formatter.string(from: self)
+        }
     }
 }
+

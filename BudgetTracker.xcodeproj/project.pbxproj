@@ -19,6 +19,7 @@
 		20E3AC9B2C679CBF00D53664 /* ExpenseListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E3AC9A2C679CBF00D53664 /* ExpenseListItemView.swift */; };
 		20E3AC9E2C67A33E00D53664 /* Expenses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E3AC9D2C67A33E00D53664 /* Expenses.swift */; };
 		20E3ACA12C67A38000D53664 /* ExpenseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E3ACA02C67A38000D53664 /* ExpenseItem.swift */; };
+		20E5660D2C7E26CF0008CD79 /* ExpenseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E5660C2C7E26CF0008CD79 /* ExpenseListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		20E3AC9A2C679CBF00D53664 /* ExpenseListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseListItemView.swift; sourceTree = "<group>"; };
 		20E3AC9D2C67A33E00D53664 /* Expenses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expenses.swift; sourceTree = "<group>"; };
 		20E3ACA02C67A38000D53664 /* ExpenseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseItem.swift; sourceTree = "<group>"; };
+		20E5660C2C7E26CF0008CD79 /* ExpenseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 			children = (
 				20E3AC9A2C679CBF00D53664 /* ExpenseListItemView.swift */,
 				20D0A1802C787BF60054DE5B /* CurrencyField.swift */,
+				20E5660C2C7E26CF0008CD79 /* ExpenseListView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -212,6 +215,7 @@
 				20E3ACA12C67A38000D53664 /* ExpenseItem.swift in Sources */,
 				20E3AC9E2C67A33E00D53664 /* Expenses.swift in Sources */,
 				2002BD212C7AC43600BB3C6F /* ExpenseView.swift in Sources */,
+				20E5660D2C7E26CF0008CD79 /* ExpenseListView.swift in Sources */,
 				20D0A1812C787BF60054DE5B /* CurrencyField.swift in Sources */,
 				202210BE2C7B86FA0044CEA4 /* Expense.swift in Sources */,
 				20E3AC9B2C679CBF00D53664 /* ExpenseListItemView.swift in Sources */,
