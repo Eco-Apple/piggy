@@ -31,7 +31,6 @@ struct CurrencyField: View {
     init(_ title: String, value: Binding<Decimal>) {
         self.title = title
         self._value = value
-        self._text = State(initialValue: currencySymbol + (value.wrappedValue.toStringWithCommaSeparator ?? ""))
     }
     
     

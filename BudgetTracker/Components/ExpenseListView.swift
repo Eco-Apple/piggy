@@ -9,7 +9,11 @@ import SwiftData
 import SwiftUI
 
 struct ExpenseSectionListView: View {
+    @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
+    
+    @State private var isAlertPresented = false
+    @State private var expensesToDelete: [Expense] = []
     
     var createDate: Date
     var filteredExpenses: [Expense]
@@ -23,12 +27,27 @@ struct ExpenseSectionListView: View {
                 }
             }
             .onDelete { offsets in
+                expensesToDelete = []
                 for index in offsets {
                     let expense = filteredExpenses[index]
-                    modelContext.delete(expense)
+                    isAlertPresented = true
+                    expensesToDelete.append(expense)
                 }
             }
-
+            .alert(isPresented: $isAlertPresented){
+                Alert(
+                    title: Text("Are you sure you want to delete \(filteredExpenses.getPluralSuffix(singular: "this", plural: "these")) expense\(filteredExpenses.getPluralSuffix(singular: "", plural: "s"))?"),
+                    message: Text("You cannot undo this action once done."),
+                    primaryButton: .destructive(Text("Delete")) {
+                        for expense in expensesToDelete {
+                            modelContext.delete(expense)
+                        }
+                        
+                        dismiss()
+                    },
+                    secondaryButton: .cancel()
+                )
+            }
         }
     }
 }

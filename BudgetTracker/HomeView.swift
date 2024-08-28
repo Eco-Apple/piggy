@@ -17,6 +17,9 @@ struct HomeView: View {
             }
             .navigationTitle("Budget Tracker")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    EditButton()
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Add button", systemImage: "plus") {
                         isAddViewPresented = true
