@@ -10,7 +10,6 @@ import SwiftData
 
 @Model
 class Expense {
-    var id: UUID
     var name: String
     var desc: String
     var amount: Decimal
@@ -18,7 +17,6 @@ class Expense {
     var updateDate: Date
     
     init(name: String, desc: String, amount: Decimal, createdDate: Date, updateDate: Date) {
-        self.id = UUID()
         self.name = name
         self.desc = desc
         self.amount = amount

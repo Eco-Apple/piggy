@@ -7,13 +7,6 @@
 
 import Foundation
 
-extension Array where Element: Expense {
-    func filterByDate(of date: Date) -> [Expense] {
-        let current = Calendar.current
-        return self.filter { current.startOfDay(for: $0.createdDate) == current.startOfDay(for: date) }
-    }
-}
-
 extension Array {
     func getPluralSuffix(singular: String, plural: String) -> String {
         self.count > 1 ? plural : singular
