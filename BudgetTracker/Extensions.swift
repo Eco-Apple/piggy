@@ -7,6 +7,8 @@
 
 import Foundation
 
+//extension Array where Element: Expense {}
+
 extension Array {
     func getPluralSuffix(singular: String, plural: String) -> String {
         self.count > 1 ? plural : singular
