@@ -13,20 +13,23 @@ fileprivate struct ExpenseSectionListViewWrapper: View {
     
     var sortDescriptors: [SortDescriptor<Expense>]
     
+    @Binding var path: NavigationPath
+    
     @State var filterDate: Date
     @State var limit: Int
     
     private var initialLimitValue: Int
     
     var body: some View {
-        ExpenseSectionListView(of: filterDate, sortDescriptors: sortDescriptors, limit: $limit, initialLimitValue: initialLimitValue)
+        ExpenseSectionListView(of: filterDate, limit: $limit, path: $path, sortDescriptors: sortDescriptors, initialLimitValue: initialLimitValue)
     }
     
-    init(of filterDate: Date, sortDescriptors: [SortDescriptor<Expense>], limit: Int) {
+    init(of filterDate: Date, sortDescriptors: [SortDescriptor<Expense>], limit: Int, path: Binding<NavigationPath>) {
         self.filterDate = filterDate
         self.sortDescriptors = sortDescriptors
         self.limit = limit
         self.initialLimitValue = limit
+        self._path = path
     }
 }
 
@@ -36,11 +39,14 @@ fileprivate struct ExpenseSectionListView: View {
     
     @Query var expenses: [Expense]
     
+    @Binding private var limit: Int
+    @Binding var path: NavigationPath
+    
     @State private var isAlertPresented = false
     @State private var expensesToDelete: [Expense] = []
     
-    @Binding private var limit: Int
-    private var limitToExpand: Int = 10
+    
+    private var limitToExpand: Int = 4 // default 10
     
     var initialLimitValue: Int
     
@@ -76,31 +82,19 @@ fileprivate struct ExpenseSectionListView: View {
                         secondaryButton: .cancel()
                     )
                 }
-                if expenses.count > limit {
+                if expenses.count > limit || expenses.count > initialLimitValue {
                     Button(action: {
-                        withAnimation {
-                            if limit != limitToExpand {
-                                limit = limitToExpand
-                                return
+                        if expenses.count <= limitToExpand {
+                            withAnimation {
+                                if limit != limitToExpand {
+                                    limit = limitToExpand
+                                } else if limit == limitToExpand {
+                                    limit = initialLimitValue
+                                }
                             }
-                            
-                            if limit == limitToExpand {
-                                limit = initialLimitValue
-                                return
-                            }
+                        } else if expenses.count > limitToExpand {
+                            path.append(expenses)
                         }
-                        // TODO: Prepare navigation
-                        //                        if expenses.count <= limitToExpand {
-                        //                            limit = limitToExpand
-                        //
-                        //                            return
-                        //                        }
-                        //
-                        //                        if expenses.count > limitToExpand {
-                        //                            // navigate
-                        //                            return
-                        //                        }
-                        
                     }) {
                         Text(limit != limitToExpand ? "See More" : "See Less")
                             .font(.subheadline)
@@ -112,10 +106,11 @@ fileprivate struct ExpenseSectionListView: View {
         }
     }
     
-    init(of filterDate: Date, sortDescriptors: [SortDescriptor<Expense>], limit: Binding<Int>, initialLimitValue: Int) {
+    init(of filterDate: Date, limit: Binding<Int>, path: Binding<NavigationPath>, sortDescriptors: [SortDescriptor<Expense>], initialLimitValue: Int) {
         self.filterDate = filterDate
         self.initialLimitValue = initialLimitValue
         self._limit = limit
+        self._path = path
         
         let normalizedDate = Calendar.current.startOfDay(for: filterDate)
         let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: normalizedDate)!
@@ -134,6 +129,9 @@ fileprivate struct ExpenseSectionListView: View {
 struct ExpenseListView: View {
     @Environment(\.modelContext) var modelContext
     @Query var expenses: [Expense]
+    
+    @Binding var path: NavigationPath
+    
     var sortDescriptors: [SortDescriptor<Expense>]
     
     let sectionsDate: [Date] = [
@@ -145,10 +143,10 @@ struct ExpenseListView: View {
     var body: some View {
         if expenses.isNotEmpty{
             List {
-                ExpenseSectionListViewWrapper(of: Date.now, sortDescriptors: sortDescriptors, limit: 5)
-                ExpenseSectionListViewWrapper(of: Calendar.current.date(byAdding: .day, value: -1, to: Date.now)!, sortDescriptors: sortDescriptors, limit: 3)
+                ExpenseSectionListViewWrapper(of: Date.now, sortDescriptors: sortDescriptors, limit: 2 /* default 5 */, path: $path)
+                ExpenseSectionListViewWrapper(of: Calendar.current.date(byAdding: .day, value: -1, to: Date.now)!, sortDescriptors: sortDescriptors, limit: 3, path: $path)
                 ForEach(sectionsDate, id: \.self) { date in
-                    ExpenseSectionListViewWrapper(of: date, sortDescriptors: sortDescriptors, limit: 3)
+                    ExpenseSectionListViewWrapper(of: date, sortDescriptors: sortDescriptors, limit: 3, path: $path)
                 }
             }
         } else {
@@ -160,5 +158,5 @@ struct ExpenseListView: View {
 }
 
 #Preview {
-    ExpenseListView(sortDescriptors: [SortDescriptor(\Expense.name)])
+    ExpenseListView(path: .constant(NavigationPath()), sortDescriptors: [SortDescriptor(\Expense.name)])
 }

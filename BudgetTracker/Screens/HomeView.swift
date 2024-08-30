@@ -15,16 +15,15 @@ struct HomeView: View {
         SortDescriptor(\Expense.name)
     ]
     
+    @State private var path = NavigationPath()
+    
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             VStack {
-                ExpenseListView(sortDescriptors: sortDescriptors)
+                ExpenseListView(path: $path, sortDescriptors: sortDescriptors)
             }
             .navigationTitle("Budget Tracker")
             .toolbar {
-//                ToolbarItem(placement: .topBarLeading) {
-//                    EditButton()
-//                }
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Menu("Sort", systemImage: "arrow.up.arrow.down") {
                         Picker("Sort", selection: $sortDescriptors){
@@ -51,8 +50,10 @@ struct HomeView: View {
             }
             .navigationDestination(for: Expense.self) { expense in
                 ExpenseView(expense)
+            }            
+            .navigationDestination(for: [Expense].self) { expenses in
+                SeeMoreView()
             }
-            
 
         }
     }
