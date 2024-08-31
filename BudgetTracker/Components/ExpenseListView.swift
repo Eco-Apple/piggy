@@ -12,41 +12,38 @@ import SwiftUI
 fileprivate struct ExpenseSectionListViewWrapper: View {
     
     var sortDescriptors: [SortDescriptor<Expense>]
-    
-    @Binding var path: NavigationPath
-    
+        
     @State var filterDate: Date
     @State var limit: Int
     
     private var initialLimitValue: Int
     
     var body: some View {
-        ExpenseSectionListView(of: filterDate, limit: $limit, path: $path, sortDescriptors: sortDescriptors, initialLimitValue: initialLimitValue)
+        ExpenseSectionListView(of: filterDate, limit: $limit, sortDescriptors: sortDescriptors, initialLimitValue: initialLimitValue)
     }
     
-    init(of filterDate: Date, sortDescriptors: [SortDescriptor<Expense>], limit: Int, path: Binding<NavigationPath>) {
+    init(of filterDate: Date, sortDescriptors: [SortDescriptor<Expense>], limit: Int) {
         self.filterDate = filterDate
         self.sortDescriptors = sortDescriptors
         self.limit = limit
         self.initialLimitValue = limit
-        self._path = path
     }
 }
 
 fileprivate struct ExpenseSectionListView: View {
+    @Environment(\.navigate) private var navigate
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     
     @Query var expenses: [Expense]
     
     @Binding private var limit: Int
-    @Binding var path: NavigationPath
     
     @State private var isAlertPresented = false
     @State private var expensesToDelete: [Expense] = []
     
     
-    private var limitToExpand: Int = 4 // default 10
+    private var limitToExpand: Int = 4 // default 10; test 4
     
     var initialLimitValue: Int
     
@@ -56,7 +53,7 @@ fileprivate struct ExpenseSectionListView: View {
         if expenses.isNotEmpty {
             Section(filterDate.format(.dateOnly, descriptive: true)) {
                 ForEach(expenses.prefix(limit)) { expense in
-                    NavigationLink(value: expense) {
+                    NavigationLink(value: NavigationRoute.expense(.detail(expense))) {
                         ExpensListItemView(expense: expense)
                     }
                 }
@@ -93,7 +90,7 @@ fileprivate struct ExpenseSectionListView: View {
                                 }
                             }
                         } else if expenses.count > limitToExpand {
-                            path.append(expenses)
+                            navigate(.expense(.seeMore(filterDate, expenses)))
                         }
                     }) {
                         Text(limit != limitToExpand ? "See More" : "See Less")
@@ -106,11 +103,10 @@ fileprivate struct ExpenseSectionListView: View {
         }
     }
     
-    init(of filterDate: Date, limit: Binding<Int>, path: Binding<NavigationPath>, sortDescriptors: [SortDescriptor<Expense>], initialLimitValue: Int) {
+    init(of filterDate: Date, limit: Binding<Int>, sortDescriptors: [SortDescriptor<Expense>], initialLimitValue: Int) {
         self.filterDate = filterDate
         self.initialLimitValue = initialLimitValue
         self._limit = limit
-        self._path = path
         
         let normalizedDate = Calendar.current.startOfDay(for: filterDate)
         let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: normalizedDate)!
@@ -130,8 +126,6 @@ struct ExpenseListView: View {
     @Environment(\.modelContext) var modelContext
     @Query var expenses: [Expense]
     
-    @Binding var path: NavigationPath
-    
     var sortDescriptors: [SortDescriptor<Expense>]
     
     let sectionsDate: [Date] = [
@@ -143,10 +137,10 @@ struct ExpenseListView: View {
     var body: some View {
         if expenses.isNotEmpty{
             List {
-                ExpenseSectionListViewWrapper(of: Date.now, sortDescriptors: sortDescriptors, limit: 2 /* default 5 */, path: $path)
-                ExpenseSectionListViewWrapper(of: Calendar.current.date(byAdding: .day, value: -1, to: Date.now)!, sortDescriptors: sortDescriptors, limit: 3, path: $path)
+                ExpenseSectionListViewWrapper(of: Date.now, sortDescriptors: sortDescriptors, limit: 2 /* default 5; test 2 */)
+                ExpenseSectionListViewWrapper(of: Calendar.current.date(byAdding: .day, value: -1, to: Date.now)!, sortDescriptors: sortDescriptors, limit: 3)
                 ForEach(sectionsDate, id: \.self) { date in
-                    ExpenseSectionListViewWrapper(of: date, sortDescriptors: sortDescriptors, limit: 3, path: $path)
+                    ExpenseSectionListViewWrapper(of: date, sortDescriptors: sortDescriptors, limit: 3)
                 }
             }
         } else {
@@ -158,5 +152,5 @@ struct ExpenseListView: View {
 }
 
 #Preview {
-    ExpenseListView(path: .constant(NavigationPath()), sortDescriptors: [SortDescriptor(\Expense.name)])
+    ExpenseListView(sortDescriptors: [SortDescriptor(\Expense.name)])
 }

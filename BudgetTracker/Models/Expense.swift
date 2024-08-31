@@ -24,3 +24,9 @@ class Expense {
         self.updateDate = updateDate
     }
 }
+
+extension Expense {
+    static var previewItem: Expense {
+        Expense(name: "Shopping", desc: "Monthly shopping", amount: 100.0, createdDate: .now, updateDate: .now)
+    }
+}

@@ -15,12 +15,10 @@ struct HomeView: View {
         SortDescriptor(\Expense.name)
     ]
     
-    @State private var path = NavigationPath()
-    
     var body: some View {
-        NavigationStack(path: $path) {
+        Navigation {
             VStack {
-                ExpenseListView(path: $path, sortDescriptors: sortDescriptors)
+                ExpenseListView(sortDescriptors: sortDescriptors)
             }
             .navigationTitle("Budget Tracker")
             .toolbar {
@@ -48,13 +46,6 @@ struct HomeView: View {
             .sheet(isPresented: $isAddViewPresented) {
                 AddExpenseView()
             }
-            .navigationDestination(for: Expense.self) { expense in
-                ExpenseView(expense)
-            }            
-            .navigationDestination(for: [Expense].self) { expenses in
-                SeeMoreView()
-            }
-
         }
     }
 }

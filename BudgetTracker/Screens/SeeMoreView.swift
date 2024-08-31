@@ -8,11 +8,21 @@
 import SwiftUI
 
 struct SeeMoreView: View {
+    var date: Date
+    var expenses: [Expense]
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            ForEach(expenses) { expense in
+                NavigationLink(value: NavigationRoute.expense(.detail(expense))) {
+                    ExpensListItemView(expense: expense)
+                }
+            }
+        }
+        .navigationTitle(date.format(.dateOnly, descriptive: true))
     }
 }
 
 #Preview {
-    SeeMoreView()
+    SeeMoreView(date: .now, expenses: [Expense.previewItem])
 }
