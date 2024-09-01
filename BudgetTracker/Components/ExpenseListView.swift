@@ -43,7 +43,7 @@ fileprivate struct ExpenseSectionListView: View {
     @State private var expensesToDelete: [Expense] = []
     
     
-    private var limitToExpand: Int = 10 // default 10; test 4
+    private var limitToExpand: Int = 4 // default 10; test 4
     
     var initialLimitValue: Int
     
@@ -137,7 +137,7 @@ struct ExpenseListView: View {
     var body: some View {
         if expenses.isNotEmpty{
             List {
-                ExpenseSectionListViewWrapper(of: Date.now, sortDescriptors: sortDescriptors, limit: 5 /* default 5; test 2 */)
+                ExpenseSectionListViewWrapper(of: Date.now, sortDescriptors: sortDescriptors, limit: 2 /* default 5; test 2 */)
                 ExpenseSectionListViewWrapper(of: Calendar.current.date(byAdding: .day, value: -1, to: Date.now)!, sortDescriptors: sortDescriptors, limit: 3)
                 ForEach(sectionsDate, id: \.self) { date in
                     ExpenseSectionListViewWrapper(of: date, sortDescriptors: sortDescriptors, limit: 3)
