@@ -15,6 +15,8 @@ struct AddExpenseView: View {
     @State var description: String = ""
     @State var amount: Decimal = 0.0
     
+    @FocusState private var isNameFocus: Bool
+    
     var currencySymbol = Locale.current.currencySymbol ?? ""
     
     var body: some View {
@@ -22,6 +24,7 @@ struct AddExpenseView: View {
             Form {
                 Section("Details") {
                     TextField("Name", text: $name)
+                        .focused($isNameFocus)
                     TextField("Description", text: $description, axis: .vertical)
                 }
                 Section("Amount") {
@@ -43,7 +46,13 @@ struct AddExpenseView: View {
                         dismiss()
                     }
                 }
-            }        }
+            }
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    isNameFocus = true
+                }
+            }
+        }
     }
     
     func isConfirmDisabled() -> Bool {
