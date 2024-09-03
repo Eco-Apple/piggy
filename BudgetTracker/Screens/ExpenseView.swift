@@ -10,6 +10,10 @@ import SwiftUI
 struct ExpenseView: View {
     @Environment(\.dismiss) var dismiss
     
+    @State private var name: String = ""
+    @State private var description: String = ""
+    @State private var amount: Decimal = 0.0
+    
     @State private var isEdit: Bool = false
     
     @Bindable var expense: Expense
@@ -20,27 +24,37 @@ struct ExpenseView: View {
         Form {
             Section("Details") {
                 if isEdit == false {
-                    InfoTextView(label: "Name", text: expense.name)
-                    InfoTextView(label: "Description", text: expense.desc)
+                    InfoTextView(label: "Name", text: name)
+                    InfoTextView(label: "Description", text: description)
                 } else {
-                    TextField("Name", text: $expense.name)
-                    TextField("Description", text: $expense.desc)
+                    TextField("Name", text: $name)
+                    TextField("Description", text: $description)
                 }
                     
             }
             Section("Amount"){
                 if isEdit == false {
-                    Text("\(currencySymbol)\(expense.amount.toStringWithCommaSeparator ?? "")")
+                    Text("\(currencySymbol)\(amount.toStringWithCommaSeparator ?? "")")
                 } else {
-                    CurrencyField("eg. \(currencySymbol)10.00", value: $expense.amount)
+                    CurrencyField("eg. \(currencySymbol)10.00", value: $amount)
                 }
             }
         }
         .navigationTitle("Expense")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button(isEdit ? "Done" : "Edit") {
-                    isEdit.toggle()
+                if isEdit {
+                    Button("Done") {
+                        expense.name = name
+                        expense.desc = description
+                        expense.amount = amount
+                        isEdit.toggle()
+                    }
+                    .disabled(isDoneButtonDisabled())
+                } else if isEdit == false {
+                    Button("Edit" ) {
+                        isEdit.toggle()
+                    }
                 }
             }
         }
@@ -48,6 +62,19 @@ struct ExpenseView: View {
     
     init(_ expense: Expense) {
         self.expense = expense
+        
+        self._name = State(initialValue: expense.name)
+        self._description = State(initialValue: expense.desc)
+        self._amount = State(initialValue: expense.amount)
+    }
+    
+    func isDoneButtonDisabled() -> Bool {
+        
+        guard name.isNotEmpty else { return true }
+        guard description.isNotEmpty else { return true }
+        guard amount >= 0 else { return true }
+        
+        return false
     }
         
 }

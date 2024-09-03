@@ -19,18 +19,39 @@ struct CurrencyField: View {
         TextField(title, text: $text)
             .keyboardType(.decimalPad)
             .onChange(of: text) { oldValue, newValue in
-                let new = newValue.replacingOccurrences(of: currencySymbol, with: "")
+                setStringandFormatValue(of: newValue) { textVal, decimalVal in
+                    text = textVal
+                    value = decimalVal
+                }
+            }
+            .onAppear {                
                 
-                if let formattedString = new.toDecimalWithCommaSeparator {
-                    text = currencySymbol + formattedString
-                    value = Decimal(Double(formattedString.replacingOccurrences(of: ",", with: "")) ?? 0.0)
+                let stringAmount = "\(value)"
+                
+                // expense.amount + 0.001 ? this make sure that amount with no decimals has .00
+                value = stringAmount.contains(".") ? value : value + 0.001
+
+                setStringandFormatValue(of: "\(value)") { textVal, decimalVal in
+                    text = textVal
+                    value = decimalVal
                 }
             }
     }
     
     init(_ title: String, value: Binding<Decimal>) {
         self.title = title
+                
         self._value = value
+    }
+    
+    func setStringandFormatValue(of newValue: String, callback: (String, Decimal) -> Void) {
+        let new = newValue.replacingOccurrences(of: currencySymbol, with: "")
+        
+        if let formattedString = new.toDecimalWithCommaSeparator {
+            let textVal = currencySymbol + formattedString
+            let decimalVal = Decimal(Double(formattedString.replacingOccurrences(of: ",", with: "")) ?? 0.0)
+            callback(textVal, decimalVal)
+        }
     }
     
     
