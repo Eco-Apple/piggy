@@ -25,18 +25,18 @@ struct ExpenseView: View {
             Section("Details") {
                 if isEdit == false {
                     InfoTextView(label: "Name", text: name)
-                    InfoTextView(label: "Description", text: description)
+                    InfoTextView(label: "Amount", currency: amount)
                 } else {
                     TextField("Name", text: $name)
-                    TextField("Description", text: $description)
+                    CurrencyField("eg. \(currencySymbol)10.00", value: $amount)
                 }
                     
             }
-            Section("Amount"){
+            Section("Description"){
                 if isEdit == false {
-                    Text("\(currencySymbol)\(amount.toStringWithCommaSeparator ?? "")")
+                    Text(description)
                 } else {
-                    CurrencyField("eg. \(currencySymbol)10.00", value: $amount)
+                    TextField("Description", text: $description, axis: .vertical)
                 }
             }
         }

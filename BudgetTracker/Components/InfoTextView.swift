@@ -18,6 +18,8 @@ struct InfoTextView: View {
     
     var tags: [String] = []
     
+    var currencySymbol = Locale.current.currencySymbol ?? ""
+    
     var body: some View {
         HStack {
             Text(label)
@@ -30,7 +32,7 @@ struct InfoTextView: View {
                     Text($0)
                 }
             } else {
-                Text( text ?? value ?? status ?? date ??  currency ?? "")
+                Text( text ?? value ?? status ?? date ?? currency ?? "")
                     .foregroundStyle(foregroundStyleOfValue())
             }
         }
@@ -63,7 +65,7 @@ struct InfoTextView: View {
     
     init(label: String, currency: Decimal) {
         self.label = label
-        self.currency = currency.toStringWithCommaSeparator
+        self.currency = currencySymbol + (currency.toStringWithCommaSeparator ?? "")
     }
     
     

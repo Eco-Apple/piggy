@@ -25,10 +25,10 @@ struct AddExpenseView: View {
                 Section("Details") {
                     TextField("Name", text: $name)
                         .focused($isNameFocus)
-                    TextField("Description", text: $description, axis: .vertical)
-                }
-                Section("Amount") {
                     CurrencyField("eg. \(currencySymbol)10.00", value: $amount)
+                }
+                Section("Description") {
+                    TextField("Description", text: $description, axis: .vertical)
                 }
             }
             .navigationTitle("Add Expense")
