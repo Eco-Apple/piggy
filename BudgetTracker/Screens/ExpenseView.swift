@@ -12,7 +12,7 @@ struct ExpenseView: View {
     
     @State private var name: String = ""
     @State private var description: String = ""
-    @State private var amount: Decimal = 0.0
+    @State private var amount: Decimal? = nil
     
     @State private var isEdit: Bool = false
     
@@ -25,7 +25,7 @@ struct ExpenseView: View {
             Section("Details") {
                 if isEdit == false {
                     InfoTextView(label: "Name", text: name)
-                    InfoTextView(label: "Amount", currency: amount)
+                    InfoTextView(label: "Amount", currency: amount!)
                 } else {
                     TextField("Name", text: $name)
                     CurrencyField("eg. \(currencySymbol)10.00", value: $amount)
@@ -47,7 +47,7 @@ struct ExpenseView: View {
                     Button("Done") {
                         expense.name = name
                         expense.desc = description
-                        expense.amount = amount
+                        expense.amount = amount!
                         isEdit.toggle()
                     }
                     .disabled(isDoneButtonDisabled())
@@ -72,7 +72,7 @@ struct ExpenseView: View {
         
         guard name.isNotEmpty else { return true }
         guard description.isNotEmpty else { return true }
-        guard amount >= 0 else { return true }
+        guard let amount, amount >= 0 else { return true }
         
         return false
     }

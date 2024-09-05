@@ -43,9 +43,11 @@ struct InfoTextView: View {
         self.text = text
     }
     
-    init(label: String, value: Int) {
+    init(label: String, value: Int?) {
         self.label = label
-        self.value = String(value)
+        if let value {
+            self.value = String(value)
+        }
     }
     
     init(label: String, status: Bool) {

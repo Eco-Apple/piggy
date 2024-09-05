@@ -13,7 +13,7 @@ struct AddExpenseView: View {
     
     @State var name: String = ""
     @State var description: String = ""
-    @State var amount: Decimal = 0.0
+    @State var amount: Decimal? = nil
     
     @FocusState private var isNameFocus: Bool
     
@@ -35,7 +35,7 @@ struct AddExpenseView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Confirm") {
-                        let newExpense = Expense(name: name, desc: description, amount: amount, createdDate: Date(), updateDate: Date())
+                        let newExpense = Expense(name: name, desc: description, amount: amount!, createdDate: Date(), updateDate: Date())
                         
                         modelContext.insert(newExpense)
                         dismiss()
@@ -56,7 +56,7 @@ struct AddExpenseView: View {
     }
     
     func isConfirmDisabled() -> Bool {
-        name.isEmpty || description.isEmpty || amount <= 0
+        name.isEmpty || description.isEmpty || amount == nil || amount! <= 0
     }
 }
 
