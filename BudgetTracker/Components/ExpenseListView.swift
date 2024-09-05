@@ -144,9 +144,11 @@ struct ExpenseListView: View {
                 }
             }
         } else {
-            Text("No expenses")
-               .foregroundColor(.gray)
-               .font(.headline)
+            ContentUnavailableView {
+                Label("No Expense", systemImage: "tray.fill")
+            } description: {
+                Text("New expenses you added will appear here.")
+            }
         }
     }
 }
