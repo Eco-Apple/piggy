@@ -5,7 +5,14 @@
 //  Created by Jerico Villaraza on 8/25/24.
 //
 
+import SwiftData
 import SwiftUI
+
+/*
+    TODO:
+    - This should be name ExpenseDetailView
+ */
+
 
 struct ExpenseView: View {
     @Environment(\.dismiss) var dismiss
@@ -13,6 +20,7 @@ struct ExpenseView: View {
     @State private var name: String = ""
     @State private var description: String = ""
     @State private var amount: Decimal? = nil
+    @State private var date: Date = .now
     
     @State private var isEdit: Bool = false
     
@@ -24,30 +32,38 @@ struct ExpenseView: View {
         Form {
             Section("Details") {
                 if isEdit == false {
-                    InfoTextView(label: "Name", text: name)
+                    InfoTextView(label: "Title", text: name)
                     InfoTextView(label: "Amount", currency: amount!)
+                    InfoTextView(label: "Date", date: date)
                 } else {
-                    TextField("Name", text: $name)
+                    TextField("Title", text: $name)
                     CurrencyField("eg. \(currencySymbol)10.00", value: $amount)
+                    DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
                 }
                     
             }
-            Section("Description"){
+            Section("Note"){
                 if isEdit == false {
                     Text(description)
+                        .frame(height: 150, alignment: .topLeading)
                 } else {
-                    TextField("Description", text: $description, axis: .vertical)
+                    TextEditor(text: $description)
+                        .frame(height: 150)
+                        .offset(x: -5, y: -8.5)
                 }
             }
         }
         .navigationTitle("Expense")
+        .scrollBounceBehavior(.basedOnSize)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 if isEdit {
                     Button("Done") {
-                        expense.name = name
-                        expense.desc = description
+                        expense.title = name
+                        expense.note = description
                         expense.amount = amount!
+                        expense.date = date
+                        expense.updatedDate = .now
                         isEdit.toggle()
                     }
                     .disabled(isDoneButtonDisabled())
@@ -63,9 +79,10 @@ struct ExpenseView: View {
     init(_ expense: Expense) {
         self.expense = expense
         
-        self._name = State(initialValue: expense.name)
-        self._description = State(initialValue: expense.desc)
+        self._name = State(initialValue: expense.title)
+        self._description = State(initialValue: expense.note)
         self._amount = State(initialValue: expense.amount)
+        self._date = State(initialValue: expense.createdDate)
     }
     
     func isDoneButtonDisabled() -> Bool {
@@ -80,5 +97,14 @@ struct ExpenseView: View {
 }
 
 #Preview {
-    return ExpenseView(Expense(name: "Book", desc: "Buying book", amount: 150.0, createdDate: Date(), updateDate: Date()))
+    do {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: Expense.self, configurations: config)
+        let example = Expense.previewItem
+        
+        return ExpenseView(example)
+            .modelContainer(container)
+    } catch {
+        return Text("Failed to create preview: \(error.localizedDescription)")
+    }
 }

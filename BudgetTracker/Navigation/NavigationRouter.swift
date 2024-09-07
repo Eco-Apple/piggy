@@ -17,20 +17,29 @@ class NavigationRouter {
         switch route {
         case .expense(let route):
             handleExpenseRoutes(route)
+        case .budget(let route):
+            handleBudgetRoutes(route)
         }
     }
     
     @ViewBuilder
     private func handleExpenseRoutes(_ route: NavigationRoute.ExpenseRoute) -> some View {
         switch route {
-        case .list:
-            Text("")
-        case .create:
-            Text("Test")
         case .detail(let expense):
             ExpenseView(expense)
         case .seeMore(let date, let expenses):
-            SeeMoreView(date: date, expenses: expenses)
+            ExpenseSeeMoreView(date: date, expenses: expenses)
         }
     }
+    
+    @ViewBuilder
+    private func handleBudgetRoutes(_ route: NavigationRoute.BudgetRoute) -> some View {
+        switch route {
+        case .detail(let budget):
+            BudgetDetailView(budget)
+        case .seeMore(let date, let budgets):
+            BudgetSeeMoreView(date: date, budgets: budgets)
+        }
+    }
+
 }

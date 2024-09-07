@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SeeMoreView: View {
+struct ExpenseSeeMoreView: View {
     var date: Date
     var expenses: [Expense]
     
@@ -24,5 +24,5 @@ struct SeeMoreView: View {
 }
 
 #Preview {
-    SeeMoreView(date: .now, expenses: [Expense.previewItem])
+    ExpenseSeeMoreView(date: .now, expenses: [Expense.previewItem])
 }

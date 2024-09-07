@@ -5,6 +5,7 @@
 //  Created by Jerico Villaraza on 8/10/24.
 //
 
+import SwiftData
 import SwiftUI
 
 struct ExpensListItemView: View {
@@ -15,8 +16,8 @@ struct ExpensListItemView: View {
             Text(amountEmoji())
                 .font(.title)
             VStack(alignment: .leading) {
-                Text(expense.name)
-                    .font(.headline)
+                Text(expense.title)
+                     .font(.headline)
                 Text("@" + expense.createdDate.format(.timeOnly))
                     .font(.caption)
             }
@@ -53,5 +54,15 @@ struct ExpensListItemView: View {
 }
 
 #Preview {
-    ExpensListItemView(expense: Expense(name: "Test", desc: "...", amount: 40, createdDate: Date(), updateDate: Date()))
+    do {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: Expense.self, configurations: config)
+        let example = Expense.previewItem
+        
+        return ExpensListItemView(expense: example)
+            .modelContainer(container)
+    } catch {
+        return Text("Failed to create preview: \(error.localizedDescription)")
+    }
+
 }

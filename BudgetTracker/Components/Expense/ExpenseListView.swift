@@ -5,9 +5,9 @@
 //  Created by Jerico Villaraza on 8/27/24.
 //
 
+import StoreKit
 import SwiftData
 import SwiftUI
-
 
 fileprivate struct ExpenseSectionListViewWrapper: View {
     
@@ -35,13 +35,14 @@ fileprivate struct ExpenseSectionListView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     
+    @AppStorage("isExpensesEmpty") var isExpensesEmpty = true
+    
     @Query var expenses: [Expense]
     
     @Binding private var limit: Int
     
     @State private var isAlertPresented = false
     @State private var expensesToDelete: [Expense] = []
-    
     
     private var limitToExpand: Int = 10 // default 10; test 4
     
@@ -69,13 +70,7 @@ fileprivate struct ExpenseSectionListView: View {
                     Alert(
                         title: Text("Are you sure you want to delete \(expenses.getPluralSuffix(singular: "this", plural: "these")) expense\(expenses.getPluralSuffix(singular: "", plural: "s"))?"),
                         message: Text("You cannot undo this action once done."),
-                        primaryButton: .destructive(Text("Delete")) {
-                            for expense in expensesToDelete {
-                                modelContext.delete(expense)
-                            }
-                            
-                            dismiss()
-                        },
+                        primaryButton: .destructive(Text("Delete"), action: actionDelete),
                         secondaryButton: .cancel()
                     )
                 }
@@ -112,19 +107,42 @@ fileprivate struct ExpenseSectionListView: View {
         let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: normalizedDate)!
         
         var fetchDescriptor = FetchDescriptor<Expense>(predicate: #Predicate<Expense> { expense in
-            return expense.createdDate >= normalizedDate && expense.createdDate < nextDay
+            if let expenseDate = expense.date {
+                return expenseDate >= normalizedDate && expenseDate < nextDay
+            } else {
+                return false
+            }
+            
         }, sortBy: sortDescriptors)
         
         fetchDescriptor.fetchLimit = limit.wrappedValue + limitToExpand
         
         _expenses = Query(fetchDescriptor)
     }
+    
+    func actionDelete() {
+        for expense in expensesToDelete {
+            modelContext.delete(expense)
+        }
+        
+        do {
+            let fetchDescriptor = FetchDescriptor<Expense>()
+            let fetchExpenses = try modelContext.fetch(fetchDescriptor)
+            
+            if fetchExpenses.isEmpty {
+                isExpensesEmpty = true
+            }
+            
+            dismiss()
+        } catch {
+            fatalError("Error deleting expense")
+        }
+    }
 
 }
 
 struct ExpenseListView: View {
-    @Environment(\.modelContext) var modelContext
-    @Query var expenses: [Expense]
+    @AppStorage("isExpensesEmpty") var isExpensesEmpty = true
     
     var sortDescriptors: [SortDescriptor<Expense>]
     
@@ -135,9 +153,9 @@ struct ExpenseListView: View {
     ]
         
     var body: some View {
-        if expenses.isNotEmpty{
+        if !isExpensesEmpty{
             List {
-                ExpenseSectionListViewWrapper(of: Date.now, sortDescriptors: sortDescriptors, limit: 5 /* default 5; test 2 */)
+                ExpenseSectionListViewWrapper(of: Date.now, sortDescriptors: sortDescriptors, limit: 5)
                 ExpenseSectionListViewWrapper(of: Calendar.current.date(byAdding: .day, value: -1, to: Date.now)!, sortDescriptors: sortDescriptors, limit: 3)
                 ForEach(sectionsDate, id: \.self) { date in
                     ExpenseSectionListViewWrapper(of: date, sortDescriptors: sortDescriptors, limit: 3)
@@ -154,5 +172,5 @@ struct ExpenseListView: View {
 }
 
 #Preview {
-    ExpenseListView(sortDescriptors: [SortDescriptor(\Expense.name)])
+    ExpenseListView(sortDescriptors: [SortDescriptor(\Expense.title)])
 }

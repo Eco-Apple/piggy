@@ -1,15 +1,15 @@
 //
-//  Expense.swift
+//  Budget.swift
 //  BudgetTracker
 //
-//  Created by Jerico Villaraza on 8/25/24.
+//  Created by Jerico Villaraza on 9/7/24.
 //
 
 import Foundation
 import SwiftData
 
 @Model
-class Expense: Codable {
+class Budget: Codable {
     
     enum CodingKeys: String, CodingKey {
         case title
@@ -21,12 +21,12 @@ class Expense: Codable {
     }
     
     var title: String
-    var note: String
+    var note: String     
     var amount: Decimal
     var date: Date?
     var createdDate: Date
     var updatedDate: Date
-    
+
     init(title: String, note: String, amount: Decimal, date: Date?, createdDate: Date, updateDate: Date) {
         self.title = title
         self.note = note
@@ -54,10 +54,12 @@ class Expense: Codable {
         try container.encode(self.createdDate, forKey: .createdDate)
         try container.encode(self.updatedDate, forKey: .updatedDate)
     }
+
 }
 
-extension Expense {
-    static var previewItem: Expense {
-        Expense(title: "Shopping", note: "Monthly shopping", amount: 100.0, date: Date.distantPast, createdDate: .now, updateDate: .now)
+extension Budget {
+    static var previewItem: Budget {
+        Budget(title: "Shopping", note: "Monthly shopping", amount: 100.0, date: Date.distantPast, createdDate: .now, updateDate: .now)
     }
 }
+
