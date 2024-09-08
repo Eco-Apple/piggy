@@ -10,7 +10,7 @@ import SwiftUI
 
 /*
  TODO:
- - Make an optional date picker ( similar to reminders app )
+ - DatePicker doesn't change the time when save
  */
 
 struct AddExpenseView: View {
@@ -18,11 +18,13 @@ struct AddExpenseView: View {
     @Environment(\.modelContext) var modelContext
     
     @AppStorage("isExpensesEmpty") var isExpensesEmpty = true
+
+    @State private var title: String = ""
+    @State private var note: String = ""
+    @State private var amount: Decimal? = nil
+    @State private var date: Date = .now
     
-    @State var title: String = ""
-    @State var note: String = ""
-    @State var amount: Decimal? = nil
-    @State var date: Date = .now
+    @State private var isTimeEnabled: Bool = false
     
     @FocusState private var isFocus: Bool
     
@@ -36,12 +38,14 @@ struct AddExpenseView: View {
                         .focused($isFocus)
                 }
                 
-                Section {
-                    DatePicker(
-                        "Date",
-                        selection: $date,
-                        displayedComponents: [.date, .hourAndMinute]
-                    )
+                DatePicker(
+                    "Date",
+                    selection: $date,
+                    displayedComponents: isTimeEnabled ? [.date, .hourAndMinute] : .date
+                )
+                
+                Toggle(isOn: $isTimeEnabled) {
+                    Text("Time")
                 }
                 
                 Section {
@@ -73,11 +77,11 @@ struct AddExpenseView: View {
     }
     
     func isConfirmDisabled() -> Bool {
-        title.isEmpty || note.isEmpty || amount == nil || amount! <= 0
+        title.isEmpty || amount == nil || amount! <= 0
     }
     
     func addEntry() {
-        let newExpense = Expense(title: title, note: note, amount: amount!,date: date, createdDate: .now, updateDate: .now)
+        let newExpense = Expense(title: title, note: note, amount: amount!,date: date, createdDate: .now, updateDate: .now, isTimeEnabled: isTimeEnabled)
         
         modelContext.insert(newExpense)
         isExpensesEmpty = false

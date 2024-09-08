@@ -76,11 +76,6 @@ extension String {
 }
 
 extension Date {
-    enum DateStyle {
-        case dateOnly
-        case timeOnly
-        case dateAndTime
-    }
 
     func format(_ dateStyle: DateStyle, descriptive: Bool = false) -> String {
         let formatter = DateFormatter()

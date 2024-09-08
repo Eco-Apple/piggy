@@ -22,7 +22,7 @@ struct IncomeListItemView: View {
                     .font(.caption)
             }
             Spacer()
-            Text(income.amount, format: .currency(code: "PHP")).foregroundStyle(amountForegroundColor())
+            Text("+ \(income.amount, format: .currency(code: "PHP"))").foregroundStyle(amountForegroundColor())
                 .font(.headline)
         }
     }

@@ -54,6 +54,10 @@ fileprivate struct IncomeSectionListView: View {
     var body: some View {
         if incomes.isNotEmpty {
             Section(filterDate.format(.dateOnly, descriptive: true)) {
+                HStack {
+                    InfoTextView(label: "Total", currency: total())
+                        .font(.headline)
+                }
                 ForEach(incomes.prefix(limit)) { income in
                     NavigationLink(value: NavigationRoute.income(.detail(income))) {
                         IncomeListItemView(income: income)
@@ -119,6 +123,17 @@ fileprivate struct IncomeSectionListView: View {
         fetchDescriptor.fetchLimit = limit.wrappedValue + limitToExpand
         
         _incomes = Query(fetchDescriptor)
+    }
+    
+    
+    func total() -> Decimal {
+        var result: Decimal = 0.0
+        
+        for val in incomes {
+            result += val.amount
+        }
+        
+        return result
     }
     
     func actionDelete() {

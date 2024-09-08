@@ -55,9 +55,9 @@ struct InfoTextView: View {
         self.status = status ? "Yes" : "No"
     }
     
-    init(label: String, date: Date) {
+    init(label: String, date: Date, style: DateStyle) {
         self.label = label
-        self.date = date.format(.dateAndTime)
+        self.date = date.format(style)
     }
     
     init(label: String, tags: [String]) {
@@ -82,5 +82,5 @@ struct InfoTextView: View {
 }
 
 #Preview {
-    InfoTextView(label: "Settings", date: .now)
+    InfoTextView(label: "Settings", date: .now, style: .dateOnly)
 }

@@ -10,7 +10,7 @@ import SwiftUI
 
 /*
  TODO:
- - Make an optional date picker ( similar to reminders app )
+ - DatePicker doesn't change the time when save
  */
 
 struct AddIncomeView: View {
@@ -24,6 +24,8 @@ struct AddIncomeView: View {
     @State var amount: Decimal? = nil
     @State var date: Date = .now
     
+    @State private var isTimeEnabled: Bool = false
+    
     @FocusState private var isFocus: Bool
     
     var currencySymbol = Locale.current.currencySymbol ?? ""
@@ -36,12 +38,14 @@ struct AddIncomeView: View {
                         .focused($isFocus)
                 }
                 
-                Section {
-                    DatePicker(
-                        "Date",
-                        selection: $date,
-                        displayedComponents: [.date, .hourAndMinute]
-                    )
+                DatePicker(
+                    "Date",
+                    selection: $date,
+                    displayedComponents: isTimeEnabled ? [.date, .hourAndMinute] : .date
+                )
+
+                Toggle(isOn: $isTimeEnabled) {
+                    Text("Time")
                 }
                 
                 Section {
@@ -73,11 +77,11 @@ struct AddIncomeView: View {
     }
     
     func isConfirmDisabled() -> Bool {
-        title.isEmpty || note.isEmpty || amount == nil || amount! <= 0
+        title.isEmpty || amount == nil || amount! <= 0
     }
     
     func addEntry() {
-        let newIncome = Income(title: title, note: note, amount: amount!,date: date, createdDate: .now, updateDate: .now)
+        let newIncome = Income(title: title, note: note, amount: amount!,date: date, createdDate: .now, updateDate: .now, isTimeEnabled: isTimeEnabled)
         
         modelContext.insert(newIncome)
         isIncomesEmpty = false

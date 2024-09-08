@@ -11,6 +11,7 @@ import SwiftUI
 /*
     TODO:
     - This should be name ExpenseDetailView
+    - DatePicker doesn't change the time when save
  */
 
 
@@ -23,6 +24,8 @@ struct ExpenseView: View {
     @State private var date: Date = .now
     
     @State private var isEdit: Bool = false
+    @State private var isTimeEnabled: Bool = false
+    
     
     @Bindable var expense: Expense
     
@@ -34,11 +37,15 @@ struct ExpenseView: View {
                 if isEdit == false {
                     InfoTextView(label: "Title", text: name)
                     InfoTextView(label: "Amount", currency: amount!)
-                    InfoTextView(label: "Date", date: date)
+                    InfoTextView(label: "Date", date: date, style: isTimeEnabled ? .dateAndTime : .dateOnly)
                 } else {
                     TextField("Title", text: $name)
                     CurrencyField("eg. \(currencySymbol)10.00", value: $amount)
-                    DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
+                    DatePicker("Date", selection: $date, displayedComponents: isTimeEnabled ? [.date, .hourAndMinute] : .date)
+                    
+                    Toggle(isOn: $isTimeEnabled) {
+                        Text("Time")
+                    }
                 }
                     
             }
@@ -63,6 +70,7 @@ struct ExpenseView: View {
                         expense.note = description
                         expense.amount = amount!
                         expense.date = date
+                        expense.isTimeEnabled = isTimeEnabled
                         expense.updatedDate = .now
                         isEdit.toggle()
                     }
@@ -83,6 +91,7 @@ struct ExpenseView: View {
         self._description = State(initialValue: expense.note)
         self._amount = State(initialValue: expense.amount)
         self._date = State(initialValue: expense.createdDate)
+        self._isTimeEnabled = State(initialValue: expense.isTimeEnabled)
     }
     
     func isDoneButtonDisabled() -> Bool {

@@ -53,6 +53,10 @@ fileprivate struct ExpenseSectionListView: View {
     var body: some View {
         if expenses.isNotEmpty {
             Section(filterDate.format(.dateOnly, descriptive: true)) {
+                HStack {
+                    InfoTextView(label: "Total", currency: total())
+                        .font(.headline)
+                }
                 ForEach(expenses.prefix(limit)) { expense in
                     NavigationLink(value: NavigationRoute.expense(.detail(expense))) {
                         ExpensListItemView(expense: expense)
@@ -118,6 +122,16 @@ fileprivate struct ExpenseSectionListView: View {
         fetchDescriptor.fetchLimit = limit.wrappedValue + limitToExpand
         
         _expenses = Query(fetchDescriptor)
+    }
+    
+    func total() -> Decimal {
+        var result: Decimal = 0.0
+        
+        for val in expenses {
+            result += val.amount
+        }
+        
+        return result
     }
     
     func actionDelete() {

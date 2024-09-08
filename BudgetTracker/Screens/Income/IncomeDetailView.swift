@@ -8,6 +8,12 @@
 import SwiftData
 import SwiftUI
 
+/*
+    TODO:
+    - DatePicker doesn't change the time when save
+*/
+
+
 struct IncomeDetailView: View {
     @Environment(\.dismiss) var dismiss
     
@@ -16,6 +22,7 @@ struct IncomeDetailView: View {
     @State private var amount: Decimal? = nil
     @State private var date: Date = .now
     
+    @State private var isTimeEnabled: Bool = false
     @State private var isEdit: Bool = false
     
     @Bindable var income: Income
@@ -28,7 +35,7 @@ struct IncomeDetailView: View {
                 if isEdit == false {
                     InfoTextView(label: "Title", text: name)
                     InfoTextView(label: "Amount", currency: amount!)
-                    InfoTextView(label: "Date", date: date)
+                    InfoTextView(label: "Date", date: date, style: isTimeEnabled ? .dateAndTime : .dateOnly)
                 } else {
                     TextField("Title", text: $name)
                     CurrencyField("eg. \(currencySymbol)10.00", value: $amount)
@@ -57,6 +64,7 @@ struct IncomeDetailView: View {
                         income.note = description
                         income.amount = amount!
                         income.date = date
+                        income.isTimeEnabled = isTimeEnabled
                         income.updatedDate = .now
                         isEdit.toggle()
                     }
@@ -77,6 +85,7 @@ struct IncomeDetailView: View {
         self._description = State(initialValue: income.note)
         self._amount = State(initialValue: income.amount)
         self._date = State(initialValue: income.createdDate)
+        self._isTimeEnabled = State(initialValue: income.isTimeEnabled)
     }
     
     func isDoneButtonDisabled() -> Bool {

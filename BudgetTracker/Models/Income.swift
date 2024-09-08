@@ -18,6 +18,7 @@ class Income: Codable {
         case date
         case createdDate
         case updatedDate
+        case isTimeEnabled
     }
     
     var title: String
@@ -26,14 +27,16 @@ class Income: Codable {
     var date: Date?
     var createdDate: Date
     var updatedDate: Date
+    var isTimeEnabled: Bool
 
-    init(title: String, note: String, amount: Decimal, date: Date?, createdDate: Date, updateDate: Date) {
+    init(title: String, note: String, amount: Decimal, date: Date?, createdDate: Date, updateDate: Date, isTimeEnabled: Bool) {
         self.title = title
         self.note = note
         self.amount = amount
         self.date = date
         self.createdDate = createdDate
         self.updatedDate = updateDate
+        self.isTimeEnabled = isTimeEnabled
     }
     
     required init(from decoder: any Decoder) throws {
@@ -44,6 +47,7 @@ class Income: Codable {
         self.date = try container.decode(Date.self, forKey: .date)
         self.createdDate = try container.decode(Date.self, forKey: .createdDate)
         self.updatedDate = try container.decode(Date.self, forKey: .updatedDate)
+        self.isTimeEnabled = try container.decode(Bool.self, forKey: .isTimeEnabled)
     }
     func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -53,13 +57,14 @@ class Income: Codable {
         try container.encode(self.date, forKey: .date)
         try container.encode(self.createdDate, forKey: .createdDate)
         try container.encode(self.updatedDate, forKey: .updatedDate)
+        try container.encode(self.isTimeEnabled, forKey: .isTimeEnabled)
     }
 
 }
 
 extension Income {
     static var previewItem: Income {
-        Income(title: "Shopping", note: "Monthly shopping", amount: 100.0, date: Date.distantPast, createdDate: .now, updateDate: .now)
+        Income(title: "Shopping", note: "Monthly shopping", amount: 100.0, date: Date.distantPast, createdDate: .now, updateDate: .now, isTimeEnabled: false)
     }
 }
 
