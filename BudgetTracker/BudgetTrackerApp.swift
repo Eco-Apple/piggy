@@ -9,11 +9,11 @@ import SwiftData
 import SwiftUI
 
 @main
-struct BudgetTrackerApp: App {
+struct IncomeTrackerApp: App {
     var body: some Scene {
         WindowGroup {
             HomeView()
         }
-        .modelContainer(for: [Expense.self, Budget.self])
+        .modelContainer(for: [Expense.self, Income.self])
     }
 }

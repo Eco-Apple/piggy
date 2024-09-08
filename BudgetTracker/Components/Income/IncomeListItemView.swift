@@ -8,31 +8,31 @@
 import SwiftData
 import SwiftUI
 
-struct BudgetListItemView: View {
-    var budget: Budget
+struct IncomeListItemView: View {
+    var income: Income
     
     var body: some View {
         HStack {
             Text(amountEmoji())
                 .font(.title)
             VStack(alignment: .leading) {
-                Text(budget.title)
+                Text(income.title)
                      .font(.headline)
-                Text("@" + budget.createdDate.format(.timeOnly))
+                Text("@" + income.createdDate.format(.timeOnly))
                     .font(.caption)
             }
             Spacer()
-            Text(budget.amount, format: .currency(code: "PHP")).foregroundStyle(amountForegroundColor())
+            Text(income.amount, format: .currency(code: "PHP")).foregroundStyle(amountForegroundColor())
                 .font(.headline)
         }
     }
     
     func amountEmoji() -> String {
-        if budget.amount <= 100 {
+        if income.amount <= 100 {
             "👍"
-        } else if budget.amount > 100 && budget.amount <= 300  {
+        } else if income.amount > 100 && income.amount <= 300  {
             "👌"
-        } else if budget.amount > 300 && budget.amount < 500  {
+        } else if income.amount > 300 && income.amount < 500  {
             "💰"
         } else {
             "🔥"
@@ -40,11 +40,11 @@ struct BudgetListItemView: View {
     }
     
     func amountForegroundColor() -> Color {
-        if budget.amount <= 200 {
+        if income.amount <= 200 {
             Color.green
-        } else if budget.amount > 200 && budget.amount <= 500  {
+        } else if income.amount > 200 && income.amount <= 500  {
             Color.orange
-        } else if budget.amount > 500 && budget.amount < 1000  {
+        } else if income.amount > 500 && income.amount < 1000  {
             Color.purple
         } else {
             Color.red
@@ -56,10 +56,10 @@ struct BudgetListItemView: View {
 #Preview {
     do {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(for: Budget.self, configurations: config)
-        let example = Budget.previewItem
+        let container = try ModelContainer(for: Income.self, configurations: config)
+        let example = Income.previewItem
         
-        return BudgetListItemView(budget: example)
+        return IncomeListItemView(income: example)
             .modelContainer(container)
     } catch {
         return Text("Failed to create preview: \(error.localizedDescription)")

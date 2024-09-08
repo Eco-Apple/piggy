@@ -8,5 +8,5 @@
 import Foundation
 
 enum HomeViewSegments {
-    case expense, budget
+    case expense, income
 }

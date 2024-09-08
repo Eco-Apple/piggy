@@ -1,5 +1,5 @@
 //
-//  AddBudgetView.swift
+//  AddIncomeView.swift
 //  BudgetTracker
 //
 //  Created by Jerico Villaraza on 9/7/24.
@@ -13,11 +13,11 @@ import SwiftUI
  - Make an optional date picker ( similar to reminders app )
  */
 
-struct AddBudgetView: View {
+struct AddIncomeView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     
-    @AppStorage("isBudgetsEmpty") var isBudgetsEmpty = true
+    @AppStorage("isIncomesEmpty") var isIncomesEmpty = true
     
     @State var title: String = ""
     @State var note: String = ""
@@ -52,7 +52,7 @@ struct AddBudgetView: View {
                 }
             }
             .listSectionSpacing(.compact)
-            .navigationTitle("New Budget")
+            .navigationTitle("New Income")
             .scrollBounceBehavior(.basedOnSize)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -77,14 +77,14 @@ struct AddBudgetView: View {
     }
     
     func addEntry() {
-        let newBudget = Budget(title: title, note: note, amount: amount!,date: date, createdDate: .now, updateDate: .now)
+        let newIncome = Income(title: title, note: note, amount: amount!,date: date, createdDate: .now, updateDate: .now)
         
-        modelContext.insert(newBudget)
-        isBudgetsEmpty = false
+        modelContext.insert(newIncome)
+        isIncomesEmpty = false
         dismiss()
     }
 }
 
 #Preview {
-    return AddBudgetView()
+    return AddIncomeView()
 }

@@ -9,15 +9,15 @@ import Foundation
 
 enum NavigationRoute: Hashable {
     case expense(ExpenseRoute)
-    case budget(BudgetRoute)
+    case income(IncomeRoute)
     
     enum ExpenseRoute: Hashable {
         case detail(Expense)
         case seeMore(Date, [Expense])
     }
     
-    enum BudgetRoute: Hashable {
-        case detail(Budget)
-        case seeMore(Date, [Budget])
+    enum IncomeRoute: Hashable {
+        case detail(Income)
+        case seeMore(Date, [Income])
     }
 }

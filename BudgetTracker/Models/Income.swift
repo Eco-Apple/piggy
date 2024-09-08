@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Budget: Codable {
+class Income: Codable {
     
     enum CodingKeys: String, CodingKey {
         case title
@@ -57,9 +57,9 @@ class Budget: Codable {
 
 }
 
-extension Budget {
-    static var previewItem: Budget {
-        Budget(title: "Shopping", note: "Monthly shopping", amount: 100.0, date: Date.distantPast, createdDate: .now, updateDate: .now)
+extension Income {
+    static var previewItem: Income {
+        Income(title: "Shopping", note: "Monthly shopping", amount: 100.0, date: Date.distantPast, createdDate: .now, updateDate: .now)
     }
 }
 

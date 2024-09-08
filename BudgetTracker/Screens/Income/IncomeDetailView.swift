@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-struct BudgetDetailView: View {
+struct IncomeDetailView: View {
     @Environment(\.dismiss) var dismiss
     
     @State private var name: String = ""
@@ -18,7 +18,7 @@ struct BudgetDetailView: View {
     
     @State private var isEdit: Bool = false
     
-    @Bindable var budget: Budget
+    @Bindable var income: Income
     
     var currencySymbol = Locale.current.currencySymbol ?? ""
     
@@ -47,17 +47,17 @@ struct BudgetDetailView: View {
                 }
             }
         }
-        .navigationTitle("Budget")
+        .navigationTitle("Income")
         .scrollBounceBehavior(.basedOnSize)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 if isEdit {
                     Button("Done") {
-                        budget.title = name
-                        budget.note = description
-                        budget.amount = amount!
-                        budget.date = date
-                        budget.updatedDate = .now
+                        income.title = name
+                        income.note = description
+                        income.amount = amount!
+                        income.date = date
+                        income.updatedDate = .now
                         isEdit.toggle()
                     }
                     .disabled(isDoneButtonDisabled())
@@ -70,13 +70,13 @@ struct BudgetDetailView: View {
         }
     }
     
-    init(_ budget: Budget) {
-        self.budget = budget
+    init(_ income: Income) {
+        self.income = income
         
-        self._name = State(initialValue: budget.title)
-        self._description = State(initialValue: budget.note)
-        self._amount = State(initialValue: budget.amount)
-        self._date = State(initialValue: budget.createdDate)
+        self._name = State(initialValue: income.title)
+        self._description = State(initialValue: income.note)
+        self._amount = State(initialValue: income.amount)
+        self._date = State(initialValue: income.createdDate)
     }
     
     func isDoneButtonDisabled() -> Bool {
@@ -93,10 +93,10 @@ struct BudgetDetailView: View {
 #Preview {
     do {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(for: Budget.self, configurations: config)
-        let example = Budget.previewItem
+        let container = try ModelContainer(for: Income.self, configurations: config)
+        let example = Income.previewItem
         
-        return BudgetDetailView(example)
+        return IncomeDetailView(example)
             .modelContainer(container)
     } catch {
         return Text("Failed to create preview: \(error.localizedDescription)")

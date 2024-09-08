@@ -15,10 +15,10 @@ struct HomeView: View {
     
     #if DEBUG
     @AppStorage("isExpensesEmpty") var isExpensesEmpty = true
-    @AppStorage("isBudgetsEmpty") var isBudgetsEmpty = true
+    @AppStorage("isIncomesEmpty") var isIncomesEmpty = true
     
     @State var expenseDayCounter: Double = 0
-    @State var budgetDayCounter: Double = 0
+    @State var incomeDayCounter: Double = 0
     #endif
     
     @State private var isAddViewPresented = false
@@ -28,9 +28,9 @@ struct HomeView: View {
         SortDescriptor(\Expense.title)
     ]
     
-    @State private var budgetSortDescriptors: [SortDescriptor<Budget>] = [
-        SortDescriptor(\Budget.createdDate, order: .reverse),
-        SortDescriptor(\Budget.title)
+    @State private var incomesSortDescriptors: [SortDescriptor<Income>] = [
+        SortDescriptor(\Income.createdDate, order: .reverse),
+        SortDescriptor(\Income.title)
     ]
 
     
@@ -42,13 +42,13 @@ struct HomeView: View {
                 
                 if selectedSegment == .expense {
                     ExpenseListView(sortDescriptors: expenseSortDescriptors)
-                } else if selectedSegment == .budget {
-                    BudgetListView(sortDescriptors: budgetSortDescriptors)
+                } else if selectedSegment == .income {
+                    IncomeListView(sortDescriptors: incomesSortDescriptors)
                 }
                 
                 Picker("Select a segment", selection: $selectedSegment) {
                     Text("Expenses").tag(HomeViewSegments.expense)
-                    Text("Budget").tag(HomeViewSegments.budget)
+                    Text("Income").tag(HomeViewSegments.income)
                  }
                  .pickerStyle(SegmentedPickerStyle())
                  .frame(width: 200)
@@ -89,8 +89,8 @@ struct HomeView: View {
                 switch selectedSegment {
                 case .expense:
                     AddExpenseView()
-                case .budget:
-                    AddBudgetView()
+                case .income:
+                    AddIncomeView()
                 }
             }
         }
@@ -111,17 +111,17 @@ struct HomeView: View {
             
             expenseDayCounter = expenseDayCounter - 1
             isExpensesEmpty = false
-        case .budget:
-            let budgets: [Budget] = Bundle.main.decode("budget.mock.json")
+        case .income:
+            let incomes: [Income] = Bundle.main.decode("income.mock.json")
             
-            for budget in budgets {
-                let date: Date = .now.addingTimeInterval(86400 * budgetDayCounter)
-                budget.date = date
-                modelContext.insert(budget)
+            for income in incomes {
+                let date: Date = .now.addingTimeInterval(86400 * incomeDayCounter)
+                income.date = date
+                modelContext.insert(income)
             }
             
-            budgetDayCounter = budgetDayCounter - 1
-            isBudgetsEmpty = false
+            incomeDayCounter = incomeDayCounter - 1
+            isIncomesEmpty = false
         }
     }
     
@@ -137,17 +137,17 @@ struct HomeView: View {
                 }
                 
                 isExpensesEmpty = true
-                budgetDayCounter = 0
-            case .budget:
-                let descriptor = FetchDescriptor<Budget>()
+                incomeDayCounter = 0
+            case .income:
+                let descriptor = FetchDescriptor<Income>()
                 let toDeleteData = try modelContext.fetch(descriptor)
                 
-                for budget in toDeleteData {
-                    modelContext.delete(budget)
+                for income in toDeleteData {
+                    modelContext.delete(income)
                 }
                 
-                isBudgetsEmpty = true
-                budgetDayCounter = 0
+                isIncomesEmpty = true
+                incomeDayCounter = 0
             }
         } catch {
             fatalError("Something went wrong.")

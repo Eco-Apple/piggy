@@ -17,8 +17,8 @@ class NavigationRouter {
         switch route {
         case .expense(let route):
             handleExpenseRoutes(route)
-        case .budget(let route):
-            handleBudgetRoutes(route)
+        case .income(let route):
+            handleIncomeRoutes(route)
         }
     }
     
@@ -33,12 +33,12 @@ class NavigationRouter {
     }
     
     @ViewBuilder
-    private func handleBudgetRoutes(_ route: NavigationRoute.BudgetRoute) -> some View {
+    private func handleIncomeRoutes(_ route: NavigationRoute.IncomeRoute) -> some View {
         switch route {
-        case .detail(let budget):
-            BudgetDetailView(budget)
-        case .seeMore(let date, let budgets):
-            BudgetSeeMoreView(date: date, budgets: budgets)
+        case .detail(let income):
+            IncomeDetailView(income)
+        case .seeMore(let date, let incomes):
+            IncomeSeeMoreView(date: date, incomes: incomes)
         }
     }
 

@@ -7,15 +7,15 @@
 
 import SwiftUI
 
-struct BudgetSeeMoreView: View {
+struct IncomeSeeMoreView: View {
     var date: Date
-    var budgets: [Budget]
+    var incomes: [Income]
     
     var body: some View {
         List {
-            ForEach(budgets) { budget in
-                NavigationLink(value: NavigationRoute.budget(.detail(budget))) {
-                    BudgetListItemView(budget: budget)
+            ForEach(incomes) { income in
+                NavigationLink(value: NavigationRoute.income(.detail(income))) {
+                    IncomeListItemView(income: income)
                 }
             }
         }
@@ -24,5 +24,5 @@ struct BudgetSeeMoreView: View {
 }
 
 #Preview {
-    BudgetSeeMoreView(date: .now, budgets: [Budget.previewItem])
+    IncomeSeeMoreView(date: .now, incomes: [Income.previewItem])
 }
