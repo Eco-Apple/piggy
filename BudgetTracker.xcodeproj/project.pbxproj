@@ -30,8 +30,6 @@
 		20ACD5482C89A71A00E08DCA /* BundleDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20ACD5472C89A71A00E08DCA /* BundleDecodable.swift */; };
 		20D0A1812C787BF60054DE5B /* CurrencyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D0A1802C787BF60054DE5B /* CurrencyField.swift */; };
 		20E3AC9B2C679CBF00D53664 /* ExpenseListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E3AC9A2C679CBF00D53664 /* ExpenseListItemView.swift */; };
-		20E3AC9E2C67A33E00D53664 /* Expenses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E3AC9D2C67A33E00D53664 /* Expenses.swift */; };
-		20E3ACA12C67A38000D53664 /* ExpenseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E3ACA02C67A38000D53664 /* ExpenseItem.swift */; };
 		20E5660D2C7E26CF0008CD79 /* ExpenseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E5660C2C7E26CF0008CD79 /* ExpenseListView.swift */; };
 		20EF78382C82F8E80057F5AD /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EF78372C82F8E80057F5AD /* Navigation.swift */; };
 		20EF783A2C82FEC80057F5AD /* NavigationRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EF78392C82FEC80057F5AD /* NavigationRoute.swift */; };
@@ -63,8 +61,6 @@
 		20ACD5472C89A71A00E08DCA /* BundleDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleDecodable.swift; sourceTree = "<group>"; };
 		20D0A1802C787BF60054DE5B /* CurrencyField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyField.swift; sourceTree = "<group>"; };
 		20E3AC9A2C679CBF00D53664 /* ExpenseListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseListItemView.swift; sourceTree = "<group>"; };
-		20E3AC9D2C67A33E00D53664 /* Expenses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expenses.swift; sourceTree = "<group>"; };
-		20E3ACA02C67A38000D53664 /* ExpenseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseItem.swift; sourceTree = "<group>"; };
 		20E5660C2C7E26CF0008CD79 /* ExpenseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseListView.swift; sourceTree = "<group>"; };
 		20EF78372C82F8E80057F5AD /* Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
 		20EF78392C82FEC80057F5AD /* NavigationRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRoute.swift; sourceTree = "<group>"; };
@@ -108,7 +104,6 @@
 				202210BC2C7B86E00044CEA4 /* Models */,
 				200971362C5B82FF0001F510 /* Components */,
 				2009712B2C5B82D90001F510 /* Assets.xcassets */,
-				202210BF2C7B89F80044CEA4 /* Deprecateds */,
 				20720F982C8C86B400D01891 /* Alert */,
 				200971352C5B82F40001F510 /* Screens */,
 				200971272C5B82D80001F510 /* BudgetTrackerApp.swift */,
@@ -154,15 +149,6 @@
 				20720F8C2C8C730500D01891 /* Income.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		202210BF2C7B89F80044CEA4 /* Deprecateds */ = {
-			isa = PBXGroup;
-			children = (
-				20E3AC9F2C67A36E00D53664 /* Structs */,
-				20E3AC9C2C67A32700D53664 /* Classes */,
-			);
-			path = Deprecateds;
 			sourceTree = "<group>";
 		};
 		20720F882C8C701300D01891 /* Expense */ = {
@@ -238,22 +224,6 @@
 			path = MockData;
 			sourceTree = "<group>";
 		};
-		20E3AC9C2C67A32700D53664 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				20E3AC9D2C67A33E00D53664 /* Expenses.swift */,
-			);
-			path = Classes;
-			sourceTree = "<group>";
-		};
-		20E3AC9F2C67A36E00D53664 /* Structs */ = {
-			isa = PBXGroup;
-			children = (
-				20E3ACA02C67A38000D53664 /* ExpenseItem.swift */,
-			);
-			path = Structs;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -326,10 +296,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				20E3ACA12C67A38000D53664 /* ExpenseItem.swift in Sources */,
 				20EF783C2C82FF0D0057F5AD /* NavigationRouter.swift in Sources */,
 				20720F8D2C8C730500D01891 /* Income.swift in Sources */,
-				20E3AC9E2C67A33E00D53664 /* Expenses.swift in Sources */,
 				2002BD212C7AC43600BB3C6F /* ExpenseView.swift in Sources */,
 				20EF783A2C82FEC80057F5AD /* NavigationRoute.swift in Sources */,
 				20E5660D2C7E26CF0008CD79 /* ExpenseListView.swift in Sources */,
