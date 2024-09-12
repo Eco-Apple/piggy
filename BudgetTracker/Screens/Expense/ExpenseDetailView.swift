@@ -8,18 +8,11 @@
 import SwiftData
 import SwiftUI
 
-/*
-    TODO:
-    - This should be name ExpenseDetailView
-    - DatePicker doesn't change the time when save
- */
-
-
-struct ExpenseView: View {
+struct ExpenseDetailView: View {
     @Environment(\.dismiss) var dismiss
     
-    @State private var name: String = ""
-    @State private var description: String = ""
+    @State private var title: String = ""
+    @State private var note: String = ""
     @State private var amount: Decimal? = nil
     @State private var date: Date = .now
     
@@ -35,11 +28,11 @@ struct ExpenseView: View {
         Form {
             Section("Details") {
                 if isEdit == false {
-                    InfoTextView(label: "Title", text: name)
+                    InfoTextView(label: "Title", text: title)
                     InfoTextView(label: "Amount", currency: amount!)
                     InfoTextView(label: "Date", date: date, style: isTimeEnabled ? .dateAndTime : .dateOnly)
                 } else {
-                    TextField("Title", text: $name)
+                    TextField("Title", text: $title)
                     CurrencyField("eg. \(currencySymbol)10.00", value: $amount)
                     DatePicker("Date", selection: $date, displayedComponents: isTimeEnabled ? [.date, .hourAndMinute] : .date)
                     
@@ -51,10 +44,10 @@ struct ExpenseView: View {
             }
             Section("Note"){
                 if isEdit == false {
-                    Text(description)
+                    Text(note)
                         .frame(height: 150, alignment: .topLeading)
                 } else {
-                    TextEditor(text: $description)
+                    TextEditor(text: $note)
                         .frame(height: 150)
                         .offset(x: -5, y: -8.5)
                 }
@@ -66,8 +59,8 @@ struct ExpenseView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 if isEdit {
                     Button("Done") {
-                        expense.title = name
-                        expense.note = description
+                        expense.title = title
+                        expense.note = note
                         expense.amount = amount!
                         expense.date = date
                         expense.isTimeEnabled = isTimeEnabled
@@ -87,17 +80,18 @@ struct ExpenseView: View {
     init(_ expense: Expense) {
         self.expense = expense
         
-        self._name = State(initialValue: expense.title)
-        self._description = State(initialValue: expense.note)
-        self._amount = State(initialValue: expense.amount)
-        self._date = State(initialValue: expense.createdDate)
-        self._isTimeEnabled = State(initialValue: expense.isTimeEnabled)
+        _title = State(initialValue: expense.title)
+        _note = State(initialValue: expense.note)
+        _amount = State(initialValue: expense.amount)
+        _date = State(initialValue: expense.date!)
+        _isTimeEnabled = State(initialValue: expense.isTimeEnabled)
     }
     
     func isDoneButtonDisabled() -> Bool {
         
-        guard name.isNotEmpty else { return true }
-        guard description.isNotEmpty else { return true }
+        guard title != expense.title || amount != expense.amount || date != expense.date || note != expense.note else { return true }
+        
+        guard title.isNotEmpty else { return true }
         guard let amount, amount >= 0 else { return true }
         
         return false
@@ -111,7 +105,7 @@ struct ExpenseView: View {
         let container = try ModelContainer(for: Expense.self, configurations: config)
         let example = Expense.previewItem
         
-        return ExpenseView(example)
+        return ExpenseDetailView(example)
             .modelContainer(container)
     } catch {
         return Text("Failed to create preview: \(error.localizedDescription)")

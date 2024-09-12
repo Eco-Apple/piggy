@@ -18,7 +18,7 @@ struct ExpensListItemView: View {
             VStack(alignment: .leading) {
                 Text(expense.title)
                      .font(.headline)
-                Text("@" + expense.createdDate.format(.timeOnly))
+                Text("@" + expense.date!.format(.timeOnly))
                     .font(.caption)
             }
             Spacer()

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2002BD212C7AC43600BB3C6F /* ExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2002BD202C7AC43600BB3C6F /* ExpenseView.swift */; };
+		2002BD212C7AC43600BB3C6F /* ExpenseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2002BD202C7AC43600BB3C6F /* ExpenseDetailView.swift */; };
 		200971282C5B82D80001F510 /* BudgetTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200971272C5B82D80001F510 /* BudgetTrackerApp.swift */; };
 		2009712A2C5B82D80001F510 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200971292C5B82D80001F510 /* HomeView.swift */; };
 		2009712C2C5B82D90001F510 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2009712B2C5B82D90001F510 /* Assets.xcassets */; };
@@ -37,7 +37,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2002BD202C7AC43600BB3C6F /* ExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseView.swift; sourceTree = "<group>"; };
+		2002BD202C7AC43600BB3C6F /* ExpenseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseDetailView.swift; sourceTree = "<group>"; };
 		200971242C5B82D80001F510 /* BudgetTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BudgetTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		200971272C5B82D80001F510 /* BudgetTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetTrackerApp.swift; sourceTree = "<group>"; };
 		200971292C5B82D80001F510 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -172,7 +172,7 @@
 		20720F902C8C838900D01891 /* Expense */ = {
 			isa = PBXGroup;
 			children = (
-				2002BD202C7AC43600BB3C6F /* ExpenseView.swift */,
+				2002BD202C7AC43600BB3C6F /* ExpenseDetailView.swift */,
 				208271F72C82226300A1BADA /* ExpenseSeeMoreView.swift */,
 			);
 			path = Expense;
@@ -298,7 +298,7 @@
 			files = (
 				20EF783C2C82FF0D0057F5AD /* NavigationRouter.swift in Sources */,
 				20720F8D2C8C730500D01891 /* Income.swift in Sources */,
-				2002BD212C7AC43600BB3C6F /* ExpenseView.swift in Sources */,
+				2002BD212C7AC43600BB3C6F /* ExpenseDetailView.swift in Sources */,
 				20EF783A2C82FEC80057F5AD /* NavigationRoute.swift in Sources */,
 				20E5660D2C7E26CF0008CD79 /* ExpenseListView.swift in Sources */,
 				20D0A1812C787BF60054DE5B /* CurrencyField.swift in Sources */,

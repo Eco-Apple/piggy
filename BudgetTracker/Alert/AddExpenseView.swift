@@ -8,11 +8,6 @@
 import StoreKit
 import SwiftUI
 
-/*
- TODO:
- - DatePicker doesn't change the time when save
- */
-
 struct AddExpenseView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
@@ -77,10 +72,14 @@ struct AddExpenseView: View {
     }
     
     func isConfirmDisabled() -> Bool {
-        title.isEmpty || amount == nil || amount! <= 0
+        guard title.isNotEmpty else { return true }
+        guard let amount, amount >= 0 else { return true }
+        
+        return false
     }
     
     func addEntry() {
+        print(date)
         let newExpense = Expense(title: title, note: note, amount: amount!,date: date, createdDate: .now, updateDate: .now, isTimeEnabled: isTimeEnabled)
         
         modelContext.insert(newExpense)

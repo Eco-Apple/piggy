@@ -26,7 +26,7 @@ class NavigationRouter {
     private func handleExpenseRoutes(_ route: NavigationRoute.ExpenseRoute) -> some View {
         switch route {
         case .detail(let expense):
-            ExpenseView(expense)
+            ExpenseDetailView(expense)
         case .seeMore(let date, let expenses):
             ExpenseSeeMoreView(date: date, expenses: expenses)
         }

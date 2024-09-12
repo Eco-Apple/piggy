@@ -8,11 +8,6 @@
 import StoreKit
 import SwiftUI
 
-/*
- TODO:
- - DatePicker doesn't change the time when save
- */
-
 struct AddIncomeView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
@@ -77,7 +72,10 @@ struct AddIncomeView: View {
     }
     
     func isConfirmDisabled() -> Bool {
-        title.isEmpty || amount == nil || amount! <= 0
+        guard title.isNotEmpty else { return true }
+        guard let amount, amount >= 0 else { return true }
+        
+        return false
     }
     
     func addEntry() {

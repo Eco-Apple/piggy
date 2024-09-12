@@ -18,7 +18,7 @@ struct IncomeListItemView: View {
             VStack(alignment: .leading) {
                 Text(income.title)
                      .font(.headline)
-                Text("@" + income.createdDate.format(.timeOnly))
+                Text("@" + income.date!.format(.timeOnly))
                     .font(.caption)
             }
             Spacer()
