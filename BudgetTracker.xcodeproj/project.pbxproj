@@ -30,6 +30,7 @@
 		20ACD5482C89A71A00E08DCA /* BundleDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20ACD5472C89A71A00E08DCA /* BundleDecodable.swift */; };
 		20D0A1812C787BF60054DE5B /* CurrencyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D0A1802C787BF60054DE5B /* CurrencyField.swift */; };
 		20E3AC9B2C679CBF00D53664 /* ExpenseItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E3AC9A2C679CBF00D53664 /* ExpenseItemView.swift */; };
+		20E442D62C9481A000150488 /* EmptyMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E442D52C9481A000150488 /* EmptyMessageView.swift */; };
 		20E5660D2C7E26CF0008CD79 /* ExpenseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E5660C2C7E26CF0008CD79 /* ExpenseListView.swift */; };
 		20EF78382C82F8E80057F5AD /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EF78372C82F8E80057F5AD /* Navigation.swift */; };
 		20EF783A2C82FEC80057F5AD /* NavigationRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EF78392C82FEC80057F5AD /* NavigationRoute.swift */; };
@@ -61,6 +62,7 @@
 		20ACD5472C89A71A00E08DCA /* BundleDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleDecodable.swift; sourceTree = "<group>"; };
 		20D0A1802C787BF60054DE5B /* CurrencyField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyField.swift; sourceTree = "<group>"; };
 		20E3AC9A2C679CBF00D53664 /* ExpenseItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseItemView.swift; sourceTree = "<group>"; };
+		20E442D52C9481A000150488 /* EmptyMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyMessageView.swift; sourceTree = "<group>"; };
 		20E5660C2C7E26CF0008CD79 /* ExpenseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseListView.swift; sourceTree = "<group>"; };
 		20EF78372C82F8E80057F5AD /* Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
 		20EF78392C82FEC80057F5AD /* NavigationRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRoute.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 				20720F882C8C701300D01891 /* Expense */,
 				20D0A1802C787BF60054DE5B /* CurrencyField.swift */,
 				208E0A362C8498490027DC5C /* InfoTextView.swift */,
+				20E442D52C9481A000150488 /* EmptyMessageView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -312,6 +315,7 @@
 				20720F9A2C8C86D800D01891 /* AddIncomeView.swift in Sources */,
 				20EF78382C82F8E80057F5AD /* Navigation.swift in Sources */,
 				20ACD5422C898B7900E08DCA /* TextEditorViewModifier.swift in Sources */,
+				20E442D62C9481A000150488 /* EmptyMessageView.swift in Sources */,
 				2009712A2C5B82D80001F510 /* HomeView.swift in Sources */,
 				200971282C5B82D80001F510 /* BudgetTrackerApp.swift in Sources */,
 				20720F8F2C8C827100D01891 /* IncomeItemView.swift in Sources */,

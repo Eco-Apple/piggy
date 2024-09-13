@@ -176,11 +176,7 @@ struct ExpenseListView: View {
                 }
             }
         } else {
-            ContentUnavailableView {
-                Label("No Expense", systemImage: "tray.fill")
-            } description: {
-                Text("New expenses you added will appear here.")
-            }
+            EmptyMessageView(title: "No Expense", message: "Press '+' button on the upper right corner to add new expense.")
         }
     }
 }

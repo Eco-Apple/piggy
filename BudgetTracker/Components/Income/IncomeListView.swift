@@ -181,11 +181,7 @@ struct IncomeListView: View {
                 }
             }
         } else {
-            ContentUnavailableView {
-                Label("No Income", systemImage: "tray.fill")
-            } description: {
-                Text("New income you added will appear here.")
-            }
+            EmptyMessageView(title: "No Income", message: "Press '+' button on the upper right corner to add new income.")
         }
     }
 }
