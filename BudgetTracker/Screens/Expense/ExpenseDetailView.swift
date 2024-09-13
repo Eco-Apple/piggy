@@ -42,14 +42,16 @@ struct ExpenseDetailView: View {
                 }
                     
             }
-            Section("Note"){
-                if isEdit == false {
-                    Text(note)
-                        .frame(height: 150, alignment: .topLeading)
-                } else {
-                    TextEditor(text: $note)
-                        .frame(height: 150)
-                        .offset(x: -5, y: -8.5)
+            if isEdit || note.isNotEmpty {
+                Section("Note"){
+                    if !isEdit {
+                        Text(note)
+                            .frame(height: 150, alignment: .topLeading)
+                    } else {
+                        TextEditor(text: $note)
+                            .frame(height: 150)
+                            .offset(x: -5, y: -8.5)
+                    }
                 }
             }
         }
