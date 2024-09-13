@@ -15,7 +15,7 @@ struct ExpenseSeeMoreView: View {
         List {
             ForEach(expenses) { expense in
                 NavigationLink(value: NavigationRoute.expense(.detail(expense))) {
-                    ExpensListItemView(expense: expense)
+                    ExpensItemView(expense: expense)
                 }
             }
         }

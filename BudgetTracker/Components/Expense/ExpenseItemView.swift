@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-struct ExpensListItemView: View {
+struct ExpensItemView: View {
     var expense: Expense
     
     var body: some View {
@@ -18,8 +18,10 @@ struct ExpensListItemView: View {
             VStack(alignment: .leading) {
                 Text(expense.title)
                      .font(.headline)
-                Text("@" + expense.date!.format(.timeOnly))
-                    .font(.caption)
+                if expense.isTimeEnabled {
+                    Text("@" + expense.date!.format(.timeOnly))
+                        .font(.caption)
+                }
             }
             Spacer()
             Text("- \(expense.amount, format: .currency(code: "PHP"))").foregroundStyle(amountForegroundColor())
@@ -59,7 +61,7 @@ struct ExpensListItemView: View {
         let container = try ModelContainer(for: Expense.self, configurations: config)
         let example = Expense.previewItem
         
-        return ExpensListItemView(expense: example)
+        return ExpensItemView(expense: example)
             .modelContainer(container)
     } catch {
         return Text("Failed to create preview: \(error.localizedDescription)")

@@ -9,7 +9,7 @@ import SwiftUI
 
 /*
     TODO:
-    - Fix user can type alphabets using copy paste ( for simulator, external keyboard can also type alphabets )
+    - ‼️ Fix user can type alphabets using copy paste ( for simulator, external keyboard can also type alphabets )
  */
 
 struct CurrencyField: View {

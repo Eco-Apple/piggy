@@ -39,7 +39,6 @@ struct HomeView: View {
     var body: some View {
         Navigation {
             VStack(alignment: .leading) {
-                
                 if selectedSegment == .expense {
                     ExpenseListView(sortDescriptors: expenseSortDescriptors)
                 } else if selectedSegment == .income {
@@ -65,24 +64,42 @@ struct HomeView: View {
                 #endif
                 
                 ToolbarItemGroup(placement: .topBarTrailing) {
-                    Menu("Sort", systemImage: "arrow.up.arrow.down") {
-                        Picker("Sort", selection: $expenseSortDescriptors){
-                            Text("Sort by time")
-                                .tag([
-                                    SortDescriptor(\Expense.createdDate, order: .reverse),
-                                    SortDescriptor(\Expense.title)
-                                ])
-                            Text("Sort by name")
-                                .tag([
-                                    SortDescriptor(\Expense.title),
-                                    SortDescriptor(\Expense.createdDate, order: .reverse)
-                                ])
+                    switch selectedSegment {
+                    case .expense:
+                        Menu("Sort", systemImage: "arrow.up.arrow.down") {
+                            Picker("Sort", selection: $expenseSortDescriptors){
+                                Text("Sort by time")
+                                    .tag([
+                                        SortDescriptor(\Expense.date, order: .reverse),
+                                        SortDescriptor(\Expense.title)
+                                    ])
+                                Text("Sort by name")
+                                    .tag([
+                                        SortDescriptor(\Expense.title),
+                                        SortDescriptor(\Expense.date, order: .reverse)
+                                    ])
+                            }
+                        }
+                    case .income:
+                        Menu("Sort", systemImage: "arrow.up.arrow.down") {
+                            Picker("Sort", selection: $expenseSortDescriptors){
+                                Text("Sort by time")
+                                    .tag([
+                                        SortDescriptor(\Income.date, order: .reverse),
+                                        SortDescriptor(\Income.title)
+                                    ])
+                                Text("Sort by name")
+                                    .tag([
+                                        SortDescriptor(\Income.title),
+                                        SortDescriptor(\Income.date, order: .reverse)
+                                    ])
+                            }
                         }
                     }
                     
                     Button("Add button", systemImage: "plus") {
                         isAddViewPresented = true
-                    } 
+                    }
                 }
             }
             .sheet(isPresented: $isAddViewPresented) {

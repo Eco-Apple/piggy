@@ -59,7 +59,7 @@ fileprivate struct ExpenseSectionListView: View {
                 }
                 ForEach(expenses.prefix(limit)) { expense in
                     NavigationLink(value: NavigationRoute.expense(.detail(expense))) {
-                        ExpensListItemView(expense: expense)
+                        ExpensItemView(expense: expense)
                     }
                 }
                 .onDelete { offsets in

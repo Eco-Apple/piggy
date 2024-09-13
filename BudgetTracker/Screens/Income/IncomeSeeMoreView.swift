@@ -15,7 +15,7 @@ struct IncomeSeeMoreView: View {
         List {
             ForEach(incomes) { income in
                 NavigationLink(value: NavigationRoute.income(.detail(income))) {
-                    IncomeListItemView(income: income)
+                    IncomeItemView(income: income)
                 }
             }
         }

@@ -60,7 +60,7 @@ fileprivate struct IncomeSectionListView: View {
                 }
                 ForEach(incomes.prefix(limit)) { income in
                     NavigationLink(value: NavigationRoute.income(.detail(income))) {
-                        IncomeListItemView(income: income)
+                        IncomeItemView(income: income)
                     }
                 }
                 .onDelete { offsets in
