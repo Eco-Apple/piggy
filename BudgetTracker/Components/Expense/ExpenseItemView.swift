@@ -18,10 +18,14 @@ struct ExpensItemView: View {
             VStack(alignment: .leading) {
                 Text(expense.title)
                      .font(.headline)
-                if expense.isTimeEnabled {
-                    Text("@" + expense.date!.format(.timeOnly))
+                     .lineLimit(1)
+                
+                if expense.note.isNotEmpty {
+                    Text(expense.note)
                         .font(.caption)
+                        .lineLimit(1)
                 }
+                
             }
             Spacer()
             Text("- \(expense.amount, format: .currency(code: "PHP"))").foregroundStyle(amountForegroundColor())

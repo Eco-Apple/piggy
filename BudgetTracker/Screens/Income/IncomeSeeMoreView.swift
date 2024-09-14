@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+/*
+ TODO:
+ - Add delete 
+ 
+ */
 struct IncomeSeeMoreView: View {
     var date: Date
     var incomes: [Income]
