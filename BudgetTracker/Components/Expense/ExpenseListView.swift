@@ -54,8 +54,12 @@ fileprivate struct ExpenseSectionListView: View {
         if expenses.isNotEmpty {
             Section(filterDate.format(.dateOnly, descriptive: true)) {
                 HStack {
-                    InfoTextView(label: "Total", currency: total())
-                        .font(.headline)
+                    NavigationLink { 
+                        Text("Test") //TODO: Total expenses screen for t/day
+                    } label: {
+                        InfoTextView(label: "Total", currency: total())
+                            .font(.headline)
+                    }
                 }
                 ForEach(expenses.prefix(limit)) { expense in
                     NavigationLink(value: NavigationRoute.expense(.detail(expense))) {
@@ -97,6 +101,17 @@ fileprivate struct ExpenseSectionListView: View {
                             .foregroundColor(.blue)
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
+                }
+            }
+        } else {
+            Section(filterDate.format(.dateOnly, descriptive: true)) {
+                HStack {
+                    Spacer()
+                    Image(systemName:"tray.fill")
+                        .foregroundColor(.secondary)
+                    Text("No expense.")
+                        .font(.subheadline)
+                    Spacer()
                 }
             }
         }
@@ -160,24 +175,56 @@ struct ExpenseListView: View {
     
     var sortDescriptors: [SortDescriptor<Expense>]
     
-    let sectionsDate: [Date] = [
-        Calendar.current.date(byAdding: .day, value: -2, to: Date.now)!,
-        Calendar.current.date(byAdding: .day, value: -3, to: Date.now)!,
-        Calendar.current.date(byAdding: .day, value: -4, to: Date.now)!,
-    ]
+    let sectionsDate: [Date]
         
     var body: some View {
         if !isExpensesEmpty{
             List {
-                ExpenseSectionListViewWrapper(of: Date.now, sortDescriptors: sortDescriptors, limit: 5)
-                ExpenseSectionListViewWrapper(of: Calendar.current.date(byAdding: .day, value: -1, to: Date.now)!, sortDescriptors: sortDescriptors, limit: 3)
+                Section("this week") {
+                    NavigationLink {
+                        Text("Test") //TODO: Total expenses screen for t/week
+                    } label: {
+                        InfoTextView(label: "Expenses", currency: 10.0)
+                            .font(.headline)
+                    }
+                }
+                
                 ForEach(sectionsDate, id: \.self) { date in
-                    ExpenseSectionListViewWrapper(of: date, sortDescriptors: sortDescriptors, limit: 3)
+                    ExpenseSectionListViewWrapper(of: date, sortDescriptors: sortDescriptors, limit: Calendar.current.startOfDay(for:date) == Calendar.current.startOfDay(for: Date.now) ? 5 : 3)
                 }
             }
+            .listSectionSpacing(.compact)
         } else {
             EmptyMessageView(title: "No Expense", message: "Press '+' button on the upper right corner to add new expense.")
         }
+    }
+    
+    init(sortDescriptors: [SortDescriptor<Expense>]) {
+        self.sortDescriptors = sortDescriptors
+        
+        let today = Date.now
+        let calendar = Calendar.current
+        
+        // Set Monday as the first day of the week
+        var components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: today)
+        components.weekday = 2 // 2 represents Monday
+        
+        // Get the date for the previous or current Monday
+        guard let monday = calendar.nextDate(after: today, matching: components, matchingPolicy: .nextTimePreservingSmallerComponents, direction: .backward) else {
+            self.sectionsDate = []
+            return
+        }
+
+        // Calculate all the dates from Monday until today
+        var dates: [Date] = []
+        var currentDate = monday
+        
+        while currentDate <= today {
+            dates.insert(currentDate, at: 0)
+            currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
+        }
+
+        self.sectionsDate = dates
     }
 }
 
