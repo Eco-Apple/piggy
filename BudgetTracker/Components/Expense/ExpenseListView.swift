@@ -175,7 +175,7 @@ struct ExpenseListView: View {
     
     var sortDescriptors: [SortDescriptor<Expense>]
     
-    let sectionsDate: [Date]
+    var sectionsDate: [Date] = []
         
     var body: some View {
         if !isExpensesEmpty{
@@ -202,29 +202,41 @@ struct ExpenseListView: View {
     init(sortDescriptors: [SortDescriptor<Expense>]) {
         self.sortDescriptors = sortDescriptors
         
-        let today = Date.now
+        self.sectionsDate = setupDates()
+    }
+    
+    
+    func setupDates() -> [Date] {
+        var date = Date.now
         let calendar = Calendar.current
+        let currentWeekdayNumber = calendar.component(.weekday, from: date)
         
-        // Set Monday as the first day of the week
-        var components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: today)
-        components.weekday = 2 // 2 represents Monday
+        var dates: [Date] = []
         
-        // Get the date for the previous or current Monday
-        guard let monday = calendar.nextDate(after: today, matching: components, matchingPolicy: .nextTimePreservingSmallerComponents, direction: .backward) else {
-            self.sectionsDate = []
-            return
+        if currentWeekdayNumber == 1 {
+            date = calendar.date(byAdding: .day, value: -1, to: date)!
+        }
+        
+        var components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
+        
+        components.weekday = 2
+        
+        guard let monday = calendar.nextDate(after: date, matching: components, matchingPolicy: .nextTimePreservingSmallerComponents, direction: .backward) else {
+            return []
         }
 
-        // Calculate all the dates from Monday until today
-        var dates: [Date] = []
         var currentDate = monday
         
-        while currentDate <= today {
+        while currentDate <= date {
             dates.insert(currentDate, at: 0)
             currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
         }
-
-        self.sectionsDate = dates
+        
+        if currentWeekdayNumber == 1 {
+            dates.insert(Date.now, at: 0)
+        }
+        
+        return dates
     }
 }
 
