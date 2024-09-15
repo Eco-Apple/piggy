@@ -36,6 +36,7 @@ fileprivate struct ExpenseSectionListView: View {
     @Environment(\.modelContext) var modelContext
     
     @AppStorage("isExpensesEmpty") var isExpensesEmpty = true
+    @AppStorage("totalWeekExpenses") var totalWeekExpenses = "0.0"
     
     @Query var expenses: [Expense]
     
@@ -150,9 +151,14 @@ fileprivate struct ExpenseSectionListView: View {
     }
     
     func actionDelete() {
+        var totalDeletedExpenses: Decimal = 0.0
+        
         for expense in expensesToDelete {
+            totalDeletedExpenses = totalDeletedExpenses + expense.amount
             modelContext.delete(expense)
         }
+        
+        totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: totalDeletedExpenses, .sub)!
         
         do {
             let fetchDescriptor = FetchDescriptor<Expense>()
@@ -172,6 +178,7 @@ fileprivate struct ExpenseSectionListView: View {
 
 struct ExpenseListView: View {
     @AppStorage("isExpensesEmpty") var isExpensesEmpty = true
+    @AppStorage("totalWeekExpenses") var totalWeekExpenses = "0.0"
     
     var sortDescriptors: [SortDescriptor<Expense>]
     
@@ -184,7 +191,7 @@ struct ExpenseListView: View {
                     NavigationLink {
                         Text("Test") //TODO: Total expenses screen for t/week
                     } label: {
-                        InfoTextView(label: "Expenses", currency: 10.0)
+                        InfoTextView(label: "Expenses", currency: Decimal(string: totalWeekExpenses)!)
                             .font(.headline)
                     }
                 }

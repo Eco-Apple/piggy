@@ -16,6 +16,7 @@ struct HomeView: View {
     #if DEBUG
     @AppStorage("isExpensesEmpty") var isExpensesEmpty = true
     @AppStorage("isIncomesEmpty") var isIncomesEmpty = true
+    @AppStorage("totalWeekExpenses") var totalWeekExpenses = "0.0"
     
     @State var expenseDayCounter: Double = 0
     @State var incomeDayCounter: Double = 0
@@ -119,12 +120,16 @@ struct HomeView: View {
         switch selectedSegment {
         case .expense:
             let expenses: [Expense] = Bundle.main.decode("expense.mock.json")
+            var totalExpense: Decimal = 0.0
             
             for expense in expenses {
                 let date: Date = .now.addingTimeInterval(86400 * expenseDayCounter)
                 expense.date = date
+                totalExpense = totalExpense + expense.amount
                 modelContext.insert(expense)
             }
+            
+            totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: totalExpense, .add)!
             
             expenseDayCounter = expenseDayCounter - 1
             isExpensesEmpty = false
@@ -153,8 +158,9 @@ struct HomeView: View {
                     modelContext.delete(expense)
                 }
                 
+                totalWeekExpenses = "0.0"
                 isExpensesEmpty = true
-                incomeDayCounter = 0
+                expenseDayCounter = 0
             case .income:
                 let descriptor = FetchDescriptor<Income>()
                 let toDeleteData = try modelContext.fetch(descriptor)

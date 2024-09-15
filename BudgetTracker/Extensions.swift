@@ -34,6 +34,7 @@ extension Decimal {
     }
 }
 
+
 extension String {
     var toDecimalWithCommaSeparator: String? {
         let components = self.split(separator: ".")
@@ -73,6 +74,28 @@ extension String {
         
         return result
     }
+}
+
+
+extension String {
+    
+    enum ArithmeticOperation {
+        case add, sub
+    }
+    
+    func arithmeticOperation(of decimal: Decimal, _ operation: ArithmeticOperation ) -> String? {
+        
+        guard let selfDecimal = Decimal(string: self) else { return nil}
+        
+        switch operation {
+        case .add:
+            return "\(selfDecimal + decimal)"
+        case .sub:
+            return "\(selfDecimal - decimal)"
+        }
+        
+    }
+    
 }
 
 extension Date {

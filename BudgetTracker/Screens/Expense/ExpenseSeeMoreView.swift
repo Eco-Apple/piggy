@@ -12,9 +12,10 @@ struct ExpenseSeeMoreView: View {
     @Environment(\.modelContext) var modelContext
     
     @AppStorage("isExpensesEmpty") var isExpensesEmpty = true
+    @AppStorage("totalWeekExpenses") var totalWeekExpenses = "0.0"
     
     var date: Date
-    var expenses: [Expense]
+    @State var expenses: [Expense]
     
     @State private var isAlertPresented = false
     @State private var expensesToDelete: [Expense] = []
@@ -49,9 +50,18 @@ struct ExpenseSeeMoreView: View {
     
     
     func actionDelete() {
+        var totalDeletedExpenses: Decimal = 0.0
+        
         for expense in expensesToDelete {
+            totalDeletedExpenses = totalDeletedExpenses + expense.amount
             modelContext.delete(expense)
         }
+        
+        expenses.removeAll { expense in
+            expensesToDelete.contains(expense)
+        }
+        
+        totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: totalDeletedExpenses, .sub)!
         
         do {
             let fetchDescriptor = FetchDescriptor<Expense>()
