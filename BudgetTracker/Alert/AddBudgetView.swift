@@ -13,6 +13,7 @@ struct AddBudgetView: View {
     @Environment(\.modelContext) var modelContext
     
     @AppStorage("isBudgetsEmpty") var isBudgetsEmpty = true
+    @AppStorage("totalWeekBudgets") var totalWeekBudgets = "0.0"
     
     @State var title: String = ""
     @State var note: String = ""
@@ -80,6 +81,8 @@ struct AddBudgetView: View {
     
     func addEntry() {
         let newBudget = Budget(title: title, note: note, amount: amount!,date: date, createdDate: .now, updatedDate: .now, isTimeEnabled: isTimeEnabled)
+        
+        totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: newBudget.amount, .add)!
         
         modelContext.insert(newBudget)
         isBudgetsEmpty = false

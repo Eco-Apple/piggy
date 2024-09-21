@@ -56,21 +56,8 @@ fileprivate struct ExpenseSectionListView: View {
         if expenses.isNotEmpty {
             Section(filterDate.format(.dateOnly, descriptive: true)) {
                 HStack {
-                    
                     InfoTextView(label: "Total", currency: total())
                         .font(.headline)
-                    
-                    // TODO: [v2] descript here...
-//                    Button {
-//                        isTotalSheetPresented = true
-//                    } label: {
-//                        InfoTextView(label: "Total", currency: total(), isButton: true)
-//                            .font(.headline)
-//                    }
-//                    .buttonStyle(.plain)
-//                    .sheet(isPresented: $isTotalSheetPresented){
-//                        Text("test")
-//                    }
                 }
                 ForEach(expenses.prefix(limit)) { expense in
                     NavigationLink(value: NavigationRoute.expense(.detail(expense))) {
@@ -190,8 +177,6 @@ struct ExpenseListView: View {
     @AppStorage("isExpensesEmpty") var isExpensesEmpty = true
     @AppStorage("totalWeekExpenses") var totalWeekExpenses = "0.0"
     
-    @State private var isThisWeekExpensePresented: Bool = false
-    
     var sortDescriptors: [SortDescriptor<Expense>]
     var sectionsDate: [Date] = []
         
@@ -199,19 +184,8 @@ struct ExpenseListView: View {
         if !isExpensesEmpty{
             List {
                 Section("this week") {
-                    
                     InfoTextView(label: "Expenses", currency: Decimal(string: totalWeekExpenses)!)
                         .font(.headline)
-                    
-                    // TODO: [v2] descript here...
-//                    Button {
-//                        isThisWeekExpensePresented = true
-//                    } label: {
-//                        InfoTextView(label: "Expenses", currency: Decimal(string: totalWeekExpenses)!, isButton: false)
-//                            .font(.headline)
-//                    }
-//                    .buttonStyle(.plain)
-//                    .sheet(isPresented: $isThisWeekExpensePresented) {}
                 }
                 
                 ForEach(sectionsDate, id: \.self) { date in

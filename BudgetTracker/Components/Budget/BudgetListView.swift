@@ -37,6 +37,7 @@ fileprivate struct BudgetSectionListView: View {
     @Environment(\.modelContext) var modelContext
     
     @AppStorage("isBudgetsEmpty") var isBudgetsEmpty = true
+    @AppStorage("totalWeekBudgets") var totalWeekBudgets = "0.0"
     
     @Query var budgets: [Budget]
     
@@ -100,6 +101,17 @@ fileprivate struct BudgetSectionListView: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
             }
+        } else {
+            Section(filterDate.format(.dateOnly, descriptive: true)) {
+                HStack {
+                    Spacer()
+                    Image(systemName:"tray.fill")
+                        .foregroundColor(.secondary)
+                    Text("No budget.")
+                        .font(.subheadline)
+                    Spacer()
+                }
+            }
         }
     }
     
@@ -137,9 +149,14 @@ fileprivate struct BudgetSectionListView: View {
     }
     
     func actionDelete() {
+        var totalDeletedBudgets: Decimal = 0.0
+        
         for budget in budgetsToDelete {
+            totalDeletedBudgets = totalDeletedBudgets + budget.amount
             modelContext.delete(budget)
         }
+        
+        totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: totalDeletedBudgets, .sub)!
         
         do {
             let fetchDescriptor = FetchDescriptor<Budget>()
@@ -160,28 +177,67 @@ fileprivate struct BudgetSectionListView: View {
 
 struct BudgetListView: View {
     @AppStorage("isBudgetsEmpty") var isBudgetsEmpty = true
+    @AppStorage("totalWeekBudgets") var totalWeekBudgets = "0.0"
     
     var sortDescriptors: [SortDescriptor<Budget>]
-    
-    let sectionsDate: [Date] = [
-        Calendar.current.date(byAdding: .day, value: -2, to: Date.now)!,
-        Calendar.current.date(byAdding: .day, value: -3, to: Date.now)!,
-        Calendar.current.date(byAdding: .day, value: -4, to: Date.now)!,
-    ]
+    var sectionsDate: [Date] = []
     
     
     var body: some View {
         if !isBudgetsEmpty {
             List {
-                BudgetSectionListViewWrapper(of: Date.now, sortDescriptors: sortDescriptors, limit: 5)
-                BudgetSectionListViewWrapper(of: Calendar.current.date(byAdding: .day, value: -1, to: Date.now)!, sortDescriptors: sortDescriptors, limit: 3)
-                ForEach(sectionsDate, id: \.self) { date in
-                    BudgetSectionListViewWrapper(of: date, sortDescriptors: sortDescriptors, limit: 3)
-                }
+                    Section("this week") {
+                        InfoTextView(label: "Budgets", currency: Decimal(string: totalWeekBudgets)!)
+                            .font(.headline)
+                    }
+                    
+                    ForEach(sectionsDate, id: \.self) { date in
+                        BudgetSectionListViewWrapper(of: date, sortDescriptors: sortDescriptors, limit: Calendar.current.startOfDay(for:date) == Calendar.current.startOfDay(for: Date.now) ? 5 : 3)
+                    }
             }
         } else {
             EmptyMessageView(title: "No Budget", message: "Press '+' button at the upper right corner to add new budget.")
         }
+    }
+    
+    init(sortDescriptors: [SortDescriptor<Budget>]) {
+        self.sortDescriptors = sortDescriptors
+        
+        self.sectionsDate = setupDates()
+    }
+
+    
+    func setupDates() -> [Date] {
+        var date = Date.now
+        let calendar = Calendar.current
+        let currentWeekdayNumber = calendar.component(.weekday, from: date)
+        
+        var dates: [Date] = []
+        
+        if currentWeekdayNumber == 1 {
+            date = calendar.date(byAdding: .day, value: -1, to: date)!
+        }
+        
+        var components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
+        
+        components.weekday = 2
+        
+        guard let monday = calendar.nextDate(after: date, matching: components, matchingPolicy: .nextTimePreservingSmallerComponents, direction: .backward) else {
+            return []
+        }
+
+        var currentDate = monday
+        
+        while currentDate <= date {
+            dates.insert(currentDate, at: 0)
+            currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
+        }
+        
+        if currentWeekdayNumber == 1 {
+            dates.insert(Date.now, at: 0)
+        }
+        
+        return dates
     }
 }
 

@@ -19,6 +19,8 @@ struct HomeView: View {
     @AppStorage("isBudgetsEmpty") var isBudgetsEmpty = true
     
     @AppStorage("totalWeekExpenses") var totalWeekExpenses = "0.0"
+    @AppStorage("totalWeekBudgets") var totalWeekBudgets = "0.0"
+    @AppStorage("totalWeekIncomes") var totalWeekIncomes = "0.0"
     
     @State var expenseDayCounter: Double = 0
     @State var incomeDayCounter: Double = 0
@@ -162,23 +164,31 @@ struct HomeView: View {
             isExpensesEmpty = false
         case .income:
             let incomes: [Income] = Bundle.main.decode("income.mock.json")
+            var totalIncome: Decimal = 0.0
             
             for income in incomes {
                 let date: Date = .now.addingTimeInterval(86400 * incomeDayCounter)
                 income.date = date
+                totalIncome = totalIncome + income.amount
                 modelContext.insert(income)
             }
+            
+            totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: totalIncome, .add)!
             
             incomeDayCounter = incomeDayCounter - 1
             isIncomesEmpty = false
         case .budget:
             let budgets: [Budget] = Bundle.main.decode("budget.mock.json")
+            var totalBudget: Decimal = 0.0
             
             for budget in budgets {
                 let date: Date = .now.addingTimeInterval(86400 * budgetDayCounter)
                 budget.date = date
+                totalBudget = totalBudget + budget.amount
                 modelContext.insert(budget)
             }
+            
+            totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: totalBudget, .add)!
             
             budgetDayCounter = budgetDayCounter - 1
             isBudgetsEmpty = false
@@ -208,6 +218,7 @@ struct HomeView: View {
                     modelContext.delete(income)
                 }
                 
+                totalWeekIncomes = "0.0"
                 isIncomesEmpty = true
                 incomeDayCounter = 0
             case .budget:
@@ -218,6 +229,7 @@ struct HomeView: View {
                     modelContext.delete(budget)
                 }
                 
+                totalWeekBudgets = "0.0"
                 isBudgetsEmpty = true
                 budgetDayCounter = 0
                 break

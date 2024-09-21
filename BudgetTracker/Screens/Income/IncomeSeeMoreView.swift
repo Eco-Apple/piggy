@@ -12,9 +12,10 @@ struct IncomeSeeMoreView: View {
     @Environment(\.modelContext) var modelContext
     
     @AppStorage("isIncomesEmpty") var isIncomesEmpty = true
+    @AppStorage("totalWeekIncomes") var totalWeekIncomes = "0.0"
     
     var date: Date
-    var incomes: [Income]
+    @State var incomes: [Income]
     
     @State private var isAlertPresented = false
     @State private var incomesToDelete: [Income] = []
@@ -48,9 +49,18 @@ struct IncomeSeeMoreView: View {
     
     
     func actionDelete() {
+        var totalDeletedIncomes: Decimal = 0.0
+        
         for income in incomesToDelete {
+            totalDeletedIncomes = totalDeletedIncomes + income.amount
             modelContext.delete(income)
         }
+        
+        incomes.removeAll { income in
+            incomesToDelete.contains(income)
+        }
+
+        totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: totalDeletedIncomes, .sub)!
         
         do {
             let fetchDescriptor = FetchDescriptor<Income>()

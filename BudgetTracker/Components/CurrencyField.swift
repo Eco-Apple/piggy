@@ -71,6 +71,6 @@ struct CurrencyField: View {
 }
 
 #Preview {
-    @State var amount: Decimal? = nil
+    @Previewable @State var amount: Decimal? = nil
     return CurrencyField("Amount",value: $amount)
 }
