@@ -8,35 +8,35 @@
 import SwiftData
 import SwiftUI
 
-struct IncomeSeeMoreView: View {
+struct BudgetSeeMoreView: View {
     @Environment(\.modelContext) var modelContext
     
-    @AppStorage("isIncomesEmpty") var isIncomesEmpty = true
+    @AppStorage("isBudgetsEmpty") var isBudgetsEmpty = true
     
     var date: Date
-    var incomes: [Income]
+    var budgets: [Budget]
     
     @State private var isAlertPresented = false
-    @State private var incomesToDelete: [Income] = []
+    @State private var budgetsToDelete: [Budget] = []
     
     var body: some View {
         List {
-            ForEach(incomes) { income in
-                NavigationLink(value: NavigationRoute.income(.detail(income))) {
-                    IncomeItemView(income: income)
+            ForEach(budgets) { budget in
+                NavigationLink(value: NavigationRoute.budget(.detail(budget))) {
+                    BudgetItemView(budget: budget)
                 }
             }
             .onDelete { offsets in
-                incomesToDelete = []
+                budgetsToDelete = []
                 for index in offsets {
-                    let income = incomes[index]
+                    let budget = budgets[index]
                     isAlertPresented = true
-                    incomesToDelete.append(income)
+                    budgetsToDelete.append(budget)
                 }
             }
             .alert(isPresented: $isAlertPresented){
                 Alert(
-                    title: Text("Are you sure you want to delete \(incomes.getPluralSuffix(singular: "this", plural: "these")) income\(incomes.getPluralSuffix(singular: "", plural: "s"))?"),
+                    title: Text("Are you sure you want to delete \(budgets.getPluralSuffix(singular: "this", plural: "these")) budget\(budgets.getPluralSuffix(singular: "", plural: "s"))?"),
                     message: Text("You cannot undo this action once done."),
                     primaryButton: .destructive(Text("Delete"), action: actionDelete),
                     secondaryButton: .cancel()
@@ -48,16 +48,16 @@ struct IncomeSeeMoreView: View {
     
     
     func actionDelete() {
-        for income in incomesToDelete {
-            modelContext.delete(income)
+        for budget in budgetsToDelete {
+            modelContext.delete(budget)
         }
         
         do {
-            let fetchDescriptor = FetchDescriptor<Income>()
-            let fetchIncomes = try modelContext.fetch(fetchDescriptor)
+            let fetchDescriptor = FetchDescriptor<Budget>()
+            let fetchBudgets = try modelContext.fetch(fetchDescriptor)
             
-            if fetchIncomes.isEmpty {
-                isIncomesEmpty = true
+            if fetchBudgets.isEmpty {
+                isBudgetsEmpty = true
             }
             
         } catch {
@@ -68,5 +68,5 @@ struct IncomeSeeMoreView: View {
 }
 
 #Preview {
-    IncomeSeeMoreView(date: .now, incomes: [Income.previewItem])
+    BudgetSeeMoreView(date: .now, budgets: [Budget.previewItem])
 }

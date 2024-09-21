@@ -16,10 +16,13 @@ struct HomeView: View {
     #if DEBUG
     @AppStorage("isExpensesEmpty") var isExpensesEmpty = true
     @AppStorage("isIncomesEmpty") var isIncomesEmpty = true
+    @AppStorage("isBudgetsEmpty") var isBudgetsEmpty = true
+    
     @AppStorage("totalWeekExpenses") var totalWeekExpenses = "0.0"
     
     @State var expenseDayCounter: Double = 0
     @State var incomeDayCounter: Double = 0
+    @State var budgetDayCounter: Double = 0
     #endif
     
     @State private var isAddViewPresented = false
@@ -33,25 +36,35 @@ struct HomeView: View {
         SortDescriptor(\Income.createdDate, order: .reverse),
         SortDescriptor(\Income.title)
     ]
+    
+    @State private var budgetsSortDescriptors: [SortDescriptor<Budget>] = [
+        SortDescriptor(\Budget.createdDate, order: .reverse),
+        SortDescriptor(\Budget.title)
+    ]
+
 
     
-    @State private var selectedSegment: HomeViewSegments = .expense
+    @State private var selectedSegment: HomeViewSegments = .budget
     
     var body: some View {
         Navigation {
             VStack(alignment: .leading) {
-                if selectedSegment == .expense {
+                switch selectedSegment {
+                case .expense:
                     ExpenseListView(sortDescriptors: expenseSortDescriptors)
-                } else if selectedSegment == .income {
+                case .income:
                     IncomeListView(sortDescriptors: incomesSortDescriptors)
+                case .budget:
+                    BudgetListView(sortDescriptors: budgetsSortDescriptors)
                 }
                 
                 Picker("Select a segment", selection: $selectedSegment) {
+                    Text("Budget").tag(HomeViewSegments.budget)
                     Text("Expenses").tag(HomeViewSegments.expense)
                     Text("Income").tag(HomeViewSegments.income)
                  }
                  .pickerStyle(SegmentedPickerStyle())
-                 .frame(width: 200)
+                 .frame(width: 250)
                  .padding()
             }
             .scrollBounceBehavior(.basedOnSize)
@@ -96,6 +109,21 @@ struct HomeView: View {
                                     ])
                             }
                         }
+                    case .budget:
+                        Menu("Sort", systemImage: "arrow.up.arrow.down") {
+                            Picker("Sort", selection: $expenseSortDescriptors){
+                                Text("Sort by time")
+                                    .tag([
+                                        SortDescriptor(\Budget.date, order: .reverse),
+                                        SortDescriptor(\Budget.title)
+                                    ])
+                                Text("Sort by name")
+                                    .tag([
+                                        SortDescriptor(\Budget.title),
+                                        SortDescriptor(\Budget.date, order: .reverse)
+                                    ])
+                            }
+                        }
                     }
                     
                     Button("Add button", systemImage: "plus") {
@@ -109,6 +137,8 @@ struct HomeView: View {
                     AddExpenseView()
                 case .income:
                     AddIncomeView()
+                case .budget:
+                    AddBudgetView()
                 }
             }
         }
@@ -144,6 +174,18 @@ struct HomeView: View {
             
             incomeDayCounter = incomeDayCounter - 1
             isIncomesEmpty = false
+        case .budget:
+            let budgets: [Budget] = Bundle.main.decode("budget.mock.json")
+            
+            for budget in budgets {
+                let date: Date = .now.addingTimeInterval(86400 * budgetDayCounter)
+                budget.date = date
+                modelContext.insert(budget)
+            }
+            
+            budgetDayCounter = budgetDayCounter - 1
+            isBudgetsEmpty = false
+            break
         }
     }
     
@@ -171,6 +213,17 @@ struct HomeView: View {
                 
                 isIncomesEmpty = true
                 incomeDayCounter = 0
+            case .budget:
+                let descriptor = FetchDescriptor<Budget>()
+                let toDeleteData = try modelContext.fetch(descriptor)
+                
+                for budget in toDeleteData {
+                    modelContext.delete(budget)
+                }
+                
+                isBudgetsEmpty = true
+                budgetDayCounter = 0
+                break
             }
         } catch {
             fatalError("Something went wrong.")

@@ -14,5 +14,5 @@ enum DateStyle {
 }
 
 enum HomeViewSegments {
-    case expense, income
+    case expense, income, budget
 }

@@ -44,6 +44,7 @@ fileprivate struct ExpenseSectionListView: View {
     
     @State private var isAlertPresented = false
     @State private var expensesToDelete: [Expense] = []
+    @State private var isTotalSheetPresented = false
     
     private var limitToExpand: Int = 10 // default 10; test 4
     
@@ -55,12 +56,21 @@ fileprivate struct ExpenseSectionListView: View {
         if expenses.isNotEmpty {
             Section(filterDate.format(.dateOnly, descriptive: true)) {
                 HStack {
-                    NavigationLink { 
-                        Text("Test") //TODO: Total expenses screen for t/day
-                    } label: {
-                        InfoTextView(label: "Total", currency: total())
-                            .font(.headline)
-                    }
+                    
+                    InfoTextView(label: "Total", currency: total())
+                        .font(.headline)
+                    
+                    // TODO: [v2] descript here...
+//                    Button {
+//                        isTotalSheetPresented = true
+//                    } label: {
+//                        InfoTextView(label: "Total", currency: total(), isButton: true)
+//                            .font(.headline)
+//                    }
+//                    .buttonStyle(.plain)
+//                    .sheet(isPresented: $isTotalSheetPresented){
+//                        Text("test")
+//                    }
                 }
                 ForEach(expenses.prefix(limit)) { expense in
                     NavigationLink(value: NavigationRoute.expense(.detail(expense))) {
@@ -180,20 +190,28 @@ struct ExpenseListView: View {
     @AppStorage("isExpensesEmpty") var isExpensesEmpty = true
     @AppStorage("totalWeekExpenses") var totalWeekExpenses = "0.0"
     
-    var sortDescriptors: [SortDescriptor<Expense>]
+    @State private var isThisWeekExpensePresented: Bool = false
     
+    var sortDescriptors: [SortDescriptor<Expense>]
     var sectionsDate: [Date] = []
         
     var body: some View {
         if !isExpensesEmpty{
             List {
                 Section("this week") {
-                    NavigationLink {
-                        Text("Test") //TODO: Total expenses screen for t/week
-                    } label: {
-                        InfoTextView(label: "Expenses", currency: Decimal(string: totalWeekExpenses)!)
-                            .font(.headline)
-                    }
+                    
+                    InfoTextView(label: "Expenses", currency: Decimal(string: totalWeekExpenses)!)
+                        .font(.headline)
+                    
+                    // TODO: [v2] descript here...
+//                    Button {
+//                        isThisWeekExpensePresented = true
+//                    } label: {
+//                        InfoTextView(label: "Expenses", currency: Decimal(string: totalWeekExpenses)!, isButton: false)
+//                            .font(.headline)
+//                    }
+//                    .buttonStyle(.plain)
+//                    .sheet(isPresented: $isThisWeekExpensePresented) {}
                 }
                 
                 ForEach(sectionsDate, id: \.self) { date in
@@ -202,7 +220,7 @@ struct ExpenseListView: View {
             }
             .listSectionSpacing(.compact)
         } else {
-            EmptyMessageView(title: "No Expense", message: "Press '+' button on the upper right corner to add new expense.")
+            EmptyMessageView(title: "No Expense", message: "Press '+' button at the upper right corner to add new expense.")
         }
     }
     

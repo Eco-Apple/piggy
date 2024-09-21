@@ -32,6 +32,13 @@
 		20E3AC9B2C679CBF00D53664 /* ExpenseItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E3AC9A2C679CBF00D53664 /* ExpenseItemView.swift */; };
 		20E442D62C9481A000150488 /* EmptyMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E442D52C9481A000150488 /* EmptyMessageView.swift */; };
 		20E5660D2C7E26CF0008CD79 /* ExpenseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E5660C2C7E26CF0008CD79 /* ExpenseListView.swift */; };
+		20EB37FC2C9E9D49003495A1 /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EB37FB2C9E9D49003495A1 /* Budget.swift */; };
+		20EB37FE2C9EA278003495A1 /* budget.mock.json in Resources */ = {isa = PBXBuildFile; fileRef = 20EB37FD2C9EA278003495A1 /* budget.mock.json */; };
+		20EB38012C9EA2DE003495A1 /* BudgetItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EB38002C9EA2DE003495A1 /* BudgetItemView.swift */; };
+		20EB38032C9EA43B003495A1 /* BudgetListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EB38022C9EA43B003495A1 /* BudgetListView.swift */; };
+		20EB38062C9EA4FA003495A1 /* BudgetSeeMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EB38052C9EA4FA003495A1 /* BudgetSeeMoreView.swift */; };
+		20EB38082C9EA5A7003495A1 /* BudgetDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EB38072C9EA5A7003495A1 /* BudgetDetailView.swift */; };
+		20EB380A2C9EA893003495A1 /* AddBudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EB38092C9EA893003495A1 /* AddBudgetView.swift */; };
 		20EF78382C82F8E80057F5AD /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EF78372C82F8E80057F5AD /* Navigation.swift */; };
 		20EF783A2C82FEC80057F5AD /* NavigationRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EF78392C82FEC80057F5AD /* NavigationRoute.swift */; };
 		20EF783C2C82FF0D0057F5AD /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EF783B2C82FF0D0057F5AD /* NavigationRouter.swift */; };
@@ -64,6 +71,13 @@
 		20E3AC9A2C679CBF00D53664 /* ExpenseItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseItemView.swift; sourceTree = "<group>"; };
 		20E442D52C9481A000150488 /* EmptyMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyMessageView.swift; sourceTree = "<group>"; };
 		20E5660C2C7E26CF0008CD79 /* ExpenseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseListView.swift; sourceTree = "<group>"; };
+		20EB37FB2C9E9D49003495A1 /* Budget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Budget.swift; sourceTree = "<group>"; };
+		20EB37FD2C9EA278003495A1 /* budget.mock.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = budget.mock.json; sourceTree = "<group>"; };
+		20EB38002C9EA2DE003495A1 /* BudgetItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetItemView.swift; sourceTree = "<group>"; };
+		20EB38022C9EA43B003495A1 /* BudgetListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetListView.swift; sourceTree = "<group>"; };
+		20EB38052C9EA4FA003495A1 /* BudgetSeeMoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSeeMoreView.swift; sourceTree = "<group>"; };
+		20EB38072C9EA5A7003495A1 /* BudgetDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetDetailView.swift; sourceTree = "<group>"; };
+		20EB38092C9EA893003495A1 /* AddBudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBudgetView.swift; sourceTree = "<group>"; };
 		20EF78372C82F8E80057F5AD /* Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
 		20EF78392C82FEC80057F5AD /* NavigationRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRoute.swift; sourceTree = "<group>"; };
 		20EF783B2C82FF0D0057F5AD /* NavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouter.swift; sourceTree = "<group>"; };
@@ -126,6 +140,7 @@
 		200971352C5B82F40001F510 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				20EB38042C9EA4F2003495A1 /* Budget */,
 				20720F912C8C83AD00D01891 /* Income */,
 				20720F902C8C838900D01891 /* Expense */,
 				200971292C5B82D80001F510 /* HomeView.swift */,
@@ -136,6 +151,7 @@
 		200971362C5B82FF0001F510 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				20EB37FF2C9EA2D2003495A1 /* Budget */,
 				20720F892C8C702200D01891 /* Income */,
 				20720F882C8C701300D01891 /* Expense */,
 				20D0A1802C787BF60054DE5B /* CurrencyField.swift */,
@@ -150,6 +166,7 @@
 			children = (
 				202210BD2C7B86FA0044CEA4 /* Expense.swift */,
 				20720F8C2C8C730500D01891 /* Income.swift */,
+				20EB37FB2C9E9D49003495A1 /* Budget.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -195,6 +212,7 @@
 			children = (
 				200971652C6790180001F510 /* AddExpenseView.swift */,
 				20720F992C8C86D800D01891 /* AddIncomeView.swift */,
+				20EB38092C9EA893003495A1 /* AddBudgetView.swift */,
 			);
 			path = Alert;
 			sourceTree = "<group>";
@@ -221,10 +239,29 @@
 			isa = PBXGroup;
 			children = (
 				20ACD5452C89A41100E08DCA /* expense.mock.json */,
+				20EB37FD2C9EA278003495A1 /* budget.mock.json */,
 				20720F9B2C8C8AC800D01891 /* income.mock.json */,
 				20ACD5472C89A71A00E08DCA /* BundleDecodable.swift */,
 			);
 			path = MockData;
+			sourceTree = "<group>";
+		};
+		20EB37FF2C9EA2D2003495A1 /* Budget */ = {
+			isa = PBXGroup;
+			children = (
+				20EB38022C9EA43B003495A1 /* BudgetListView.swift */,
+				20EB38002C9EA2DE003495A1 /* BudgetItemView.swift */,
+			);
+			path = Budget;
+			sourceTree = "<group>";
+		};
+		20EB38042C9EA4F2003495A1 /* Budget */ = {
+			isa = PBXGroup;
+			children = (
+				20EB38072C9EA5A7003495A1 /* BudgetDetailView.swift */,
+				20EB38052C9EA4FA003495A1 /* BudgetSeeMoreView.swift */,
+			);
+			path = Budget;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -287,6 +324,7 @@
 			files = (
 				2009712F2C5B82D90001F510 /* Preview Assets.xcassets in Resources */,
 				2009712C2C5B82D90001F510 /* Assets.xcassets in Resources */,
+				20EB37FE2C9EA278003495A1 /* budget.mock.json in Resources */,
 				20ACD5462C89A41100E08DCA /* expense.mock.json in Resources */,
 				20720F9C2C8C8AC800D01891 /* income.mock.json in Resources */,
 			);
@@ -307,20 +345,26 @@
 				20D0A1812C787BF60054DE5B /* CurrencyField.swift in Sources */,
 				20720F952C8C846E00D01891 /* IncomeSeeMoreView.swift in Sources */,
 				202210BE2C7B86FA0044CEA4 /* Expense.swift in Sources */,
+				20EB38012C9EA2DE003495A1 /* BudgetItemView.swift in Sources */,
 				20E3AC9B2C679CBF00D53664 /* ExpenseItemView.swift in Sources */,
 				20720F8B2C8C703200D01891 /* IncomeListView.swift in Sources */,
 				20ACD5482C89A71A00E08DCA /* BundleDecodable.swift in Sources */,
 				208E0A372C8498490027DC5C /* InfoTextView.swift in Sources */,
+				20EB37FC2C9E9D49003495A1 /* Budget.swift in Sources */,
 				200971662C6790180001F510 /* AddExpenseView.swift in Sources */,
 				20720F9A2C8C86D800D01891 /* AddIncomeView.swift in Sources */,
 				20EF78382C82F8E80057F5AD /* Navigation.swift in Sources */,
 				20ACD5422C898B7900E08DCA /* TextEditorViewModifier.swift in Sources */,
+				20EB38032C9EA43B003495A1 /* BudgetListView.swift in Sources */,
 				20E442D62C9481A000150488 /* EmptyMessageView.swift in Sources */,
+				20EB38062C9EA4FA003495A1 /* BudgetSeeMoreView.swift in Sources */,
 				2009712A2C5B82D80001F510 /* HomeView.swift in Sources */,
 				200971282C5B82D80001F510 /* BudgetTrackerApp.swift in Sources */,
+				20EB38082C9EA5A7003495A1 /* BudgetDetailView.swift in Sources */,
 				20720F8F2C8C827100D01891 /* IncomeItemView.swift in Sources */,
 				200971682C679A990001F510 /* Extensions.swift in Sources */,
 				208271F82C82226300A1BADA /* ExpenseSeeMoreView.swift in Sources */,
+				20EB380A2C9EA893003495A1 /* AddBudgetView.swift in Sources */,
 				20720F972C8C861A00D01891 /* Enums.swift in Sources */,
 				20720F932C8C83BF00D01891 /* IncomeDetailView.swift in Sources */,
 			);

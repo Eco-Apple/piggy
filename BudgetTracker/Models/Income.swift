@@ -22,20 +22,20 @@ class Income: Codable {
     }
     
     var title: String
-    var note: String     
+    var note: String
     var amount: Decimal
     var date: Date?
     var createdDate: Date
     var updatedDate: Date
     var isTimeEnabled: Bool
 
-    init(title: String, note: String, amount: Decimal, date: Date?, createdDate: Date, updateDate: Date, isTimeEnabled: Bool) {
+    init(title: String, note: String, amount: Decimal, date: Date?, createdDate: Date, updatedDate: Date, isTimeEnabled: Bool) {
         self.title = title
         self.note = note
         self.amount = amount
         self.date = date
         self.createdDate = createdDate
-        self.updatedDate = updateDate
+        self.updatedDate = updatedDate
         self.isTimeEnabled = isTimeEnabled
     }
     
@@ -64,7 +64,6 @@ class Income: Codable {
 
 extension Income {
     static var previewItem: Income {
-        Income(title: "Shopping", note: "Monthly shopping", amount: 100.0, date: Date.distantPast, createdDate: .now, updateDate: .now, isTimeEnabled: false)
+        Income(title: "Shopping", note: "Monthly shopping", amount: 100.0, date: Date.distantPast, createdDate: .now, updatedDate: .now, isTimeEnabled: false)
     }
 }
-

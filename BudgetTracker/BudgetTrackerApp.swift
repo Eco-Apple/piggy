@@ -14,6 +14,6 @@ struct IncomeTrackerApp: App {
         WindowGroup {
             HomeView()
         }
-        .modelContainer(for: [Expense.self, Income.self])
+        .modelContainer(for: [Expense.self, Income.self, Budget.self])
     }
 }

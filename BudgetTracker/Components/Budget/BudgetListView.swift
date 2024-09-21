@@ -9,9 +9,9 @@ import StoreKit
 import SwiftData
 import SwiftUI
 
-fileprivate struct IncomeSectionListViewWrapper: View {
+fileprivate struct BudgetSectionListViewWrapper: View {
     
-    var sortDescriptors: [SortDescriptor<Income>]
+    var sortDescriptors: [SortDescriptor<Budget>]
         
     @State var filterDate: Date
     @State var limit: Int
@@ -19,10 +19,10 @@ fileprivate struct IncomeSectionListViewWrapper: View {
     private var initialLimitValue: Int
     
     var body: some View {
-        IncomeSectionListView(of: filterDate, limit: $limit, sortDescriptors: sortDescriptors, initialLimitValue: initialLimitValue)
+        BudgetSectionListView(of: filterDate, limit: $limit, sortDescriptors: sortDescriptors, initialLimitValue: initialLimitValue)
     }
     
-    init(of filterDate: Date, sortDescriptors: [SortDescriptor<Income>], limit: Int) {
+    init(of filterDate: Date, sortDescriptors: [SortDescriptor<Budget>], limit: Int) {
         self.filterDate = filterDate
         self.sortDescriptors = sortDescriptors
         self.limit = limit
@@ -31,19 +31,19 @@ fileprivate struct IncomeSectionListViewWrapper: View {
 }
 
 
-fileprivate struct IncomeSectionListView: View {
+fileprivate struct BudgetSectionListView: View {
     @Environment(\.navigate) private var navigate
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     
-    @AppStorage("isIncomesEmpty") var isIncomesEmpty = true
+    @AppStorage("isBudgetsEmpty") var isBudgetsEmpty = true
     
-    @Query var incomes: [Income]
+    @Query var budgets: [Budget]
     
     @Binding private var limit: Int
     
     @State private var isAlertPresented = false
-    @State private var incomesToDelete: [Income] = []
+    @State private var budgetsToDelete: [Budget] = []
     
     private var limitToExpand: Int = 10 // default 10; test 4
     
@@ -52,36 +52,36 @@ fileprivate struct IncomeSectionListView: View {
     var filterDate: Date
     
     var body: some View {
-        if incomes.isNotEmpty {
+        if budgets.isNotEmpty {
             Section(filterDate.format(.dateOnly, descriptive: true)) {
                 HStack {
                     InfoTextView(label: "Total", currency: total())
                         .font(.headline)
                 }
-                ForEach(incomes.prefix(limit)) { income in
-                    NavigationLink(value: NavigationRoute.income(.detail(income))) {
-                        IncomeItemView(income: income)
+                ForEach(budgets.prefix(limit)) { budget in
+                    NavigationLink(value: NavigationRoute.budget(.detail(budget))) {
+                        BudgetItemView(budget: budget)
                     }
                 }
                 .onDelete { offsets in
-                    incomesToDelete = []
+                    budgetsToDelete = []
                     for index in offsets {
-                        let income = incomes[index]
+                        let budget = budgets[index]
                         isAlertPresented = true
-                        incomesToDelete.append(income)
+                        budgetsToDelete.append(budget)
                     }
                 }
                 .alert(isPresented: $isAlertPresented){
                     Alert(
-                        title: Text("Are you sure you want to delete \(incomes.getPluralSuffix(singular: "this", plural: "these")) income\(incomes.getPluralSuffix(singular: "", plural: "s"))?"),
+                        title: Text("Are you sure you want to delete \(budgets.getPluralSuffix(singular: "this", plural: "these")) budget\(budgets.getPluralSuffix(singular: "", plural: "s"))?"),
                         message: Text("You cannot undo this action once done."),
                         primaryButton: .destructive(Text("Delete"), action: actionDelete),
                         secondaryButton: .cancel()
                     )
                 }
-                if incomes.count > limit || incomes.count > initialLimitValue {
+                if budgets.count > limit || budgets.count > initialLimitValue {
                     Button(action: {
-                        if incomes.count <= limitToExpand {
+                        if budgets.count <= limitToExpand {
                             withAnimation {
                                 if limit != limitToExpand {
                                     limit = limitToExpand
@@ -89,8 +89,8 @@ fileprivate struct IncomeSectionListView: View {
                                     limit = initialLimitValue
                                 }
                             }
-                        } else if incomes.count > limitToExpand {
-                            navigate(.income(.seeMore(filterDate, incomes)))
+                        } else if budgets.count > limitToExpand {
+                            navigate(.budget(.seeMore(filterDate, budgets)))
                         }
                     }) {
                         Text(limit != limitToExpand ? "See More" : "See Less")
@@ -103,7 +103,7 @@ fileprivate struct IncomeSectionListView: View {
         }
     }
     
-    init(of filterDate: Date, limit: Binding<Int>, sortDescriptors: [SortDescriptor<Income>], initialLimitValue: Int) {
+    init(of filterDate: Date, limit: Binding<Int>, sortDescriptors: [SortDescriptor<Budget>], initialLimitValue: Int) {
         self.filterDate = filterDate
         self.initialLimitValue = initialLimitValue
         self._limit = limit
@@ -111,9 +111,9 @@ fileprivate struct IncomeSectionListView: View {
         let normalizedDate = Calendar.current.startOfDay(for: filterDate)
         let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: normalizedDate)!
         
-        var fetchDescriptor = FetchDescriptor<Income>(predicate: #Predicate<Income> { income in
-            if let incomeDate = income.date {
-                return incomeDate >= normalizedDate && incomeDate < nextDay
+        var fetchDescriptor = FetchDescriptor<Budget>(predicate: #Predicate<Budget> { budget in
+            if let budgetDate = budget.date {
+                return budgetDate >= normalizedDate && budgetDate < nextDay
             } else {
                 return false
             }
@@ -122,14 +122,14 @@ fileprivate struct IncomeSectionListView: View {
         
         fetchDescriptor.fetchLimit = limit.wrappedValue + limitToExpand
         
-        _incomes = Query(fetchDescriptor)
+        _budgets = Query(fetchDescriptor)
     }
     
     
     func total() -> Decimal {
         var result: Decimal = 0.0
         
-        for val in incomes {
+        for val in budgets {
             result += val.amount
         }
         
@@ -137,32 +137,31 @@ fileprivate struct IncomeSectionListView: View {
     }
     
     func actionDelete() {
-        for income in incomesToDelete {
-            modelContext.delete(income)
+        for budget in budgetsToDelete {
+            modelContext.delete(budget)
         }
         
-        
         do {
-            let fetchDescriptor = FetchDescriptor<Income>()
-            let fetchincome = try modelContext.fetch(fetchDescriptor)
+            let fetchDescriptor = FetchDescriptor<Budget>()
+            let fetchBudget = try modelContext.fetch(fetchDescriptor)
             
             
-            if fetchincome.isEmpty {
-                isIncomesEmpty = true
+            if fetchBudget.isEmpty {
+                isBudgetsEmpty = true
             }
             
             dismiss()
         } catch {
-            fatalError("Error deleting income.")
+            fatalError("Error deleting budget.")
         }
     }
 
 }
 
-struct IncomeListView: View {
-    @AppStorage("isIncomesEmpty") var isIncomesEmpty = true
+struct BudgetListView: View {
+    @AppStorage("isBudgetsEmpty") var isBudgetsEmpty = true
     
-    var sortDescriptors: [SortDescriptor<Income>]
+    var sortDescriptors: [SortDescriptor<Budget>]
     
     let sectionsDate: [Date] = [
         Calendar.current.date(byAdding: .day, value: -2, to: Date.now)!,
@@ -172,20 +171,20 @@ struct IncomeListView: View {
     
     
     var body: some View {
-        if !isIncomesEmpty {
+        if !isBudgetsEmpty {
             List {
-                IncomeSectionListViewWrapper(of: Date.now, sortDescriptors: sortDescriptors, limit: 5)
-                IncomeSectionListViewWrapper(of: Calendar.current.date(byAdding: .day, value: -1, to: Date.now)!, sortDescriptors: sortDescriptors, limit: 3)
+                BudgetSectionListViewWrapper(of: Date.now, sortDescriptors: sortDescriptors, limit: 5)
+                BudgetSectionListViewWrapper(of: Calendar.current.date(byAdding: .day, value: -1, to: Date.now)!, sortDescriptors: sortDescriptors, limit: 3)
                 ForEach(sectionsDate, id: \.self) { date in
-                    IncomeSectionListViewWrapper(of: date, sortDescriptors: sortDescriptors, limit: 3)
+                    BudgetSectionListViewWrapper(of: date, sortDescriptors: sortDescriptors, limit: 3)
                 }
             }
         } else {
-            EmptyMessageView(title: "No Income", message: "Press '+' button at the upper right corner to add new income.")
+            EmptyMessageView(title: "No Budget", message: "Press '+' button at the upper right corner to add new budget.")
         }
     }
 }
 
 #Preview {
-    IncomeListView(sortDescriptors: [SortDescriptor(\Income.title)])
+    BudgetListView(sortDescriptors: [SortDescriptor(\Budget.title)])
 }

@@ -1,5 +1,5 @@
 //
-//  AddIncomeView.swift
+//  AddBudgetView.swift
 //  BudgetTracker
 //
 //  Created by Jerico Villaraza on 9/7/24.
@@ -8,11 +8,11 @@
 import StoreKit
 import SwiftUI
 
-struct AddIncomeView: View {
+struct AddBudgetView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     
-    @AppStorage("isIncomesEmpty") var isIncomesEmpty = true
+    @AppStorage("isBudgetsEmpty") var isBudgetsEmpty = true
     
     @State var title: String = ""
     @State var note: String = ""
@@ -51,7 +51,7 @@ struct AddIncomeView: View {
                 }
             }
             .listSectionSpacing(.compact)
-            .navigationTitle("New Income")
+            .navigationTitle("New Budget")
             .scrollBounceBehavior(.basedOnSize)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -79,14 +79,14 @@ struct AddIncomeView: View {
     }
     
     func addEntry() {
-        let newIncome = Income(title: title, note: note, amount: amount!,date: date, createdDate: .now, updatedDate: .now, isTimeEnabled: isTimeEnabled)
+        let newBudget = Budget(title: title, note: note, amount: amount!,date: date, createdDate: .now, updatedDate: .now, isTimeEnabled: isTimeEnabled)
         
-        modelContext.insert(newIncome)
-        isIncomesEmpty = false
+        modelContext.insert(newBudget)
+        isBudgetsEmpty = false
         dismiss()
     }
 }
 
 #Preview {
-    return AddIncomeView()
+    return AddBudgetView()
 }

@@ -19,6 +19,7 @@ struct InfoTextView: View {
     var tags: [String] = []
     
     var currencySymbol = Locale.current.currencySymbol ?? ""
+    var isButton: Bool = false
     
     var body: some View {
         HStack {
@@ -34,15 +35,23 @@ struct InfoTextView: View {
             } else {
                 Text( text ?? value ?? status ?? date ?? currency ?? "")
                     .foregroundStyle(foregroundStyleOfValue())
+                
+                if isButton {
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(foregroundStyleOfValue())
+                }
             }
         }
+        .contentShape(Rectangle())  // Makes the entire HStack area tappable
     }
     
+    // Text
     init(label: String, text: String) {
         self.label = label
         self.text = text
     }
     
+    // Number
     init(label: String, value: Int?) {
         self.label = label
         if let value {
@@ -50,24 +59,29 @@ struct InfoTextView: View {
         }
     }
     
+    // Status
     init(label: String, status: Bool) {
         self.label = label
         self.status = status ? "Yes" : "No"
     }
     
+    // Date
     init(label: String, date: Date, style: DateStyle) {
         self.label = label
         self.date = date.format(style)
     }
     
+    // Tags
     init(label: String, tags: [String]) {
         self.label = label
         self.tags = tags
     }
     
-    init(label: String, currency: Decimal) {
+    // Currency
+    init(label: String, currency: Decimal,  isButton: Bool = false) {
         self.label = label
         self.currency = currencySymbol + (currency.toStringWithCommaSeparator ?? "")
+        self.isButton = isButton
     }
     
     
