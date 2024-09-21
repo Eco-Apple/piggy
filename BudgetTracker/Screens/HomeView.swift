@@ -28,16 +28,19 @@ struct HomeView: View {
     @State private var isAddViewPresented = false
     
     @State private var expenseSortDescriptors: [SortDescriptor<Expense>] = [
+        SortDescriptor(\Expense.updatedDate, order: .reverse),
         SortDescriptor(\Expense.createdDate, order: .reverse),
         SortDescriptor(\Expense.title)
     ]
     
     @State private var incomesSortDescriptors: [SortDescriptor<Income>] = [
+        SortDescriptor(\Income.updatedDate, order: .reverse),
         SortDescriptor(\Income.createdDate, order: .reverse),
         SortDescriptor(\Income.title)
     ]
     
     @State private var budgetsSortDescriptors: [SortDescriptor<Budget>] = [
+        SortDescriptor(\Budget.updatedDate, order: .reverse),
         SortDescriptor(\Budget.createdDate, order: .reverse),
         SortDescriptor(\Budget.title)
     ]
