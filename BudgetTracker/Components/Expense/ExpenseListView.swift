@@ -147,27 +147,8 @@ fileprivate struct ExpenseSectionListView: View {
     }
     
     func actionDelete() {
-        var totalDeletedExpenses: Decimal = 0.0
-        
-        for expense in expensesToDelete {
-            totalDeletedExpenses = totalDeletedExpenses + expense.amount
-            modelContext.delete(expense)
-        }
-        
-        totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: totalDeletedExpenses, .sub)!
-        
-        do {
-            let fetchDescriptor = FetchDescriptor<Expense>()
-            let fetchExpenses = try modelContext.fetch(fetchDescriptor)
-            
-            if fetchExpenses.isEmpty {
-                isExpensesEmpty = true
-            }
-            
-            dismiss()
-        } catch {
-            fatalError("Error deleting expense")
-        }
+        expensesToDelete.delete(modelContext: modelContext)
+        dismiss()
     }
 
 }
@@ -226,22 +207,12 @@ struct ExpenseListView: View {
         var currentDate = monday
         
         while currentDate <= date {
-            let startDateCurrentDate = calendar.startOfDay(for: currentDate)
-            
-            let timeZoneOffsetForCurrentDate = TimeZone.current.secondsFromGMT(for: startDateCurrentDate)
-            let localStartOfDateCurrentDate = startDateCurrentDate.addingTimeInterval(TimeInterval(timeZoneOffsetForCurrentDate))
-            
-            dates.insert(localStartOfDateCurrentDate, at: 0)
+            dates.insert(currentDate.localStartOfDate, at: 0)
             currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
         }
         
         if currentWeekdayNumber == 1 {
-            let startDateCurrentDate = calendar.startOfDay(for: Date.now)
-            
-            let timeZoneOffsetForCurrentDate = TimeZone.current.secondsFromGMT(for: startDateCurrentDate)
-            let localStartOfDateCurrentDate = startDateCurrentDate.addingTimeInterval(TimeInterval(timeZoneOffsetForCurrentDate))
-            
-            dates.insert(localStartOfDateCurrentDate, at: 0)
+            dates.insert(Date.now.localStartOfDate, at: 0)
         }
         
         return dates

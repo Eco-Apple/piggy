@@ -50,29 +50,11 @@ struct ExpenseSeeMoreView: View {
     
     
     func actionDelete() {
-        var totalDeletedExpenses: Decimal = 0.0
-        
-        for expense in expensesToDelete {
-            totalDeletedExpenses = totalDeletedExpenses + expense.amount
-            modelContext.delete(expense)
-        }
+        // TODO: Need to test this see more delete.
+        expensesToDelete.delete(modelContext: modelContext)
         
         expenses.removeAll { expense in
             expensesToDelete.contains(expense)
-        }
-        
-        totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: totalDeletedExpenses, .sub)!
-        
-        do {
-            let fetchDescriptor = FetchDescriptor<Expense>()
-            let fetchExpenses = try modelContext.fetch(fetchDescriptor)
-            
-            if fetchExpenses.isEmpty {
-                isExpensesEmpty = true
-            }
-            
-        } catch {
-            fatalError("Error deleting expense")
         }
     }
 }

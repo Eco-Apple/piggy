@@ -49,29 +49,9 @@ struct IncomeSeeMoreView: View {
     
     
     func actionDelete() {
-        var totalDeletedIncomes: Decimal = 0.0
-        
-        for income in incomesToDelete {
-            totalDeletedIncomes = totalDeletedIncomes + income.amount
-            modelContext.delete(income)
-        }
-        
+        incomesToDelete.delete(modelContext: modelContext)
         incomes.removeAll { income in
             incomesToDelete.contains(income)
-        }
-
-        totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: totalDeletedIncomes, .sub)!
-        
-        do {
-            let fetchDescriptor = FetchDescriptor<Income>()
-            let fetchIncomes = try modelContext.fetch(fetchDescriptor)
-            
-            if fetchIncomes.isEmpty {
-                isIncomesEmpty = true
-            }
-            
-        } catch {
-            fatalError("Error deleting budget")
         }
     }
 

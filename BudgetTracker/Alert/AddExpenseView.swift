@@ -26,9 +26,16 @@ struct AddExpenseView: View {
     
     @State private var isTimeEnabled: Bool = false
     
+    @State private var isAddBudgetPresented: Bool = false
+    
     @FocusState private var isFocus: Bool
     
     var currencySymbol = Locale.current.currencySymbol ?? ""
+    
+    var saveLater: Bool = false
+    var removeBudget: Bool = false
+
+    var callback: (Expense) -> Void = { _ in }
     
     var body: some View {
         NavigationStack {
@@ -39,20 +46,15 @@ struct AddExpenseView: View {
                 }
                 
                 Section {
-                    Picker("Budget", selection: $selectedbudget) {
-                        ForEach(budgets) { budget in
-                            Text(budget.title).tag(budget)
-                        }
-                    }
                     DatePicker(
                         "Date",
                         selection: $date,
                         displayedComponents: isTimeEnabled ? [.date, .hourAndMinute] : .date
                     )
-                }
-                
-                Toggle(isOn: $isTimeEnabled) {
-                    Text("Time")
+                    
+                    Toggle(isOn: $isTimeEnabled) {
+                        Text("Time")
+                    }
                 }
                 
                 Section {
@@ -60,6 +62,20 @@ struct AddExpenseView: View {
                     TextEditor(text: $note)
                         .placeHolder("Note", text: $note)
                         .frame(height: 150)
+                }
+                
+                if !removeBudget {
+                    if selectedbudget != nil {
+                        Picker("Budget", selection: $selectedbudget) {
+                            ForEach(budgets) { budget in
+                                Text(budget.title).tag(budget)
+                            }
+                        }
+                    } else {
+                        Button("Add Budget") {
+                            isAddBudgetPresented = true
+                        }
+                    }
                 }
             }
             .listSectionSpacing(.compact)
@@ -75,6 +91,11 @@ struct AddExpenseView: View {
                     }
                 }
             }
+            .sheet(isPresented: $isAddBudgetPresented) {
+                AddBudgetView(removeIncome: true, removeExpense: true) { budget in
+                    selectedbudget = budget
+                }
+            }
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     isFocus = true
@@ -86,16 +107,19 @@ struct AddExpenseView: View {
     }
     
     
-    init() {
+    init(saveLater: Bool = false, removeBudget: Bool = false, callback: @escaping (Expense) -> Void = { _ in }) {
+        self.callback = callback
+        self.saveLater = saveLater
+        self.removeBudget = removeBudget
+
         guard let fromToDate = setupDate() else { return }
         
+        let normalizedFromDate = fromToDate.from
+        let normalizedToDate = fromToDate.to
         
-        let normalizedFromDate = Calendar.current.startOfDay(for: fromToDate.from)
-        let normalizedToDate = Calendar.current.startOfDay(for: fromToDate.to)
-        
-        var fetchDescriptor = FetchDescriptor<Budget>(predicate: #Predicate<Budget> { budget in
+        let fetchDescriptor = FetchDescriptor<Budget>(predicate: #Predicate<Budget> { budget in
             if let budgetDate = budget.date {
-                return budgetDate >= normalizedFromDate && budgetDate < normalizedToDate
+                return budgetDate >= normalizedFromDate && budgetDate <= normalizedToDate
             } else {
                 return false
             }
@@ -105,7 +129,6 @@ struct AddExpenseView: View {
         _budgets = Query(fetchDescriptor)
     }
     
-    
     func setupDate() -> (from: Date, to: Date)? {
         let today = Date.now
         let calendar = Calendar.current
@@ -114,30 +137,35 @@ struct AddExpenseView: View {
         
 
         let daysToMonday = (weekday == 1 ? -6 : 2 - weekday)
-        let daysToSunday = (weekday == 1 ? 0 : 8 - weekday)
 
-        guard let monday = calendar.date(byAdding: .day, value: daysToMonday, to: today) else { return nil }
-        guard let sunday = calendar.date(byAdding: .day, value: daysToSunday, to: today) else { return nil }
+        guard let monday = calendar.date(byAdding: .day, value: daysToMonday, to: today)?.localStartOfDate else { return nil }
+        guard let nextDay = calendar.date(byAdding: .day, value: 1, to: today)?.localStartOfDate else { return nil }
          
-        return (monday, sunday)
+        return (monday, nextDay)
     }
-    
-
     
     func isConfirmDisabled() -> Bool {
         guard title.isNotEmpty else { return true }
         guard let amount, amount >= 0 else { return true }
+        guard selectedbudget != nil || removeBudget else { return true }
         
         return false
     }
     
     func addEntry() {
-        let newExpense = Expense(title: title, note: note, amount: amount!,date: date, createdDate: .now, updateDate: .now, isTimeEnabled: isTimeEnabled, budget: selectedbudget!)
+        let newExpense = Expense(title: title, note: note, amount: amount!,date: date, createdDate: .now, updateDate: .now, isTimeEnabled: isTimeEnabled, budget: selectedbudget)
         
-        totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: newExpense.amount, .add)!
         
-        modelContext.insert(newExpense)
-        isExpensesEmpty = false
+        if saveLater {
+            dismiss()
+            
+            callback(newExpense)
+            return
+        }
+        
+        newExpense.save(selectedBudget: selectedbudget!, modelContext: modelContext)
+        
+        callback(newExpense)
         dismiss()
     }
 }

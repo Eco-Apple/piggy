@@ -20,11 +20,12 @@ struct InfoTextView: View {
     
     var currencySymbol = Locale.current.currencySymbol ?? ""
     var isButton: Bool = false
+    var isLink: Bool = false
     
     var body: some View {
         HStack {
             Text(label)
-                .foregroundStyle(.primary)
+                .foregroundStyle(foregroundStyleOfLabel())
             
             Spacer()
             
@@ -36,7 +37,7 @@ struct InfoTextView: View {
                 Text( text ?? value ?? status ?? date ?? currency ?? "")
                     .foregroundStyle(foregroundStyleOfValue())
                 
-                if isButton {
+                if isLink {
                     Image(systemName: "chevron.right")
                         .foregroundStyle(foregroundStyleOfValue())
                 }
@@ -78,12 +79,23 @@ struct InfoTextView: View {
     }
     
     // Currency
-    init(label: String, currency: Decimal,  isButton: Bool = false) {
+    init(label: String, currency: Decimal, isButton: Bool = false, isLink: Bool = false) {
         self.label = label
         self.currency = currencySymbol + (currency.toStringWithCommaSeparator ?? "")
         self.isButton = isButton
+        self.isLink = isLink
     }
     
+    
+    func foregroundStyleOfLabel() -> Color {
+        
+        if isButton {
+            return .accentColor
+        }
+        
+        return .primary
+    }
+
     
     func foregroundStyleOfValue() -> Color {
         if status != nil {

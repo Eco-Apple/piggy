@@ -52,7 +52,7 @@ struct BudgetSeeMoreView: View {
         var totalDeletedBudgets: Decimal = 0.0
         
         for budget in budgetsToDelete {
-            totalDeletedBudgets = totalDeletedBudgets + budget.amount
+//            totalDeletedBudgets = totalDeletedBudgets + budget.estimatedAmount TODO: Total budgets
             modelContext.delete(budget)
         }
         

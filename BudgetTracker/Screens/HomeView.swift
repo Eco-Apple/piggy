@@ -138,6 +138,29 @@ struct HomeView: View {
                     AddBudgetView()
                 }
             }
+            #if DEBUG
+            .onAppear {
+                    do {
+                        let fetchBudget = try modelContext.fetch(FetchDescriptor<Budget>())
+                        let fetchExpense = try modelContext.fetch(FetchDescriptor<Expense>())
+                        let fetchIncome = try modelContext.fetch(FetchDescriptor<Income>())
+                                                
+                        print("Budget: \(fetchBudget.count)")
+                        print("Expense: \(fetchExpense.count)")
+                        print("Income: \(fetchIncome.count)")
+                        
+                        print("isBudgetsEmpty: \(isBudgetsEmpty)")
+                        print("isExpensesEmpty: \(isExpensesEmpty)")
+                        print("isIncomesEmpty: \(isIncomesEmpty)")
+                        
+                        print("totalWeekBudgets: \(totalWeekBudgets)")
+                        print("totalWeekExpenses: \(totalWeekExpenses)")
+                        print("totalWeekIncomes: \(totalWeekIncomes)")
+                    } catch {
+                        fatalError("Cannot fetch data")
+                    }
+            }
+            #endif
         }
     }
     
@@ -182,7 +205,7 @@ struct HomeView: View {
             for budget in budgets {
                 let date: Date = .now.addingTimeInterval(86400 * budgetDayCounter)
                 budget.date = date
-                totalBudget = totalBudget + budget.amount
+//                totalBudget = totalBudget + budget.estimatedAmount TODO: Total budgets
                 modelContext.insert(budget)
             }
             

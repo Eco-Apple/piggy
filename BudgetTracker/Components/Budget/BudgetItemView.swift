@@ -24,33 +24,37 @@ struct BudgetItemView: View {
                 }
             }
             Spacer()
-            Text("+ \(budget.amount, format: .currency(code: "PHP"))").foregroundStyle(amountForegroundColor())
-                .font(.headline)
+//            Text("+ \(budget.estimatedAmount, format: .currency(code: "PHP"))").foregroundStyle(amountForegroundColor())
+//                .font(.headline) // TODO: Budget total item
         }
     }
     
     func amountEmoji() -> String {
-        if budget.amount <= 100 {
-            "👍"
-        } else if budget.amount > 100 && budget.amount <= 300  {
-            "👌"
-        } else if budget.amount > 300 && budget.amount < 500  {
-            "💰"
-        } else {
-            "🔥"
-        }
+        return "💰"
+//        if true {estimatedAmount
+////        if budget.estimatedAmount <= 100 { TODO: Emoji
+//            "👍"
+//        } else if budget.estimatedAmount > 100 && budget.estimatedAmount <= 300  {
+//            "👌"
+//        } else if budget.estimatedAmount > 300 && budget.estimatedAmount < 500  {
+//            "💰"
+//        } else {
+//            "🔥"
+//        }
     }
     
     func amountForegroundColor() -> Color {
-        if budget.amount <= 200 {
-            Color.green
-        } else if budget.amount > 200 && budget.amount <= 500  {
-            Color.orange
-        } else if budget.amount > 500 && budget.amount < 1000  {
-            Color.purple
-        } else {
-            Color.red
-        }
+        return .green
+//        if true{
+////        if budget.estimatedAmount <= 200 { TODO: Emoji
+//            Color.green
+//        } else if budget.estimatedAmount > 200 && budget.estimatedAmount <= 500  {
+//            Color.orange
+//        } else if budget.estimatedAmount > 500 && budget.estimatedAmount < 1000  {
+//            Color.purple
+//        } else {
+//            Color.red
+//        }
     }
 
 }

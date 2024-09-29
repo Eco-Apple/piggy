@@ -73,7 +73,7 @@ fileprivate struct BudgetSectionListView: View {
         let normalizedFromDate = fromToDate.from
         let normalizedToDate = fromToDate.to
                 
-        var fetchDescriptor = FetchDescriptor<Budget>(predicate: #Predicate<Budget> { budget in
+        let fetchDescriptor = FetchDescriptor<Budget>(predicate: #Predicate<Budget> { budget in
             if let budgetDate = budget.date {
                 return budgetDate >= normalizedFromDate && budgetDate <= normalizedToDate
             } else {
@@ -90,35 +90,16 @@ fileprivate struct BudgetSectionListView: View {
         var result: Decimal = 0.0
         
         for val in budgets {
-            result += val.amount
+            result += val.totalBudget
         }
         
         return result
     }
     
     func actionDelete() {
-        var totalDeletedBudgets: Decimal = 0.0
+        budgetsToDelete.delete(modelContext: modelContext)
         
-        for budget in budgetsToDelete {
-            totalDeletedBudgets = totalDeletedBudgets + budget.amount
-            modelContext.delete(budget)
-        }
-        
-        totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: totalDeletedBudgets, .sub)!
-        
-        do {
-            let fetchDescriptor = FetchDescriptor<Budget>()
-            let fetchBudget = try modelContext.fetch(fetchDescriptor)
-            
-            
-            if fetchBudget.isEmpty {
-                isBudgetsEmpty = true
-            }
-            
-            dismiss()
-        } catch {
-            fatalError("Error deleting budget.")
-        }
+        dismiss()
     }
 
 }
@@ -163,20 +144,10 @@ struct BudgetListView: View {
 
         let daysToMonday = (weekday == 1 ? -6 : 2 - weekday)
         
-        guard let monday = calendar.date(byAdding: .day, value: daysToMonday, to: today) else { return nil }
-        guard let nextDay = calendar.date(byAdding: .day, value: 1, to: today) else { return nil }
+        guard let monday = calendar.date(byAdding: .day, value: daysToMonday, to: today)?.localStartOfDate else { return nil }
+        guard let nextDay = calendar.date(byAdding: .day, value: 1, to: today)?.localStartOfDate else { return nil }
         
-        let startOfDateMonday = calendar.startOfDay(for: monday)
-        let startOfDateNextDay = calendar.startOfDay(for: nextDay)
-        
-        let timeZoneOffsetForMonday = TimeZone.current.secondsFromGMT(for: startOfDateMonday)
-        let localStartOfDateMonday = startOfDateMonday.addingTimeInterval(TimeInterval(timeZoneOffsetForMonday))
-        
-        
-        let timeZoneOffsetForNextDay = TimeZone.current.secondsFromGMT(for: startOfDateNextDay)
-        let localStartOfDateNextDay = startOfDateNextDay.addingTimeInterval(TimeInterval(timeZoneOffsetForNextDay))
-        
-        return (localStartOfDateMonday, localStartOfDateNextDay)
+        return (monday, nextDay)
     }
 }
 

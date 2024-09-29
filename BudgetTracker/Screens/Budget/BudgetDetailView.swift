@@ -13,7 +13,6 @@ struct BudgetDetailView: View {
     
     @State private var title: String = ""
     @State private var note: String = ""
-    @State private var amount: Decimal? = nil
     @State private var date: Date = .now
     
     @State private var isTimeEnabled: Bool = false
@@ -28,11 +27,9 @@ struct BudgetDetailView: View {
             Section("Details") {
                 if isEdit == false {
                     InfoTextView(label: "Title", text: title)
-                    InfoTextView(label: "Amount", currency: amount!)
                     InfoTextView(label: "Date", date: date, style: isTimeEnabled ? .dateAndTime : .dateOnly)
                 } else {
                     TextField("Title", text: $title)
-                    CurrencyField("eg. \(currencySymbol)10.00", value: $amount)
                     DatePicker("Date", selection: $date, displayedComponents: isTimeEnabled ? [.date, .hourAndMinute] : .date)
                     
                     Toggle(isOn: $isTimeEnabled) {
@@ -53,6 +50,13 @@ struct BudgetDetailView: View {
                     }
                 }
             }
+            
+            Section {
+                InfoTextView(label: "Expenses", currency: budget.totalExpenses, isLink: true)
+                InfoTextView(label: "Incomes", currency: budget.totalIncomes, isLink: true)
+            }
+            
+            InfoTextView(label: "Total Budget", currency: budget.totalBudget)
         }
         .navigationTitle("Budget")
         .scrollBounceBehavior(.basedOnSize)
@@ -62,7 +66,6 @@ struct BudgetDetailView: View {
                     Button("Done") {
                         budget.title = title
                         budget.note = note
-                        budget.amount = amount!
                         budget.date = date
                         budget.isTimeEnabled = isTimeEnabled
                         budget.updatedDate = .now
@@ -83,17 +86,15 @@ struct BudgetDetailView: View {
         
         self._title = State(initialValue: budget.title)
         self._note = State(initialValue: budget.note)
-        self._amount = State(initialValue: budget.amount)
         self._date = State(initialValue: budget.date!)
         self._isTimeEnabled = State(initialValue: budget.isTimeEnabled)
     }
     
     func isDoneButtonDisabled() -> Bool {
         
-        guard title != budget.title || amount != budget.amount || date != budget.date || note != budget.note else { return true }
+        guard title != budget.title || date != budget.date || note != budget.note else { return true }
         
         guard title.isNotEmpty else { return true }
-        guard let amount, amount >= 0 else { return true }
         
         return false
     }
