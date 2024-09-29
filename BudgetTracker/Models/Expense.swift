@@ -19,6 +19,7 @@ class Expense: Codable {
         case createdDate
         case updatedDate
         case isTimeEnabled
+        case budget
     }
     
     var title: String
@@ -30,7 +31,9 @@ class Expense: Codable {
     
     var isTimeEnabled: Bool
     
-    init(title: String, note: String, amount: Decimal, date: Date?, createdDate: Date, updateDate: Date, isTimeEnabled: Bool) {
+    var budget: Budget
+    
+    init(title: String, note: String, amount: Decimal, date: Date?, createdDate: Date, updateDate: Date, isTimeEnabled: Bool, budget: Budget) {
         self.title = title
         self.note = note
         self.amount = amount
@@ -38,6 +41,7 @@ class Expense: Codable {
         self.createdDate = createdDate
         self.updatedDate = updateDate
         self.isTimeEnabled = isTimeEnabled
+        self.budget = budget
     }
     
     required init(from decoder: any Decoder) throws {
@@ -49,6 +53,7 @@ class Expense: Codable {
         self.createdDate = try container.decode(Date.self, forKey: .createdDate)
         self.updatedDate = try container.decode(Date.self, forKey: .updatedDate)
         self.isTimeEnabled = try container.decode(Bool.self, forKey: .isTimeEnabled)
+        self.budget = try container.decode(Budget.self, forKey: .budget)
     }
     func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -59,11 +64,12 @@ class Expense: Codable {
         try container.encode(self.createdDate, forKey: .createdDate)
         try container.encode(self.updatedDate, forKey: .updatedDate)
         try container.encode(self.isTimeEnabled, forKey: .isTimeEnabled)
+        try container.encode(self.budget, forKey: .budget)
     }
 }
 
 extension Expense {
     static var previewItem: Expense {
-        Expense(title: "Shopping", note: "Monthly shopping", amount: 100.0, date: Date.distantPast, createdDate: .now, updateDate: .now, isTimeEnabled: false)
+        Expense(title: "Shopping", note: "Monthly shopping", amount: 100.0, date: Date.distantPast, createdDate: .now, updateDate: .now, isTimeEnabled: false, budget: .previewItem)
     }
 }

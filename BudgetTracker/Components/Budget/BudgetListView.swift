@@ -9,28 +9,6 @@ import StoreKit
 import SwiftData
 import SwiftUI
 
-fileprivate struct BudgetSectionListViewWrapper: View {
-    
-    var sortDescriptors: [SortDescriptor<Budget>]
-        
-    @State var filterDate: Date
-    @State var limit: Int
-    
-    private var initialLimitValue: Int
-    
-    var body: some View {
-        BudgetSectionListView(of: filterDate, limit: $limit, sortDescriptors: sortDescriptors, initialLimitValue: initialLimitValue)
-    }
-    
-    init(of filterDate: Date, sortDescriptors: [SortDescriptor<Budget>], limit: Int) {
-        self.filterDate = filterDate
-        self.sortDescriptors = sortDescriptors
-        self.limit = limit
-        self.initialLimitValue = limit
-    }
-}
-
-
 fileprivate struct BudgetSectionListView: View {
     @Environment(\.navigate) private var navigate
     @Environment(\.dismiss) var dismiss
@@ -41,25 +19,19 @@ fileprivate struct BudgetSectionListView: View {
     
     @Query var budgets: [Budget]
     
-    @Binding private var limit: Int
-    
     @State private var isAlertPresented = false
     @State private var budgetsToDelete: [Budget] = []
     
-    private var limitToExpand: Int = 10 // default 10; test 4
-    
-    var initialLimitValue: Int
-    
-    var filterDate: Date
+    var fromToDate: (from: Date, to: Date)
     
     var body: some View {
         if budgets.isNotEmpty {
-            Section(filterDate.format(.dateOnly, descriptive: true)) {
+            Section("This week") {
                 HStack {
                     InfoTextView(label: "Total", currency: total())
                         .font(.headline)
                 }
-                ForEach(budgets.prefix(limit)) { budget in
+                ForEach(budgets) { budget in
                     NavigationLink(value: NavigationRoute.budget(.detail(budget))) {
                         BudgetItemView(budget: budget)
                     }
@@ -80,29 +52,9 @@ fileprivate struct BudgetSectionListView: View {
                         secondaryButton: .cancel()
                     )
                 }
-                if budgets.count > limit || budgets.count > initialLimitValue {
-                    Button(action: {
-                        if budgets.count <= limitToExpand {
-                            withAnimation {
-                                if limit != limitToExpand {
-                                    limit = limitToExpand
-                                } else if limit == limitToExpand {
-                                    limit = initialLimitValue
-                                }
-                            }
-                        } else if budgets.count > limitToExpand {
-                            navigate(.budget(.seeMore(filterDate, budgets)))
-                        }
-                    }) {
-                        Text(limit != limitToExpand ? "See More" : "See Less")
-                            .font(.subheadline)
-                            .foregroundColor(.blue)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .center)
-                }
             }
         } else {
-            Section(filterDate.format(.dateOnly, descriptive: true)) {
+            Section("This week") {
                 HStack {
                     Spacer()
                     Image(systemName:"tray.fill")
@@ -115,24 +67,20 @@ fileprivate struct BudgetSectionListView: View {
         }
     }
     
-    init(of filterDate: Date, limit: Binding<Int>, sortDescriptors: [SortDescriptor<Budget>], initialLimitValue: Int) {
-        self.filterDate = filterDate
-        self.initialLimitValue = initialLimitValue
-        self._limit = limit
+    init(of fromToDate: (from: Date, to: Date), sortDescriptors: [SortDescriptor<Budget>]) {
+        self.fromToDate = fromToDate
         
-        let normalizedDate = Calendar.current.startOfDay(for: filterDate)
-        let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: normalizedDate)!
-        
+        let normalizedFromDate = fromToDate.from
+        let normalizedToDate = fromToDate.to
+                
         var fetchDescriptor = FetchDescriptor<Budget>(predicate: #Predicate<Budget> { budget in
             if let budgetDate = budget.date {
-                return budgetDate >= normalizedDate && budgetDate < nextDay
+                return budgetDate >= normalizedFromDate && budgetDate <= normalizedToDate
             } else {
                 return false
             }
             
         }, sortBy: sortDescriptors)
-        
-        fetchDescriptor.fetchLimit = limit.wrappedValue + limitToExpand
         
         _budgets = Query(fetchDescriptor)
     }
@@ -180,20 +128,19 @@ struct BudgetListView: View {
     @AppStorage("totalWeekBudgets") var totalWeekBudgets = "0.0"
     
     var sortDescriptors: [SortDescriptor<Budget>]
-    var sectionsDate: [Date] = []
-    
+    var fromToDate: (from: Date, to: Date)? = nil
     
     var body: some View {
         if !isBudgetsEmpty {
             List {
-                    Section("this week") {
-                        InfoTextView(label: "Budgets", currency: Decimal(string: totalWeekBudgets)!)
-                            .font(.headline)
-                    }
-                    
-                    ForEach(sectionsDate, id: \.self) { date in
-                        BudgetSectionListViewWrapper(of: date, sortDescriptors: sortDescriptors, limit: Calendar.current.startOfDay(for:date) == Calendar.current.startOfDay(for: Date.now) ? 5 : 3)
-                    }
+                Section("this week") {
+                    InfoTextView(label: "Budgets", currency: Decimal(string: totalWeekBudgets)!)
+                        .font(.headline)
+                }
+
+                if let fromToDate = fromToDate {
+                    BudgetSectionListView(of: fromToDate, sortDescriptors: sortDescriptors)
+                }
             }
         } else {
             EmptyMessageView(title: "No Budget", message: "Press '+' button at the upper right corner to add new budget.")
@@ -203,41 +150,33 @@ struct BudgetListView: View {
     init(sortDescriptors: [SortDescriptor<Budget>]) {
         self.sortDescriptors = sortDescriptors
         
-        self.sectionsDate = setupDates()
+        self.fromToDate = setupDate()
     }
 
     
-    func setupDates() -> [Date] {
-        var date = Date.now
+    func setupDate() -> (from: Date, to: Date)? {
+        let today = Date.now
         let calendar = Calendar.current
-        let currentWeekdayNumber = calendar.component(.weekday, from: date)
-        
-        var dates: [Date] = []
-        
-        if currentWeekdayNumber == 1 {
-            date = calendar.date(byAdding: .day, value: -1, to: date)!
-        }
-        
-        var components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
-        
-        components.weekday = 2
-        
-        guard let monday = calendar.nextDate(after: date, matching: components, matchingPolicy: .nextTimePreservingSmallerComponents, direction: .backward) else {
-            return []
-        }
 
-        var currentDate = monday
+        let weekday = calendar.component(.weekday, from: today)
         
-        while currentDate <= date {
-            dates.insert(currentDate, at: 0)
-            currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
-        }
+
+        let daysToMonday = (weekday == 1 ? -6 : 2 - weekday)
         
-        if currentWeekdayNumber == 1 {
-            dates.insert(Date.now, at: 0)
-        }
+        guard let monday = calendar.date(byAdding: .day, value: daysToMonday, to: today) else { return nil }
+        guard let nextDay = calendar.date(byAdding: .day, value: 1, to: today) else { return nil }
         
-        return dates
+        let startOfDateMonday = calendar.startOfDay(for: monday)
+        let startOfDateNextDay = calendar.startOfDay(for: nextDay)
+        
+        let timeZoneOffsetForMonday = TimeZone.current.secondsFromGMT(for: startOfDateMonday)
+        let localStartOfDateMonday = startOfDateMonday.addingTimeInterval(TimeInterval(timeZoneOffsetForMonday))
+        
+        
+        let timeZoneOffsetForNextDay = TimeZone.current.secondsFromGMT(for: startOfDateNextDay)
+        let localStartOfDateNextDay = startOfDateNextDay.addingTimeInterval(TimeInterval(timeZoneOffsetForNextDay))
+        
+        return (localStartOfDateMonday, localStartOfDateNextDay)
     }
 }
 

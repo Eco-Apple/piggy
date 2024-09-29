@@ -29,6 +29,8 @@ class Budget: Codable {
     var updatedDate: Date
     var isTimeEnabled: Bool
     
+    @Relationship(deleteRule: .cascade) var expenses = [Expense]()
+    
     init(title: String, note: String, amount: Decimal, date: Date, createdDate: Date, updatedDate: Date, isTimeEnabled: Bool) {
         self.title = title
         self.note = note

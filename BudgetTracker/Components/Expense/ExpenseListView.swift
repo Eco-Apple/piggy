@@ -120,12 +120,11 @@ fileprivate struct ExpenseSectionListView: View {
         self.initialLimitValue = initialLimitValue
         self._limit = limit
         
-        let normalizedDate = Calendar.current.startOfDay(for: filterDate)
-        let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: normalizedDate)!
-        
+        let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: filterDate)!
+                
         var fetchDescriptor = FetchDescriptor<Expense>(predicate: #Predicate<Expense> { expense in
             if let expenseDate = expense.date {
-                return expenseDate >= normalizedDate && expenseDate < nextDay
+                return expenseDate >= filterDate && expenseDate < nextDay
             } else {
                 return false
             }
@@ -227,12 +226,22 @@ struct ExpenseListView: View {
         var currentDate = monday
         
         while currentDate <= date {
-            dates.insert(currentDate, at: 0)
+            let startDateCurrentDate = calendar.startOfDay(for: currentDate)
+            
+            let timeZoneOffsetForCurrentDate = TimeZone.current.secondsFromGMT(for: startDateCurrentDate)
+            let localStartOfDateCurrentDate = startDateCurrentDate.addingTimeInterval(TimeInterval(timeZoneOffsetForCurrentDate))
+            
+            dates.insert(localStartOfDateCurrentDate, at: 0)
             currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
         }
         
         if currentWeekdayNumber == 1 {
-            dates.insert(Date.now, at: 0)
+            let startDateCurrentDate = calendar.startOfDay(for: Date.now)
+            
+            let timeZoneOffsetForCurrentDate = TimeZone.current.secondsFromGMT(for: startDateCurrentDate)
+            let localStartOfDateCurrentDate = startDateCurrentDate.addingTimeInterval(TimeInterval(timeZoneOffsetForCurrentDate))
+            
+            dates.insert(localStartOfDateCurrentDate, at: 0)
         }
         
         return dates

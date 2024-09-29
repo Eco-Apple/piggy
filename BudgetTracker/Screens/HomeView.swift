@@ -41,8 +41,6 @@ struct HomeView: View {
         SortDescriptor(\Budget.createdDate, order: .reverse),
     ]
 
-
-    
     @State private var selectedSegment: HomeViewSegments = .budget
     
     var body: some View {

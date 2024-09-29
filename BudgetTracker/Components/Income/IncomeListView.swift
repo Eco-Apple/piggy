@@ -120,12 +120,11 @@ fileprivate struct IncomeSectionListView: View {
         self.initialLimitValue = initialLimitValue
         self._limit = limit
         
-        let normalizedDate = Calendar.current.startOfDay(for: filterDate)
-        let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: normalizedDate)!
+        let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: filterDate)!
         
         var fetchDescriptor = FetchDescriptor<Income>(predicate: #Predicate<Income> { income in
             if let incomeDate = income.date {
-                return incomeDate >= normalizedDate && incomeDate < nextDay
+                return incomeDate >= filterDate && incomeDate < nextDay
             } else {
                 return false
             }
@@ -229,14 +228,25 @@ struct IncomeListView: View {
         var currentDate = monday
         
         while currentDate <= date {
-            dates.insert(currentDate, at: 0)
+            let startDateCurrentDate = calendar.startOfDay(for: currentDate)
+            
+            let timeZoneOffsetForCurrentDate = TimeZone.current.secondsFromGMT(for: startDateCurrentDate)
+            let localStartOfDateCurrentDate = startDateCurrentDate.addingTimeInterval(TimeInterval(timeZoneOffsetForCurrentDate))
+            
+            dates.insert(localStartOfDateCurrentDate, at: 0)
             currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
         }
         
         if currentWeekdayNumber == 1 {
-            dates.insert(Date.now, at: 0)
+            let startDateCurrentDate = calendar.startOfDay(for: Date.now)
+            
+            let timeZoneOffsetForCurrentDate = TimeZone.current.secondsFromGMT(for: startDateCurrentDate)
+            let localStartOfDateCurrentDate = startDateCurrentDate.addingTimeInterval(TimeInterval(timeZoneOffsetForCurrentDate))
+            
+            dates.insert(localStartOfDateCurrentDate, at: 0)
         }
         
+        print("Dates: \(dates)")
         return dates
     }
 
