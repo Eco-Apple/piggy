@@ -22,15 +22,13 @@ struct AddExpenseView: View {
     @State private var note: String = ""
     @State private var amount: Decimal? = nil
     @State private var date: Date = .now
-    @State private var selectedbudget: Budget?
+    @State private var budget: Budget?
     
     @State private var isTimeEnabled: Bool = false
     
     @State private var isAddBudgetPresented: Bool = false
     
     @FocusState private var isFocus: Bool
-    
-    var currencySymbol = Locale.current.currencySymbol ?? ""
     
     var saveLater: Bool = false
     var removeBudget: Bool = false
@@ -40,8 +38,8 @@ struct AddExpenseView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Amount") {
-                    CurrencyField("eg. \(currencySymbol)10.00", value: $amount)
+                Section("Amount*") {
+                    CurrencyField("eg. 10.00", value: $amount)
                         .focused($isFocus)
                 }
                 
@@ -58,21 +56,21 @@ struct AddExpenseView: View {
                 }
                 
                 Section {
-                    TextField("Title", text: $title)
+                    TextField("Title*", text: $title)
                     TextEditor(text: $note)
                         .placeHolder("Note", text: $note)
                         .frame(height: 150)
                 }
                 
                 if !removeBudget {
-                    if selectedbudget != nil {
-                        Picker("Budget", selection: $selectedbudget) {
+                    if budget != nil {
+                        Picker("Budget", selection: $budget) {
                             ForEach(budgets) { budget in
                                 Text(budget.title).tag(budget)
                             }
                         }
                     } else {
-                        Button("Add Budget") {
+                        Button("Add Budget*") {
                             isAddBudgetPresented = true
                         }
                     }
@@ -92,8 +90,8 @@ struct AddExpenseView: View {
                 }
             }
             .sheet(isPresented: $isAddBudgetPresented) {
-                AddBudgetView(removeIncome: true, removeExpense: true) { budget in
-                    selectedbudget = budget
+                AddBudgetView(removeIncome: true, removeExpense: true) { newBudget in
+                    budget = newBudget
                 }
             }
             .onAppear {
@@ -101,7 +99,7 @@ struct AddExpenseView: View {
                     isFocus = true
                 }
                 
-                selectedbudget = budgets.first
+                budget = budgets.first
             }
         }
     }
@@ -147,13 +145,16 @@ struct AddExpenseView: View {
     func isConfirmDisabled() -> Bool {
         guard title.isNotEmpty else { return true }
         guard let amount, amount >= 0 else { return true }
-        guard selectedbudget != nil || removeBudget else { return true }
+        guard budget != nil || removeBudget else { return true }
         
         return false
     }
     
     func addEntry() {
-        let newExpense = Expense(title: title, note: note, amount: amount!,date: date, createdDate: .now, updateDate: .now, isTimeEnabled: isTimeEnabled, budget: selectedbudget)
+        
+        guard let budget = budget else { return }
+        
+        let newExpense = Expense(title: title, note: note, amount: amount!,date: date, createdDate: .now, updateDate: .now, isTimeEnabled: isTimeEnabled, budget: budget)
         
         
         if saveLater {
@@ -163,7 +164,7 @@ struct AddExpenseView: View {
             return
         }
         
-        newExpense.save(selectedBudget: selectedbudget!, modelContext: modelContext)
+        newExpense.save(modelContext: modelContext)
         
         callback(newExpense)
         dismiss()

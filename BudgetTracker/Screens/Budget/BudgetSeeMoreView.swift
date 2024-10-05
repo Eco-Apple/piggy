@@ -49,7 +49,7 @@ struct BudgetSeeMoreView: View {
     
     
     func actionDelete() {
-        var totalDeletedBudgets: Decimal = 0.0
+        let totalDeletedBudgets: Decimal = 0.0
         
         for budget in budgetsToDelete {
 //            totalDeletedBudgets = totalDeletedBudgets + budget.estimatedAmount TODO: Total budgets

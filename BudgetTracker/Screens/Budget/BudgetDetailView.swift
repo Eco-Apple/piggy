@@ -52,8 +52,8 @@ struct BudgetDetailView: View {
             }
             
             Section {
-                InfoTextView(label: "Expenses", currency: budget.totalExpenses, isLink: true)
-                InfoTextView(label: "Incomes", currency: budget.totalIncomes, isLink: true)
+                InfoTextView(label: "Expense", currency: budget.totalExpense, isLink: true, prefix: "- ")
+                InfoTextView(label: "Income", currency: budget.totalIncome, isLink: true, prefix: "+ ")
             }
             
             InfoTextView(label: "Total Budget", currency: budget.totalBudget)
@@ -63,15 +63,8 @@ struct BudgetDetailView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 if isEdit {
-                    Button("Done") {
-                        budget.title = title
-                        budget.note = note
-                        budget.date = date
-                        budget.isTimeEnabled = isTimeEnabled
-                        budget.updatedDate = .now
-                        isEdit.toggle()
-                    }
-                    .disabled(isDoneButtonDisabled())
+                    Button("Done", action: done)
+                        .disabled(isDoneButtonDisabled())
                 } else if isEdit == false {
                     Button("Edit" ) {
                         isEdit.toggle()
@@ -88,6 +81,11 @@ struct BudgetDetailView: View {
         self._note = State(initialValue: budget.note)
         self._date = State(initialValue: budget.date!)
         self._isTimeEnabled = State(initialValue: budget.isTimeEnabled)
+    }
+    
+    func done() {
+        budget.edit(title: title, note: note, date: date, isTimeEnabled: isTimeEnabled)
+        isEdit.toggle()
     }
     
     func isDoneButtonDisabled() -> Bool {

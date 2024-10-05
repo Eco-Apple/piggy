@@ -42,6 +42,7 @@
 		20EF78382C82F8E80057F5AD /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EF78372C82F8E80057F5AD /* Navigation.swift */; };
 		20EF783A2C82FEC80057F5AD /* NavigationRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EF78392C82FEC80057F5AD /* NavigationRoute.swift */; };
 		20EF783C2C82FF0D0057F5AD /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EF783B2C82FF0D0057F5AD /* NavigationRouter.swift */; };
+		20FFBB542CAECF40007BCFAE /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FFBB532CAECF40007BCFAE /* StringExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,6 +82,7 @@
 		20EF78372C82F8E80057F5AD /* Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
 		20EF78392C82FEC80057F5AD /* NavigationRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRoute.swift; sourceTree = "<group>"; };
 		20EF783B2C82FF0D0057F5AD /* NavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouter.swift; sourceTree = "<group>"; };
+		20FFBB532CAECF40007BCFAE /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 		200971262C5B82D80001F510 /* BudgetTracker */ = {
 			isa = PBXGroup;
 			children = (
+				20FFBB522CAECF1D007BCFAE /* Extensions */,
 				20720F962C8C861A00D01891 /* Enums.swift */,
 				20ACD5432C89A38A00E08DCA /* MockData */,
 				20ACD5402C898B6200E08DCA /* Modifiers */,
@@ -123,7 +126,6 @@
 				20720F982C8C86B400D01891 /* Alert */,
 				200971352C5B82F40001F510 /* Screens */,
 				200971272C5B82D80001F510 /* BudgetTrackerApp.swift */,
-				200971672C679A990001F510 /* Extensions.swift */,
 				2009712D2C5B82D90001F510 /* Preview Content */,
 			);
 			path = BudgetTracker;
@@ -264,6 +266,15 @@
 			path = Budget;
 			sourceTree = "<group>";
 		};
+		20FFBB522CAECF1D007BCFAE /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				200971672C679A990001F510 /* Extensions.swift */,
+				20FFBB532CAECF40007BCFAE /* StringExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -338,6 +349,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				20EF783C2C82FF0D0057F5AD /* NavigationRouter.swift in Sources */,
+				20FFBB542CAECF40007BCFAE /* StringExtension.swift in Sources */,
 				20720F8D2C8C730500D01891 /* Income.swift in Sources */,
 				2002BD212C7AC43600BB3C6F /* ExpenseDetailView.swift in Sources */,
 				20EF783A2C82FEC80057F5AD /* NavigationRoute.swift in Sources */,

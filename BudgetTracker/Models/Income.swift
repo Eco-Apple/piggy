@@ -23,18 +23,18 @@ class Income: Codable {
         case budget
     }
     
-    var id: UUID
-    var title: String
-    var note: String
-    var amount: Decimal
-    var date: Date?
-    var createdDate: Date
-    var updatedDate: Date
-    var isTimeEnabled: Bool
+    private(set) var id: UUID
+    private(set) var title: String
+    private(set) var note: String
+    private(set) var amount: Decimal
+    private(set) var date: Date?
+    private(set) var createdDate: Date
+    private(set) var updatedDate: Date
+    private(set) var isTimeEnabled: Bool
     
-    var budget: Budget?
+    private(set) var budget: Budget
 
-    init(title: String, note: String, amount: Decimal, date: Date?, createdDate: Date, updatedDate: Date, isTimeEnabled: Bool, budget: Budget?) {
+    init(title: String, note: String, amount: Decimal, date: Date?, createdDate: Date, updatedDate: Date, isTimeEnabled: Bool, budget: Budget) {
         self.id = UUID()
         self.title = title
         self.note = note
@@ -76,5 +76,144 @@ class Income: Codable {
 extension Income {
     static var previewItem: Income {
         Income(title: "Shopping", note: "Monthly shopping", amount: 100.0, date: Date.distantPast, createdDate: .now, updatedDate: .now, isTimeEnabled: false, budget: .previewItem)
+    }
+    
+    func save(modelContext: ModelContext) {
+        var totalWeekIncomes: String {
+            get {
+                UserDefaults.standard.string(forKey: "totalWeekIncomes") ?? "0.0"
+            }
+            set {
+                UserDefaults.standard.set(newValue, forKey: "totalWeekIncomes")
+            }
+        }
+        
+        var isIncomesEmpty: Bool {
+            get {
+                UserDefaults.standard.bool(forKey: "isIncomesEmpty")
+            }
+            set {
+                UserDefaults.standard.set(newValue, forKey: "isIncomesEmpty")
+            }
+        }
+        
+        totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: self.amount, .add)!
+        modelContext.insert(self)
+        self.budget.addOrSub(amount: self.amount, operation: .add, income: self)
+        isIncomesEmpty = false
+    }
+    
+    func edit(title: String, note: String, amount: Decimal, date: Date, isTimeEnabled: Bool, budget: Budget){
+        let oldAmount = self.amount
+        
+        self.title = title
+        self.note = note
+        self.amount = amount
+        self.date = date
+        self.isTimeEnabled = isTimeEnabled
+        self.updatedDate = .now
+        
+        var totalWeekIncomes: String {
+            get {
+                UserDefaults.standard.string(forKey: "totalWeekIncomes") ?? "0.0"
+            }
+            set {
+                UserDefaults.standard.set(newValue, forKey: "totalWeekIncomes")
+            }
+        }
+        
+        totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: oldAmount, .sub)!
+        totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: amount, .add)!
+        
+        self.setBudget(budget, oldAmount: oldAmount)
+    }
+    
+    private func setBudget(_ newBudget: Budget, oldAmount: Decimal) {
+        
+        var totalWeekBudgets: String {
+            get {
+                UserDefaults.standard.string(forKey: "totalWeekBudgets") ?? "0.0"
+            }
+            set {
+                UserDefaults.standard.set(newValue, forKey: "totalWeekBudgets")
+            }
+        }
+        
+        if budget == newBudget {
+            budget.decreaseTotalIncome(to: oldAmount)
+            budget.increaseTotalIncome(to: amount)
+            
+            totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: oldAmount, .sub)!; #warning ("This will break if user edit budget previous week")
+            totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: amount, .add)!; #warning ("This will break if user edit budget previous week")
+        } else {
+            budget.decreaseTotalIncome(to: oldAmount)
+            newBudget.increaseTotalIncome(to: amount)
+            
+            budget.removeIncome(of: self)
+            newBudget.addIncome(of: self)
+            
+            totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: oldAmount, .sub)!; #warning ("This will break if user edit budget previous week")
+            totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: amount, .add)!; #warning ("This will break if user edit budget previous week")
+        }
+    }
+
+}
+
+extension [Income] {
+
+    func delete(modelContext: ModelContext) {
+        var totalWeekIncomes: String {
+            get {
+                UserDefaults.standard.string(forKey: "totalWeekIncomes") ?? "0.0"
+            }
+            set {
+                UserDefaults.standard.set(newValue, forKey: "totalWeekIncomes")
+            }
+        }
+        
+        
+        var isIncomesEmpty: Bool {
+            get {
+                UserDefaults.standard.bool(forKey: "isIncomesEmpty")
+            }
+            set {
+                UserDefaults.standard.set(newValue, forKey: "isIncomesEmpty")
+            }
+        }
+        
+        let today = Date.now
+        let calendar = Calendar.current
+
+        let weekday = calendar.component(.weekday, from: today)
+        
+
+        let daysToMonday = (weekday == 1 ? -6 : 2 - weekday)
+        
+        guard let monday = calendar.date(byAdding: .day, value: daysToMonday, to: today)?.localStartOfDate else { return }
+        
+        var totalDeletedItems: Decimal = 0.0
+        
+        for item in self {
+            if monday <= item.date! {
+                totalDeletedItems = totalDeletedItems + item.amount
+            }
+            
+            modelContext.delete(item)
+            item.budget.itemDeletedFor(income: item, modelContext: modelContext)
+        }
+        
+        totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: totalDeletedItems, .sub)!
+        
+        do {
+            let fetchDescriptor = FetchDescriptor<Income>()
+            let fetchIncomes = try modelContext.fetch(fetchDescriptor)
+            
+            if fetchIncomes.isEmpty {
+                isIncomesEmpty = true
+            }
+            
+        } catch {
+            fatalError("Error deleting incomes")
+        }
     }
 }

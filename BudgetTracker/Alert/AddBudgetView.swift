@@ -69,7 +69,7 @@ struct AddBudgetView: View {
                 }
                 
                 Section {
-                    TextField("Title", text: $title)
+                    TextField("Title*", text: $title)
                     TextEditor(text: $note)
                         .placeHolder("Note", text: $note)
                         .frame(height: 150)

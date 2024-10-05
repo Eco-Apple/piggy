@@ -24,7 +24,7 @@ struct IncomeItemView: View {
                 }
             }
             Spacer()
-            Text("+ \(income.amount, format: .currency(code: "PHP"))").foregroundStyle(amountForegroundColor())
+            Text(income.amount.toCurrency).foregroundStyle(amountForegroundColor())
                 .font(.headline)
         }
     }

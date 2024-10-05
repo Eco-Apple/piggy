@@ -23,19 +23,19 @@ class Expense: Codable {
         case budget
     }
     
-    var id: UUID
-    var title: String
-    var note: String
-    var amount: Decimal
-    var date: Date?
-    var createdDate: Date
-    var updatedDate: Date
+    private(set) var id: UUID
+    private(set) var title: String
+    private(set) var note: String
+    private(set) var amount: Decimal
+    private(set) var date: Date?
+    private(set) var createdDate: Date
+    private(set) var updatedDate: Date
     
-    var isTimeEnabled: Bool
+    private(set) var isTimeEnabled: Bool
     
-    var budget: Budget?
+    private(set) var budget: Budget
     
-    init(title: String, note: String, amount: Decimal, date: Date?, createdDate: Date, updateDate: Date, isTimeEnabled: Bool, budget: Budget?) {
+    init(title: String, note: String, amount: Decimal, date: Date?, createdDate: Date, updateDate: Date, isTimeEnabled: Bool, budget: Budget) {
         self.id = UUID()
         self.title = title
         self.note = note
@@ -77,4 +77,138 @@ extension Expense {
     static var previewItem: Expense {
         Expense(title: "Shopping", note: "Monthly shopping", amount: 100.0, date: Date.distantPast, createdDate: .now, updateDate: .now, isTimeEnabled: false, budget: .previewItem)
     }
+    
+    func save(modelContext: ModelContext) {
+        var totalWeekExpenses: String {
+            get {
+                UserDefaults.standard.string(forKey: "totalWeekExpenses") ?? "0.0"
+            }
+            set {
+                UserDefaults.standard.set(newValue, forKey: "totalWeekExpenses")
+            }
+        }
+        
+        var isExpensesEmpty: Bool {
+            get {
+                UserDefaults.standard.bool(forKey: "isExpensesEmpty")
+            }
+            set {
+                UserDefaults.standard.set(newValue, forKey: "isExpensesEmpty")
+            }
+        }
+        
+        totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: self.amount, .add)!
+        modelContext.insert(self)
+        self.budget.addOrSub(amount: self.amount, operation: .sub, expense: self)
+        isExpensesEmpty = false
+    }
+    
+    func edit(title: String, note: String, amount: Decimal, date: Date, isTimeEnabled: Bool, budget: Budget){
+        let oldAmount = self.amount
+        
+        self.title = title
+        self.note = note
+        self.amount = amount
+        self.date = date
+        self.isTimeEnabled = isTimeEnabled
+        self.updatedDate = .now
+        
+        
+        var totalWeekExpenses: String {
+            get {
+                UserDefaults.standard.string(forKey: "totalWeekExpenses") ?? "0.0"
+            }
+            set {
+                UserDefaults.standard.set(newValue, forKey: "totalWeekExpenses")
+            }
+        }
+        
+        totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: oldAmount, .sub)!
+        totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: amount, .add)!
+        
+        self.setBudget(budget, oldAmount: oldAmount)
+    }
+    
+    private func setBudget(_ newBudget: Budget, oldAmount: Decimal) {
+        
+        var totalWeekBudgets: String {
+            get {
+                UserDefaults.standard.string(forKey: "totalWeekBudgets") ?? "0.0"
+            }
+            set {
+                UserDefaults.standard.set(newValue, forKey: "totalWeekBudgets")
+            }
+        }
+        
+        if budget == newBudget {
+            budget.decreaseTotalExpense(to: oldAmount)
+            budget.increaseTotalExpense(to: amount)
+            
+            totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: oldAmount, .add)!; #warning ("This will break if user edit budget previous week")
+            totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: amount, .sub)!; #warning ("This will break if user edit budget previous week")
+        } else {
+            budget.decreaseTotalExpense(to: oldAmount)
+            newBudget.increaseTotalExpense(to: amount)
+            
+            budget.removeExpense(of: self)
+            newBudget.addExpense(of: self)
+            
+            totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: oldAmount, .add)!; #warning ("This will break if user edit budget previous week")
+            totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: amount, .sub)!; #warning ("This will break if user edit budget previous week")
+        }
+    }
+
+}
+
+
+extension [Expense] {
+    
+    func delete(modelContext: ModelContext) {
+        
+        var totalWeekExpenses: String {
+            get {
+                UserDefaults.standard.string(forKey: "totalWeekExpenses") ?? "0.0"
+            }
+            set {
+                UserDefaults.standard.set(newValue, forKey: "totalWeekExpenses")
+            }
+        }
+        
+        
+        var isExpensesEmpty: Bool {
+            get {
+                UserDefaults.standard.bool(forKey: "isExpensesEmpty")
+            }
+            set {
+                UserDefaults.standard.set(newValue, forKey: "isExpensesEmpty")
+            }
+        }
+        
+        var totalDeletedItems: Decimal = 0.0
+        
+        for item in self {
+            if Date.getPreviousStartDayMonday <= item.date! {
+                totalDeletedItems = totalDeletedItems + item.amount
+            }
+            
+            modelContext.delete(item)
+            
+            item.budget.itemDeletedFor(expense: item, modelContext: modelContext)
+        }
+        
+        totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: totalDeletedItems, .sub)!
+        
+        do {
+            let fetchDescriptor = FetchDescriptor<Expense>()
+            let fetchExpenses = try modelContext.fetch(fetchDescriptor)
+            
+            if fetchExpenses.isEmpty {
+                isExpensesEmpty = true
+            }
+            
+        } catch {
+            fatalError("Error deleting expenses")
+        }
+    }
+
 }

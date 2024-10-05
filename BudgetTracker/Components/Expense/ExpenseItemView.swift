@@ -28,7 +28,7 @@ struct ExpensItemView: View {
                 
             }
             Spacer()
-            Text("- \(expense.amount, format: .currency(code: "PHP"))").foregroundStyle(amountForegroundColor())
+            Text(expense.amount.toCurrency).foregroundStyle(amountForegroundColor())
                 .font(.headline)
         }
     }

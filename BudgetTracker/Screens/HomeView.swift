@@ -57,13 +57,13 @@ struct HomeView: View {
                 
                 Picker("Select a segment", selection: $selectedSegment) {
                     Text("Budget").tag(HomeViewSegments.budget)
-                    Text("Expenses").tag(HomeViewSegments.expense)
+                    Text("Expense").tag(HomeViewSegments.expense)
                     Text("Income").tag(HomeViewSegments.income)
                  }
                  .pickerStyle(SegmentedPickerStyle())
                  .frame(width: 250)
                  .padding()
-            }
+            }   
             .scrollBounceBehavior(.basedOnSize)
             .toolbar {
                 
@@ -174,7 +174,7 @@ struct HomeView: View {
             
             for expense in expenses {
                 let date: Date = .now.addingTimeInterval(86400 * expenseDayCounter)
-                expense.date = date
+//                expense.date = date
                 totalExpense = totalExpense + expense.amount
                 modelContext.insert(expense)
             }
@@ -189,7 +189,7 @@ struct HomeView: View {
             
             for income in incomes {
                 let date: Date = .now.addingTimeInterval(86400 * incomeDayCounter)
-                income.date = date
+//                income.date = date
                 totalIncome = totalIncome + income.amount
                 modelContext.insert(income)
             }
@@ -200,11 +200,11 @@ struct HomeView: View {
             isIncomesEmpty = false
         case .budget:
             let budgets: [Budget] = Bundle.main.decode("budget.mock.json")
-            var totalBudget: Decimal = 0.0
+            let totalBudget: Decimal = 0.0
             
             for budget in budgets {
                 let date: Date = .now.addingTimeInterval(86400 * budgetDayCounter)
-                budget.date = date
+//                budget.date = date
 //                totalBudget = totalBudget + budget.estimatedAmount TODO: Total budgets
                 modelContext.insert(budget)
             }

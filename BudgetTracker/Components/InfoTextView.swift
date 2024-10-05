@@ -18,7 +18,6 @@ struct InfoTextView: View {
     
     var tags: [String] = []
     
-    var currencySymbol = Locale.current.currencySymbol ?? ""
     var isButton: Bool = false
     var isLink: Bool = false
     
@@ -79,9 +78,9 @@ struct InfoTextView: View {
     }
     
     // Currency
-    init(label: String, currency: Decimal, isButton: Bool = false, isLink: Bool = false) {
+    init(label: String, currency: Decimal, isButton: Bool = false, isLink: Bool = false, prefix: String = "") {
         self.label = label
-        self.currency = currencySymbol + (currency.toStringWithCommaSeparator ?? "")
+        self.currency = prefix + currency.toCurrency
         self.isButton = isButton
         self.isLink = isLink
     }

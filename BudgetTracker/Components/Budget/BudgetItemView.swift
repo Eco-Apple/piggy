@@ -11,6 +11,8 @@ import SwiftUI
 struct BudgetItemView: View {
     var budget: Budget
     
+    
+    
     var body: some View {
         HStack {
             Text(amountEmoji())
@@ -24,37 +26,37 @@ struct BudgetItemView: View {
                 }
             }
             Spacer()
-//            Text("+ \(budget.estimatedAmount, format: .currency(code: "PHP"))").foregroundStyle(amountForegroundColor())
-//                .font(.headline) // TODO: Budget total item
+            Text(budget.totalBudget.toCurrency).foregroundStyle(amountForegroundColor())
+                .font(.headline)
         }
     }
     
     func amountEmoji() -> String {
-        return "💰"
-//        if true {estimatedAmount
-////        if budget.estimatedAmount <= 100 { TODO: Emoji
-//            "👍"
-//        } else if budget.estimatedAmount > 100 && budget.estimatedAmount <= 300  {
-//            "👌"
-//        } else if budget.estimatedAmount > 300 && budget.estimatedAmount < 500  {
-//            "💰"
-//        } else {
-//            "🔥"
-//        }
+        if budget.totalBudget < 0 {
+            "😭"
+        } else if budget.totalBudget == 0 {
+            budget.isFresh ? "😐" : "😭"
+        } else if budget.totalBudget > 0 && budget.totalBudget <= 100 {
+            "👍"
+        } else if budget.totalBudget > 100 && budget.totalBudget <= 300  {
+            "👌"
+        }else if budget.totalBudget > 300 && budget.totalBudget < 500  {
+            "💰"
+        } else {
+            "🔥"
+        }
     }
     
     func amountForegroundColor() -> Color {
-        return .green
-//        if true{
-////        if budget.estimatedAmount <= 200 { TODO: Emoji
-//            Color.green
-//        } else if budget.estimatedAmount > 200 && budget.estimatedAmount <= 500  {
-//            Color.orange
-//        } else if budget.estimatedAmount > 500 && budget.estimatedAmount < 1000  {
-//            Color.purple
-//        } else {
-//            Color.red
-//        }
+        if budget.totalBudget <= 200 {
+            Color.green
+        } else if budget.totalBudget > 200 && budget.totalBudget <= 500  {
+            Color.orange
+        } else if budget.totalBudget > 500 && budget.totalBudget < 1000  {
+            Color.purple
+        } else {
+            Color.red
+        }
     }
 
 }
