@@ -12,7 +12,7 @@ struct BudgetSeeMoreView: View {
     @Environment(\.modelContext) var modelContext
     
     @AppStorage("isBudgetsEmpty") var isBudgetsEmpty = true
-    @AppStorage("totalWeekBudgets") var totalWeekBudgets = "0.0"
+    @AppStorage("totalBudget") var totalBudget = "0.0"
     
     var date: Date
     @State var budgets: [Budget]
@@ -52,7 +52,6 @@ struct BudgetSeeMoreView: View {
         let totalDeletedBudgets: Decimal = 0.0
         
         for budget in budgetsToDelete {
-//            totalDeletedBudgets = totalDeletedBudgets + budget.estimatedAmount TODO: Total budgets
             modelContext.delete(budget)
         }
         
@@ -62,7 +61,7 @@ struct BudgetSeeMoreView: View {
         }
 
         
-        totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: totalDeletedBudgets, .sub)!
+        totalBudget = totalBudget.arithmeticOperation(of: totalDeletedBudgets, .sub)!
         
         do {
             let fetchDescriptor = FetchDescriptor<Budget>()
@@ -80,5 +79,5 @@ struct BudgetSeeMoreView: View {
 }
 
 #Preview {
-    BudgetSeeMoreView(date: .now, budgets: [Budget.previewItem])
+    BudgetSeeMoreView(date: .today, budgets: [Budget.previewItem])
 }

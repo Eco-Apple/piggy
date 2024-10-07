@@ -9,11 +9,12 @@ import SwiftData
 import SwiftUI
 
 struct BudgetDetailView: View {
+    @Environment(\.navigate) var navigate
     @Environment(\.dismiss) var dismiss
     
     @State private var title: String = ""
     @State private var note: String = ""
-    @State private var date: Date = .now
+    @State private var date: Date = .today
     
     @State private var isTimeEnabled: Bool = false
     @State private var isEdit: Bool = false
@@ -52,11 +53,19 @@ struct BudgetDetailView: View {
             }
             
             Section {
-                InfoTextView(label: "Expense", currency: budget.totalExpense, isLink: true, prefix: "- ")
-                InfoTextView(label: "Income", currency: budget.totalIncome, isLink: true, prefix: "+ ")
+                Button {
+                    navigate(.expense(.seeMore(title: "Expenses", expenses: budget.expenses, canAdd: true, passedBudget: budget)))
+                } label: {
+                    InfoTextView(label: "Expense", currency: budget.totalExpense, isLink: true, prefix: "- ", currencyColor: .expenseFontColor(amount: budget.totalExpense))
+                }
+                Button {
+                    navigate(.income(.seeMore(title: "Incomes", incomes: budget.incomes, canAdd: true, passedBudget: budget)))
+                } label: {
+                    InfoTextView(label: "Income", currency: budget.totalIncome, isLink: true, prefix: "+ ", currencyColor: .incomeFontColor(amount: budget.totalIncome))
+                }
             }
             
-            InfoTextView(label: "Total Budget", currency: budget.totalBudget)
+            InfoTextView(label: "Total Budget", currency: budget.totalBudget, currencyColor: .budgetFontColor(amount: budget.totalBudget))
         }
         .navigationTitle("Budget")
         .scrollBounceBehavior(.basedOnSize)

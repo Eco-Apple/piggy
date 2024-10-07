@@ -13,17 +13,17 @@ struct AddBudgetView: View {
     @Environment(\.modelContext) var modelContext
     
     @AppStorage("isBudgetsEmpty") var isBudgetsEmpty = true
-    @AppStorage("totalWeekBudgets") var totalWeekBudgets = "0.0"
+    @AppStorage("totalBudget") var totalBudget = "0.0"
     
-    @AppStorage("isIncomesEmpty") var isIncomesEmpty = true
+    @AppStorage("isWeekIncomeEmpty") var isWeekIncomeEmpty = true
     @AppStorage("totalWeekIncomes") var totalWeekIncomes = "0.0"
     
-    @AppStorage("isExpensesEmpty") var isExpensesEmpty = true
+    @AppStorage("isWeekExpenseEmpty") var isWeekExpenseEmpty = true
     @AppStorage("totalWeekExpenses") var totalWeekExpenses = "0.0"
     
     @State var title: String = ""
     @State var note: String = ""
-    @State var date: Date = .now
+    @State var date: Date = .today
     @State var expenses = [Expense]()
     @State var incomes = [Income]()
     
@@ -77,32 +77,56 @@ struct AddBudgetView: View {
                 
                 
                 if !removeIncome {
-                    Section {
-                        Button {
-                            isAddIncomePresented = true
-                        } label: {
-                            InfoTextView(label: "Add Income", currency: totalIncome, isButton: true)
+                    if incomes.isEmpty {
+                        Section {
+                            Button {
+                                isAddIncomePresented = true
+                            } label: {
+                                InfoTextView(label: "Add Income", currency: totalIncome, isButton: true)
+                            }
                         }
-                        
-                        ForEach(incomes) { income in
-                            InfoTextView(label: income.title, currency: income.amount)
+                    } else {
+                        Section("Incomes") {
+                            ForEach(incomes) { income in
+                                InfoTextView(label: income.title, currency: income.amount)
+                            }
+                            .onDelete { offsets in
+                                incomes.remove(atOffsets: offsets)
+                            }
+                            
+                            Button {
+                                isAddIncomePresented = true
+                            } label: {
+                                InfoTextView(label: "Add Income", currency: totalIncome, isButton: true)
+                            }
                         }
                     }
                 }
                 
                 if !removeExpense {
-                    Section {
-                        Button {
-                            isAddExpensePresented = true
-                        } label: {
-                            InfoTextView(label: "Add Expense", currency: totalExpense, isButton: true)
+                    if expenses.isEmpty {
+                        Section {
+                            Button {
+                                isAddExpensePresented = true
+                            } label: {
+                                InfoTextView(label: "Add Expense", currency: totalExpense, isButton: true)
+                            }
                         }
-                        
-                        
-                        ForEach(expenses) { income in
-                            InfoTextView(label: income.title, currency: income.amount)
+                    } else {
+                        Section("Expenses") {
+                            ForEach(expenses) { income in
+                                InfoTextView(label: income.title, currency: income.amount)
+                            }
+                            .onDelete { offsets in
+                                expenses.remove(atOffsets: offsets)
+                            }
+                            
+                            Button {
+                                isAddExpensePresented = true
+                            } label: {
+                                InfoTextView(label: "Add Expense", currency: totalExpense, isButton: true)
+                            }
                         }
-                        
                     }
                 }
             }
@@ -138,7 +162,7 @@ struct AddBudgetView: View {
     }
     
     func addEntry() {
-        let newBudget = Budget(title: title, note: note, date: date, createdDate: .now, updatedDate: .now, isTimeEnabled: isTimeEnabled)
+        let newBudget = Budget(title: title, note: note, date: date, createdDate: .today, updatedDate: .today, isTimeEnabled: isTimeEnabled)
         
         newBudget.save(incomes: incomes, expenses: expenses, modelContext: modelContext)
         callback(newBudget)

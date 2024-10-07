@@ -13,7 +13,7 @@ struct AddIncomeView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     
-    @AppStorage("isIncomesEmpty") var isIncomesEmpty = true
+    @AppStorage("isWeekIncomeEmpty") var isWeekIncomeEmpty = true
     @AppStorage("totalWeekIncomes") var totalWeekIncomes = "0.0"
     
     @Query var budgets: [Budget]
@@ -21,7 +21,7 @@ struct AddIncomeView: View {
     @State var title: String = ""
     @State var note: String = ""
     @State var amount: Decimal? = nil
-    @State var date: Date = .now
+    @State var date: Date = .today
     @State private var budget: Budget?
     
     @State private var isTimeEnabled: Bool = false
@@ -32,6 +32,7 @@ struct AddIncomeView: View {
     
     var saveLater: Bool = false
     var removeBudget: Bool = false
+    var passedBudget: Budget? = nil
 
     var callback: (Income) -> Void = { _ in }
         
@@ -62,7 +63,7 @@ struct AddIncomeView: View {
                         .frame(height: 150)
                 }
                 
-                if !removeBudget {
+                if passedBudget == nil || !removeBudget {
                     if budget != nil {
                         Picker("Budget", selection: $budget) {
                             ForEach(budgets) { budget in
@@ -99,50 +100,24 @@ struct AddIncomeView: View {
                     isFocus = true
                 }
                 
-                budget = budgets.first
+                if passedBudget == nil {
+                    budget = budgets.first
+                }
             }
         }
     }
     
-    init(saveLater: Bool = false, removeBudget: Bool = false, callback: @escaping (Income) -> Void = { _ in}) {
+    init(saveLater: Bool = false, removeBudget: Bool = false, passedBudget: Budget? = nil, callback: @escaping (Income) -> Void = { _ in}) {
         self.callback = callback
         self.saveLater = saveLater
         self.removeBudget = removeBudget
         
-        guard let fromToDate = setupDate() else { return }
+        self.passedBudget = passedBudget
         
-        
-        let normalizedFromDate = fromToDate.from
-        let normalizedToDate = fromToDate.to
-        
-        let fetchDescriptor = FetchDescriptor<Budget>(predicate: #Predicate<Budget> { budget in
-            if let budgetDate = budget.date {
-                return budgetDate >= normalizedFromDate && budgetDate <= normalizedToDate
-            } else {
-                return false
-            }
-            
-        })
-        
-        _budgets = Query(fetchDescriptor)
+        if let passedBudget = passedBudget {
+            self._budget = State(initialValue: passedBudget)
+        }
     }
-    
-    
-    func setupDate() -> (from: Date, to: Date)? {
-        let today = Date.now
-        let calendar = Calendar.current
-
-        let weekday = calendar.component(.weekday, from: today)
-        
-
-        let daysToMonday = (weekday == 1 ? -6 : 2 - weekday)
-
-        guard let monday = calendar.date(byAdding: .day, value: daysToMonday, to: today)?.localStartOfDate else { return nil }
-        guard let nextDay = calendar.date(byAdding: .day, value: 1, to: today)?.localStartOfDate else { return nil }
-         
-        return (monday, nextDay)
-    }
-
     
     func isConfirmDisabled() -> Bool {
         guard title.isNotEmpty else { return true }
@@ -155,7 +130,7 @@ struct AddIncomeView: View {
     func addEntry() {
         guard let budget = budget else { return }
         
-        let newIncome = Income(title: title, note: note, amount: amount!,date: date, createdDate: .now, updatedDate: .now, isTimeEnabled: isTimeEnabled, budget: budget)
+        let newIncome = Income(title: title, note: note, amount: amount!,date: date, createdDate: .today, updatedDate: .today, isTimeEnabled: isTimeEnabled, budget: budget)
         
         if saveLater {
             dismiss()

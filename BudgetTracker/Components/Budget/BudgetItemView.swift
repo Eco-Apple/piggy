@@ -26,7 +26,7 @@ struct BudgetItemView: View {
                 }
             }
             Spacer()
-            Text(budget.totalBudget.toCurrency).foregroundStyle(amountForegroundColor())
+            Text(budget.totalBudget.toCurrency).foregroundStyle(Color.budgetFontColor(amount: budget.totalBudget))
                 .font(.headline)
         }
     }
@@ -46,19 +46,6 @@ struct BudgetItemView: View {
             "🔥"
         }
     }
-    
-    func amountForegroundColor() -> Color {
-        if budget.totalBudget <= 200 {
-            Color.green
-        } else if budget.totalBudget > 200 && budget.totalBudget <= 500  {
-            Color.orange
-        } else if budget.totalBudget > 500 && budget.totalBudget < 1000  {
-            Color.purple
-        } else {
-            Color.red
-        }
-    }
-
 }
 
 #Preview {

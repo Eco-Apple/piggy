@@ -14,12 +14,12 @@ enum NavigationRoute: Hashable {
     
     enum ExpenseRoute: Hashable {
         case detail(Expense)
-        case seeMore(Date, [Expense])
+        case seeMore(title: String, expenses: [Expense], canAdd: Bool = false, passedBudget: Budget? = nil)
     }
     
     enum IncomeRoute: Hashable {
         case detail(Income)
-        case seeMore(Date, [Income])
+        case seeMore(title: String, incomes: [Income], canAdd: Bool = false, passedBudget: Budget? = nil)
     }
     
     enum BudgetRoute: Hashable {

@@ -36,7 +36,7 @@ fileprivate struct IncomeSectionListView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     
-    @AppStorage("isIncomesEmpty") var isIncomesEmpty = true
+    @AppStorage("isWeekIncomeEmpty") var isWeekIncomeEmpty = true
     @AppStorage("totalWeekIncomes") var totalWeekIncomes = "0.0"
     
     @Query var incomes: [Income]
@@ -91,7 +91,8 @@ fileprivate struct IncomeSectionListView: View {
                                 }
                             }
                         } else if incomes.count > limitToExpand {
-                            navigate(.income(.seeMore(filterDate, incomes)))
+                            let title = filterDate.format(.dateOnly, descriptive: true)
+                            navigate(.income(.seeMore(title: title, incomes: incomes)))
                         }
                     }) {
                         Text(limit != limitToExpand ? "See More" : "See Less")
@@ -123,12 +124,7 @@ fileprivate struct IncomeSectionListView: View {
         let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: filterDate)!
         
         var fetchDescriptor = FetchDescriptor<Income>(predicate: #Predicate<Income> { income in
-            if let incomeDate = income.date {
-                return incomeDate >= filterDate && incomeDate < nextDay
-            } else {
-                return false
-            }
-            
+            return income.date >= filterDate && income.date < nextDay
         }, sortBy: sortDescriptors)
         
         fetchDescriptor.fetchLimit = limit.wrappedValue + limitToExpand
@@ -155,7 +151,7 @@ fileprivate struct IncomeSectionListView: View {
 }
 
 struct IncomeListView: View {
-    @AppStorage("isIncomesEmpty") var isIncomesEmpty = true
+    @AppStorage("isWeekIncomeEmpty") var isWeekIncomeEmpty = true
     @AppStorage("totalWeekIncomes") var totalWeekIncomes = "0.0"
     
     var sortDescriptors: [SortDescriptor<Income>]
@@ -163,15 +159,15 @@ struct IncomeListView: View {
     
     
     var body: some View {
-        if !isIncomesEmpty {
+        if !isWeekIncomeEmpty {
             List {
                 Section("this week") {
-                    InfoTextView(label: "Incomes", currency: Decimal(string: totalWeekIncomes)!)
+                    InfoTextView(label: "Overall", currency: Decimal(string: totalWeekIncomes)!)
                         .font(.headline)
                 }
                 
                 ForEach(sectionsDate, id: \.self) { date in
-                    IncomeSectionListViewWrapper(of: date, sortDescriptors: sortDescriptors, limit: Calendar.current.startOfDay(for:date) == Calendar.current.startOfDay(for: Date.now) ? 5 : 3)
+                    IncomeSectionListViewWrapper(of: date, sortDescriptors: sortDescriptors, limit: Calendar.current.startOfDay(for:date) == Calendar.current.startOfDay(for: .today) ? 5 : 3)
                 }
             }
         } else {
@@ -188,35 +184,24 @@ struct IncomeListView: View {
 
     
     func setupDates() -> [Date] {
-        var date = Date.now
+        let date = Date.today
         let calendar = Calendar.current
-        let currentWeekdayNumber = calendar.component(.weekday, from: date)
         
         var dates: [Date] = []
         
-        if currentWeekdayNumber == 1 {
-            date = calendar.date(byAdding: .day, value: -1, to: date)!
-        }
-        
-        var components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
-        
-        components.weekday = 2
-        
-        guard let monday = calendar.nextDate(after: date, matching: components, matchingPolicy: .nextTimePreservingSmallerComponents, direction: .backward) else {
-            return []
-        }
+        let weekday = calendar.component(.weekday, from: date)
 
+        let daysToMonday = (weekday == 1 ? -6 : 2 - weekday)
+        
+        guard let monday = calendar.date(byAdding: .day, value: daysToMonday, to: date)?.localStartOfDate else { return [] }
+        
         var currentDate = monday
         
         while currentDate <= date {
             dates.insert(currentDate.localStartOfDate, at: 0)
             currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
         }
-        
-        if currentWeekdayNumber == 1 {
-            dates.insert(Date.now.localStartOfDate, at: 0)
-        }
-        
+    
         return dates
     }
 

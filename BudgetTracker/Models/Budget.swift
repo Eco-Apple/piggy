@@ -95,16 +95,16 @@ extension Budget {
     }
     
     static var previewItem: Budget {
-        Budget(title: "Shopping", note: "Monthly shopping", date: Date.distantPast, createdDate: .now, updatedDate: .now, isTimeEnabled: true)
+        Budget(title: "Shopping", note: "Monthly shopping", date: Date.distantPast, createdDate: .today, updatedDate: .today, isTimeEnabled: true)
     }
     
     func save(incomes: [Income], expenses: [Expense], modelContext: ModelContext) {
-        var totalWeekBudgets: String {
+        var totalBudget: String {
             get {
-                UserDefaults.standard.string(forKey: "totalWeekBudgets") ?? "0.0"
+                UserDefaults.standard.string(forKey: "totalBudget") ?? "0.0"
             }
             set {
-                UserDefaults.standard.set(newValue, forKey: "totalWeekBudgets")
+                UserDefaults.standard.set(newValue, forKey: "totalBudget")
             }
         }
         
@@ -131,7 +131,7 @@ extension Budget {
             totalExpense = totalExpense + expense.amount
         }
             
-        totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: totalIncome - totalExpense, .add)!
+        totalBudget = totalBudget.arithmeticOperation(of: totalIncome - totalExpense, .add)!
         
         modelContext.insert(self)
         isBudgetsEmpty = false
@@ -142,17 +142,17 @@ extension Budget {
         self.note = note
         self.date = date
         self.isTimeEnabled = isTimeEnabled
-        self.updatedDate = .now
+        self.updatedDate = .today
 
     }
     
     func addOrSub(amount: Decimal, operation: ArithmeticOperation, expense: Expense? = nil, income: Income? = nil) {
-        var totalWeekBudgets: String {
+        var totalBudget: String {
             get {
-                UserDefaults.standard.string(forKey: "totalWeekBudgets") ?? "0.0"
+                UserDefaults.standard.string(forKey: "totalBudget") ?? "0.0"
             }
             set {
-                UserDefaults.standard.set(newValue, forKey: "totalWeekBudgets")
+                UserDefaults.standard.set(newValue, forKey: "totalBudget")
             }
         }
         
@@ -167,9 +167,9 @@ extension Budget {
         
         switch operation {
             case .add:
-                totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: amount, .add)!
+                totalBudget = totalBudget.arithmeticOperation(of: amount, .add)!
             case .sub:
-                totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: amount, .sub)!
+                totalBudget = totalBudget.arithmeticOperation(of: amount, .sub)!
                 break
         }
         
@@ -188,24 +188,24 @@ extension Budget {
     }
     
     func itemDeletedFor(expense: Expense? = nil, income: Income? = nil, modelContext: ModelContext) {
-        var totalWeekBudgets: String {
+        var totalBudget: String {
             get {
-                UserDefaults.standard.string(forKey: "totalWeekBudgets") ?? "0.0"
+                UserDefaults.standard.string(forKey: "totalBudget") ?? "0.0"
             }
             set {
-                UserDefaults.standard.set(newValue, forKey: "totalWeekBudgets")
+                UserDefaults.standard.set(newValue, forKey: "totalBudget")
             }
         }
         
         
         if let expense = expense {
-            expense.budget.totalExpense -= expense.amount
-            totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: expense.amount, .add)!
+            expense.budget!.totalExpense -= expense.amount
+            totalBudget = totalBudget.arithmeticOperation(of: expense.amount, .add)!
         }
         
         if let income = income {
-            income.budget.totalIncome -= income.amount
-            totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: income.amount, .sub)!
+            income.budget!.totalIncome -= income.amount
+            totalBudget = totalBudget.arithmeticOperation(of: income.amount, .sub)!
         }
         
     }
@@ -247,6 +247,15 @@ extension Budget {
         expenses.append(expense)
     }
 
+    #if DEBUG
+    func setMockDate(at date: Date) {
+        self.date = date
+    }
+    
+    func setMockID() {
+        self.id = UUID()
+    }
+    #endif
 
 }
 
@@ -262,12 +271,12 @@ extension [Budget] {
             }
         }
         
-        var isIncomesEmpty: Bool {
+        var isWeekIncomeEmpty: Bool {
             get {
-                UserDefaults.standard.bool(forKey: "isIncomesEmpty")
+                UserDefaults.standard.bool(forKey: "isWeekIncomeEmpty")
             }
             set {
-                UserDefaults.standard.set(newValue, forKey: "isIncomesEmpty")
+                UserDefaults.standard.set(newValue, forKey: "isWeekIncomeEmpty")
             }
         }
         
@@ -280,21 +289,21 @@ extension [Budget] {
             }
         }
         
-        var isExpensesEmpty: Bool {
+        var isWeekExpenseEmpty: Bool {
             get {
-                UserDefaults.standard.bool(forKey: "isExpensesEmpty")
+                UserDefaults.standard.bool(forKey: "isWeekExpenseEmpty")
             }
             set {
-                UserDefaults.standard.set(newValue, forKey: "isExpensesEmpty")
+                UserDefaults.standard.set(newValue, forKey: "isWeekExpenseEmpty")
             }
         }
         
-        var totalWeekBudgets: String {
+        var totalBudget: String {
             get {
-                UserDefaults.standard.string(forKey: "totalWeekBudgets") ?? "0.0"
+                UserDefaults.standard.string(forKey: "totalBudget") ?? "0.0"
             }
             set {
-                UserDefaults.standard.set(newValue, forKey: "totalWeekBudgets")
+                UserDefaults.standard.set(newValue, forKey: "totalBudget")
             }
         }
         
@@ -314,13 +323,13 @@ extension [Budget] {
         for budget in self {
             
             for income in budget.incomes {
-                if Date.getPreviousStartDayMonday <= income.date! {
+                if Date.getPreviousStartDayMonday <= income.date {
                     totalDeletedIncomes += income.amount
                 }
             }
             
             for expense in budget.expenses {
-                if Date.getPreviousStartDayMonday <= expense.date! {
+                if Date.getPreviousStartDayMonday <= expense.date {
                     totalDeletedExpenses += expense.amount
                 }
             }
@@ -330,7 +339,7 @@ extension [Budget] {
         
         totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: totalDeletedIncomes, .sub)!
         totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: totalDeletedExpenses, .sub)!
-        totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: totalDeletedIncomes - totalDeletedExpenses, .sub)!
+        totalBudget = totalBudget.arithmeticOperation(of: totalDeletedIncomes - totalDeletedExpenses, .sub)!
         
         do {
             let fetchBudgetDescriptor = FetchDescriptor<Budget>()
@@ -345,14 +354,14 @@ extension [Budget] {
             let fetchIncomes = try modelContext.fetch(fetchIncomeDescriptor)
             
             if fetchIncomes.isEmpty {
-                isIncomesEmpty = true
+                isWeekIncomeEmpty = true
             }
             
             let fetchExpenseDescriptor = FetchDescriptor<Expense>()
             let fetchExpenses = try modelContext.fetch(fetchExpenseDescriptor)
             
             if fetchExpenses.isEmpty {
-                isExpensesEmpty = true
+                isWeekExpenseEmpty = true
             }
             
         } catch {

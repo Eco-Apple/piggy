@@ -14,18 +14,22 @@ struct HomeView: View {
     @Environment(\.modelContext) var modelContext
     
     #if DEBUG
-    @AppStorage("isExpensesEmpty") var isExpensesEmpty = true
-    @AppStorage("isIncomesEmpty") var isIncomesEmpty = true
     @AppStorage("isBudgetsEmpty") var isBudgetsEmpty = true
-    
-    @AppStorage("totalWeekExpenses") var totalWeekExpenses = "0.0"
-    @AppStorage("totalWeekBudgets") var totalWeekBudgets = "0.0"
-    @AppStorage("totalWeekIncomes") var totalWeekIncomes = "0.0"
-    
+    @AppStorage("totalBudget") var totalBudget = "0.0"
     @State var expenseDayCounter: Double = 0
     @State var incomeDayCounter: Double = 0
     @State var budgetDayCounter: Double = 0
     #endif
+    
+    @AppStorage("isWeekExpenseEmpty") var isWeekExpenseEmpty = true
+    @AppStorage("totalWeekExpenses") var totalWeekExpenses = "0.0"
+    
+    @AppStorage("isWeekIncomeEmpty") var isWeekIncomeEmpty = true
+    @AppStorage("totalWeekIncomes") var totalWeekIncomes = "0.0"
+    
+    @AppStorage("expenseFirstDayOfWeek") var expenseFirstDayOfWeek = ""
+    @AppStorage("incomeFirstDayOfWeek") var incomeFirstDayOfWeek = ""
+
     
     @State private var isAddViewPresented = false
     
@@ -42,6 +46,10 @@ struct HomeView: View {
     ]
 
     @State private var selectedSegment: HomeViewSegments = .budget
+    
+    init() {
+        processStartOfTheWeek()
+    }
     
     var body: some View {
         Navigation {
@@ -63,7 +71,9 @@ struct HomeView: View {
                  .pickerStyle(SegmentedPickerStyle())
                  .frame(width: 250)
                  .padding()
-            }   
+            }
+            .navigationTitle(selectedSegment.title)
+            .navigationBarTitleDisplayMode(.inline)
             .scrollBounceBehavior(.basedOnSize)
             .toolbar {
                 
@@ -146,14 +156,18 @@ struct HomeView: View {
                         let fetchIncome = try modelContext.fetch(FetchDescriptor<Income>())
                                                 
                         print("Budget: \(fetchBudget.count)")
+                        
                         print("Expense: \(fetchExpense.count)")
+                        print("Expense Date: \(expenseFirstDayOfWeek)")
+                        
                         print("Income: \(fetchIncome.count)")
+                        print("Income Date: \(incomeFirstDayOfWeek)")
                         
                         print("isBudgetsEmpty: \(isBudgetsEmpty)")
-                        print("isExpensesEmpty: \(isExpensesEmpty)")
-                        print("isIncomesEmpty: \(isIncomesEmpty)")
+                        print("isWeekExpenseEmpty: \(isWeekExpenseEmpty)")
+                        print("isWeekIncomeEmpty: \(isWeekIncomeEmpty)")
                         
-                        print("totalWeekBudgets: \(totalWeekBudgets)")
+                        print("totalBudget: \(totalBudget)")
                         print("totalWeekExpenses: \(totalWeekExpenses)")
                         print("totalWeekIncomes: \(totalWeekIncomes)")
                     } catch {
@@ -164,6 +178,63 @@ struct HomeView: View {
         }
     }
     
+    func processStartOfTheWeek() {
+        if expenseFirstDayOfWeek == "" {
+            let calendar = Calendar.current
+            let isoFormatter = ISO8601DateFormatter()
+            
+            let weekday = calendar.component(.weekday, from: .today)
+            let daysToMonday = (weekday == 1 ? -6 : 2 - weekday)
+            
+            let monday = calendar.date(byAdding: .day, value: daysToMonday, to: .today)!.localStartOfDate
+            
+            let dateString = isoFormatter.string(from: monday)
+            
+            expenseFirstDayOfWeek = dateString
+        } else {
+            let calendar = Calendar.current
+            let isoFormatter = ISO8601DateFormatter()
+            let date = isoFormatter.date(from: expenseFirstDayOfWeek)!.localStartOfDate
+            
+            let components = calendar.dateComponents([.day], from: date, to: .today)
+            
+            if let daysAhead = components.day, daysAhead >= 7 {
+                totalWeekExpenses = "0.0"
+                isWeekExpenseEmpty = true
+                
+                let dateString = isoFormatter.string(from: .today)
+                expenseFirstDayOfWeek = dateString
+            }
+        }
+        
+        if incomeFirstDayOfWeek == "" {
+            let calendar = Calendar.current
+            let isoFormatter = ISO8601DateFormatter()
+            
+            let weekday = calendar.component(.weekday, from: .today)
+            let daysToMonday = (weekday == 1 ? -6 : 2 - weekday)
+            
+            let monday = calendar.date(byAdding: .day, value: daysToMonday, to: .today)!.localStartOfDate
+            
+            let dateString = isoFormatter.string(from: monday)
+            
+            incomeFirstDayOfWeek = dateString
+        } else {
+            let calendar = Calendar.current
+            let isoFormatter = ISO8601DateFormatter()
+            let date = isoFormatter.date(from: incomeFirstDayOfWeek)!.localStartOfDate
+            
+            let components = calendar.dateComponents([.day], from: date, to: .today)
+            
+            if let daysAhead = components.day, daysAhead >= 7 {
+                totalWeekIncomes = "0.0"
+                isWeekExpenseEmpty = true
+                
+                let dateString = isoFormatter.string(from: .today)
+                incomeFirstDayOfWeek = dateString
+            }
+        }
+    }
     #if DEBUG
     func addMockData() {
         
@@ -173,47 +244,59 @@ struct HomeView: View {
             var totalExpense: Decimal = 0.0
             
             for expense in expenses {
-                let date: Date = .now.addingTimeInterval(86400 * expenseDayCounter)
-//                expense.date = date
-                totalExpense = totalExpense + expense.amount
-                modelContext.insert(expense)
+                let date: Date = .today.addingTimeInterval(86400 * expenseDayCounter)
+                expense.setMockDate(at: date)
+                
+                do {
+                    let fetchDescriptor = FetchDescriptor<Budget>()
+                    let fetchBudgets = try modelContext.fetch(fetchDescriptor)
+                    
+                    if !fetchBudgets.isEmpty, let budget = fetchBudgets.randomElement() {
+                        expense.setMockID()
+                        expense.setMockBudget(at: budget)
+                        expense.save(modelContext: modelContext)
+                    }
+                    
+                } catch {
+                    fatalError("Error deleting budget")
+                }
             }
             
-            totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: totalExpense, .add)!
-            
-            expenseDayCounter = expenseDayCounter - 1
-            isExpensesEmpty = false
+            expenseDayCounter -= 1
         case .income:
             let incomes: [Income] = Bundle.main.decode("income.mock.json")
             var totalIncome: Decimal = 0.0
             
             for income in incomes {
-                let date: Date = .now.addingTimeInterval(86400 * incomeDayCounter)
-//                income.date = date
-                totalIncome = totalIncome + income.amount
-                modelContext.insert(income)
+                let date: Date = .today.addingTimeInterval(86400 * incomeDayCounter)
+                income.setMockDate(at: date)
+                
+                do {
+                    let fetchDescriptor = FetchDescriptor<Budget>()
+                    let fetchBudgets = try modelContext.fetch(fetchDescriptor)
+                    
+                    if !fetchBudgets.isEmpty, let budget = fetchBudgets.first {
+                        income.setMockID()
+                        income.setMockBudget(at: budget)
+                        income.save(modelContext: modelContext)
+                    }
+                    
+                } catch {
+                    fatalError("Error deleting budget")
+                }
             }
-            
-            totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: totalIncome, .add)!
-            
-            incomeDayCounter = incomeDayCounter - 1
-            isIncomesEmpty = false
+            incomeDayCounter -= 1
         case .budget:
             let budgets: [Budget] = Bundle.main.decode("budget.mock.json")
-            let totalBudget: Decimal = 0.0
+            let total: Decimal = 0.0
             
             for budget in budgets {
-                let date: Date = .now.addingTimeInterval(86400 * budgetDayCounter)
-//                budget.date = date
-//                totalBudget = totalBudget + budget.estimatedAmount TODO: Total budgets
-                modelContext.insert(budget)
+                let date: Date = .today.addingTimeInterval(86400 * budgetDayCounter)
+                budget.setMockID()
+                budget.setMockDate(at: date)
+                budget.save(incomes: [], expenses: [], modelContext: modelContext)
             }
-            
-            totalWeekBudgets = totalWeekBudgets.arithmeticOperation(of: totalBudget, .add)!
-            
-            budgetDayCounter = budgetDayCounter - 1
-            isBudgetsEmpty = false
-            break
+            budgetDayCounter -= 1
         }
     }
     
@@ -223,36 +306,21 @@ struct HomeView: View {
             case .expense:
                 let descriptor = FetchDescriptor<Expense>()
                 let toDeleteData = try modelContext.fetch(descriptor)
-                
-                for expense in toDeleteData {
-                    modelContext.delete(expense)
-                }
-                
-                totalWeekExpenses = "0.0"
-                isExpensesEmpty = true
-                expenseDayCounter = 0
+                toDeleteData.delete(modelContext: modelContext)
+                totalWeekIncomes = "0.0"
+                expenseDayCounter += 0
             case .income:
                 let descriptor = FetchDescriptor<Income>()
                 let toDeleteData = try modelContext.fetch(descriptor)
-                
-                for income in toDeleteData {
-                    modelContext.delete(income)
-                }
-                
-                totalWeekIncomes = "0.0"
-                isIncomesEmpty = true
+                toDeleteData.delete(modelContext: modelContext)
+                totalWeekExpenses = "0.0"
                 incomeDayCounter = 0
             case .budget:
                 let descriptor = FetchDescriptor<Budget>()
                 let toDeleteData = try modelContext.fetch(descriptor)
-                
-                for budget in toDeleteData {
-                    modelContext.delete(budget)
-                }
-                
-                totalWeekBudgets = "0.0"
-                isBudgetsEmpty = true
-                budgetDayCounter = 0
+                toDeleteData.delete(modelContext: modelContext)
+                totalBudget = "0.0"
+                budgetDayCounter += 0
                 break
             }
         } catch {

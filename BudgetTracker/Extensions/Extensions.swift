@@ -50,8 +50,17 @@ extension Decimal {
 
 extension Date {
     
+    static var today: Date {
+        #if DEBUG
+            let calendar = Calendar.current
+        
+            return calendar.date(byAdding: .day, value: 0, to: .now)!.localStartOfDate
+        #endif
+        return Date.now
+    }
+    
     static var getPreviousStartDayMonday: Date {
-        let today = Date.now
+        let today = Date.today
         let calendar = Calendar.current
 
         let weekday = calendar.component(.weekday, from: today)
@@ -79,11 +88,11 @@ extension Date {
         let calendar = Calendar.current
         
         if descriptive {
-            if calendar.startOfDay(for: self) == calendar.startOfDay(for: Date.now) {
+            if calendar.startOfDay(for: self) == calendar.startOfDay(for: Date.today) {
                 return "Today"
             }
             
-            if calendar.startOfDay(for: self) == calendar.startOfDay(for: Calendar.current.date(byAdding: .day, value: -1, to: Date.now)!) {
+            if calendar.startOfDay(for: self) == calendar.startOfDay(for: Calendar.current.date(byAdding: .day, value: -1, to: Date.today)!) {
                 return "Yesterday"
             }
         }
@@ -102,4 +111,43 @@ extension Date {
         }
     }
     
+}
+
+extension Color {
+    static func expenseFontColor(amount: Decimal) -> Color {
+        if amount <= 200 {
+            Color.green
+        } else if amount > 200 && amount <= 500  {
+            Color.orange
+        } else if amount > 500 && amount < 1000  {
+            Color.purple
+        } else {
+            Color.red
+        }
+    }
+    
+    static func incomeFontColor(amount: Decimal) -> Color {
+        if amount <= 200 {
+            Color.green
+        } else if amount > 200 && amount <= 500  {
+            Color.orange
+        } else if amount > 500 && amount < 1000  {
+            Color.purple
+        } else {
+            Color.red
+        }
+    }
+    
+    static func budgetFontColor(amount: Decimal) -> Color {
+        if amount <= 200 {
+            Color.green
+        } else if amount > 200 && amount <= 500  {
+            Color.orange
+        } else if amount > 500 && amount < 1000  {
+            Color.purple
+        } else {
+            Color.red
+        }
+    }
+
 }

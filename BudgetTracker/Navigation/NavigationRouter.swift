@@ -29,8 +29,8 @@ class NavigationRouter {
         switch route {
         case .detail(let expense):
             ExpenseDetailView(expense)
-        case .seeMore(let date, let expenses):
-            ExpenseSeeMoreView(date: date, expenses: expenses)
+        case .seeMore(let title, let expenses, let canAdd, let passedBudget):
+            ExpenseSeeMoreView(title: title, expenses: expenses, canAdd: canAdd, passedBudget: passedBudget)
         }
     }
     
@@ -39,8 +39,8 @@ class NavigationRouter {
         switch route {
         case .detail(let income):
             IncomeDetailView(income)
-        case .seeMore(let date, let incomes):
-            IncomeSeeMoreView(date: date, incomes: incomes)
+        case .seeMore(let title, let incomes, let canAdd, let passedBudget):
+            IncomeSeeMoreView(title: title, incomes: incomes, canAdd: canAdd, passedBudget: passedBudget)
         }
     }
     

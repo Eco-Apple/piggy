@@ -8,27 +8,37 @@
 import SwiftData
 import SwiftUI
 
-struct ExpensItemView: View {
+struct ExpenseItemView: View {
     var expense: Expense
+    
+    var caption: String? = nil
     
     var body: some View {
         HStack {
             Text(amountEmoji())
                 .font(.title)
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 1) {
                 Text(expense.title)
-                     .font(.headline)
-                     .lineLimit(1)
+                    .font(.headline)
+                    .lineLimit(1)
                 
-                if expense.note.isNotEmpty {
-                    Text(expense.note)
+                if let caption = caption {
+                    Text(caption)
                         .font(.caption)
                         .lineLimit(1)
+                } else {
+                    if expense.note.isNotEmpty {
+                        Text(expense.note)
+                            .font(.caption)
+                            .lineLimit(1)
+                    } else if expense.isTimeEnabled {
+                        Text(expense.date.format(.timeOnly))
+                            .font(.caption)
+                    }
                 }
-                
             }
             Spacer()
-            Text(expense.amount.toCurrency).foregroundStyle(amountForegroundColor())
+            Text(expense.amount.toCurrency).foregroundStyle(Color.expenseFontColor(amount: expense.amount))
                 .font(.headline)
         }
     }
@@ -44,19 +54,6 @@ struct ExpensItemView: View {
             "🥶"
         }
     }
-    
-    func amountForegroundColor() -> Color {
-        if expense.amount <= 200 {
-            Color.green
-        } else if expense.amount > 200 && expense.amount <= 500  {
-            Color.orange
-        } else if expense.amount > 500 && expense.amount < 1000  {
-            Color.purple
-        } else {
-            Color.red
-        }
-    }
-
 }
 
 #Preview {
@@ -65,7 +62,7 @@ struct ExpensItemView: View {
         let container = try ModelContainer(for: Expense.self, configurations: config)
         let example = Expense.previewItem
         
-        return ExpensItemView(expense: example)
+        return ExpenseItemView(expense: example)
             .modelContainer(container)
     } catch {
         return Text("Failed to create preview: \(error.localizedDescription)")

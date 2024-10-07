@@ -15,6 +15,7 @@ struct InfoTextView: View {
     var status: String?
     var date: String?
     var currency: String?
+    var currencyColor: Color? = nil
     
     var tags: [String] = []
     
@@ -34,7 +35,7 @@ struct InfoTextView: View {
                 }
             } else {
                 Text( text ?? value ?? status ?? date ?? currency ?? "")
-                    .foregroundStyle(foregroundStyleOfValue())
+                    .foregroundStyle(currencyColor ?? foregroundStyleOfValue())
                 
                 if isLink {
                     Image(systemName: "chevron.right")
@@ -78,11 +79,12 @@ struct InfoTextView: View {
     }
     
     // Currency
-    init(label: String, currency: Decimal, isButton: Bool = false, isLink: Bool = false, prefix: String = "") {
+    init(label: String, currency: Decimal, isButton: Bool = false, isLink: Bool = false, prefix: String = "", currencyColor: Color? = nil) {
         self.label = label
         self.currency = prefix + currency.toCurrency
         self.isButton = isButton
         self.isLink = isLink
+        self.currencyColor = currencyColor
     }
     
     
@@ -107,5 +109,5 @@ struct InfoTextView: View {
 }
 
 #Preview {
-    InfoTextView(label: "Settings", date: .now, style: .dateOnly)
+    InfoTextView(label: "Settings", date: .today, style: .dateOnly)
 }

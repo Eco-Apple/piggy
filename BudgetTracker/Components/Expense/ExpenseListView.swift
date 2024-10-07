@@ -35,7 +35,7 @@ fileprivate struct ExpenseSectionListView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     
-    @AppStorage("isExpensesEmpty") var isExpensesEmpty = true
+    @AppStorage("isWeekExpenseEmpty") var isWeekExpenseEmpty = true
     @AppStorage("totalWeekExpenses") var totalWeekExpenses = "0.0"
     
     @Query var expenses: [Expense]
@@ -56,12 +56,12 @@ fileprivate struct ExpenseSectionListView: View {
         if expenses.isNotEmpty {
             Section(filterDate.format(.dateOnly, descriptive: true)) {
                 HStack {
-                    InfoTextView(label: "Total", currency: total())
+                    InfoTextView(label: "Overall", currency: total())
                         .font(.headline)
                 }
                 ForEach(expenses.prefix(limit)) { expense in
                     NavigationLink(value: NavigationRoute.expense(.detail(expense))) {
-                        ExpensItemView(expense: expense)
+                        ExpenseItemView(expense: expense)
                     }
                 }
                 .onDelete { offsets in
@@ -91,7 +91,8 @@ fileprivate struct ExpenseSectionListView: View {
                                 }
                             }
                         } else if expenses.count > limitToExpand {
-                            navigate(.expense(.seeMore(filterDate, expenses)))
+                            let title = filterDate.format(.dateOnly, descriptive: true)
+                            navigate(.expense(.seeMore(title: title, expenses: expenses)))
                         }
                     }) {
                         Text(limit != limitToExpand ? "See More" : "See Less")
@@ -123,12 +124,7 @@ fileprivate struct ExpenseSectionListView: View {
         let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: filterDate)!
                 
         var fetchDescriptor = FetchDescriptor<Expense>(predicate: #Predicate<Expense> { expense in
-            if let expenseDate = expense.date {
-                return expenseDate >= filterDate && expenseDate < nextDay
-            } else {
-                return false
-            }
-            
+            return expense.date >= filterDate && expense.date < nextDay
         }, sortBy: sortDescriptors)
         
         fetchDescriptor.fetchLimit = limit.wrappedValue + limitToExpand
@@ -154,14 +150,14 @@ fileprivate struct ExpenseSectionListView: View {
 }
 
 struct ExpenseListView: View {
-    @AppStorage("isExpensesEmpty") var isExpensesEmpty = true
+    @AppStorage("isWeekExpenseEmpty") var isWeekExpenseEmpty = true
     @AppStorage("totalWeekExpenses") var totalWeekExpenses = "0.0"
     
     var sortDescriptors: [SortDescriptor<Expense>]
     var sectionsDate: [Date] = []
         
     var body: some View {
-        if !isExpensesEmpty{
+        if !isWeekExpenseEmpty{
             List {
                 Section("this week") {
                     InfoTextView(label: "Expenses", currency: Decimal(string: totalWeekExpenses)!)
@@ -169,7 +165,7 @@ struct ExpenseListView: View {
                 }
                 
                 ForEach(sectionsDate, id: \.self) { date in
-                    ExpenseSectionListViewWrapper(of: date, sortDescriptors: sortDescriptors, limit: Calendar.current.startOfDay(for:date) == Calendar.current.startOfDay(for: Date.now) ? 5 : 3)
+                    ExpenseSectionListViewWrapper(of: date, sortDescriptors: sortDescriptors, limit: Calendar.current.startOfDay(for:date) == Calendar.current.startOfDay(for: Date.today) ? 5 : 3)
                 }
             }
             .listSectionSpacing(.compact)
@@ -186,35 +182,23 @@ struct ExpenseListView: View {
     
     
     func setupDates() -> [Date] {
-        var date = Date.now
+        let date = Date.today
         let calendar = Calendar.current
-        let currentWeekdayNumber = calendar.component(.weekday, from: date)
-        
         var dates: [Date] = []
         
-        if currentWeekdayNumber == 1 {
-            date = calendar.date(byAdding: .day, value: -1, to: date)!
-        }
-        
-        var components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
-        
-        components.weekday = 2
-        
-        guard let monday = calendar.nextDate(after: date, matching: components, matchingPolicy: .nextTimePreservingSmallerComponents, direction: .backward) else {
-            return []
-        }
+        let weekday = calendar.component(.weekday, from: date)
 
+        let daysToMonday = (weekday == 1 ? -6 : 2 - weekday)
+        
+        guard let monday = calendar.date(byAdding: .day, value: daysToMonday, to: date)?.localStartOfDate else { return [] }
+        
         var currentDate = monday
         
         while currentDate <= date {
             dates.insert(currentDate.localStartOfDate, at: 0)
             currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
         }
-        
-        if currentWeekdayNumber == 1 {
-            dates.insert(Date.now.localStartOfDate, at: 0)
-        }
-        
+                
         return dates
     }
 }

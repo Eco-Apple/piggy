@@ -11,20 +11,32 @@ import SwiftUI
 struct IncomeItemView: View {
     var income: Income
     
+    var caption: String? = nil
+    
     var body: some View {
         HStack {
             Text(amountEmoji())
                 .font(.title)
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 1) {
                 Text(income.title)
                      .font(.headline)
-                if income.isTimeEnabled {
-                    Text("@" + income.date!.format(.timeOnly))
+                if let caption = caption {
+                    Text(caption)
                         .font(.caption)
+                        .lineLimit(1)
+                } else {
+                    if income.note.isNotEmpty {
+                        Text(income.note)
+                            .font(.caption)
+                            .lineLimit(1)
+                    } else if income.isTimeEnabled {
+                        Text(income.date.format(.timeOnly))
+                            .font(.caption)
+                    }
                 }
             }
             Spacer()
-            Text(income.amount.toCurrency).foregroundStyle(amountForegroundColor())
+            Text(income.amount.toCurrency).foregroundStyle(Color.incomeFontColor(amount: income.amount))
                 .font(.headline)
         }
     }
@@ -40,19 +52,6 @@ struct IncomeItemView: View {
             "🔥"
         }
     }
-    
-    func amountForegroundColor() -> Color {
-        if income.amount <= 200 {
-            Color.green
-        } else if income.amount > 200 && income.amount <= 500  {
-            Color.orange
-        } else if income.amount > 500 && income.amount < 1000  {
-            Color.purple
-        } else {
-            Color.red
-        }
-    }
-
 }
 
 #Preview {
