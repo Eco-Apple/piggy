@@ -54,7 +54,7 @@ extension Date {
         #if DEBUG
             let calendar = Calendar.current
         
-            return calendar.date(byAdding: .day, value: 0, to: .now)!.localStartOfDate
+            return calendar.date(byAdding: .day, value: 0, to: .now)!
         #endif
         return Date.now
     }
@@ -68,19 +68,17 @@ extension Date {
 
         let daysToMonday = (weekday == 1 ? -6 : 2 - weekday)
         
-        let monday = calendar.date(byAdding: .day, value: daysToMonday, to: today)!.localStartOfDate
+        let monday = calendar.date(byAdding: .day, value: daysToMonday, to: today)!.startOfDay
         
         return monday
     }
     
-    var localStartOfDate: Date {
+    var startOfDay: Date {
         let startOfDate = Calendar.current.startOfDay(for: self)
-        let timezoneOffset = TimeZone.current.secondsFromGMT(for: startOfDate)
         
-        let result = startOfDate.addingTimeInterval(TimeInterval(timezoneOffset))
-        
-        return result
+        return startOfDate
     }
+
 
     func format(_ dateStyle: DateStyle, descriptive: Bool = false) -> String {
         let formatter = DateFormatter()

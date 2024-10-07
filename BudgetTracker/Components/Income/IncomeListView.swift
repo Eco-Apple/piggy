@@ -193,12 +193,12 @@ struct IncomeListView: View {
 
         let daysToMonday = (weekday == 1 ? -6 : 2 - weekday)
         
-        guard let monday = calendar.date(byAdding: .day, value: daysToMonday, to: date)?.localStartOfDate else { return [] }
+        guard let monday = calendar.date(byAdding: .day, value: daysToMonday, to: date) else { return [] }
         
-        var currentDate = monday
+        var currentDate = monday.startOfDay
         
         while currentDate <= date {
-            dates.insert(currentDate.localStartOfDate, at: 0)
+            dates.insert(currentDate.startOfDay, at: 0)
             currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
         }
     

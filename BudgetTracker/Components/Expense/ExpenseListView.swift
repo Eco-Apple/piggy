@@ -56,7 +56,7 @@ fileprivate struct ExpenseSectionListView: View {
         if expenses.isNotEmpty {
             Section(filterDate.format(.dateOnly, descriptive: true)) {
                 HStack {
-                    InfoTextView(label: "Overall", currency: total())
+                    InfoTextView(label: "Total", currency: total())
                         .font(.headline)
                 }
                 ForEach(expenses.prefix(limit)) { expense in
@@ -160,7 +160,7 @@ struct ExpenseListView: View {
         if !isWeekExpenseEmpty{
             List {
                 Section("this week") {
-                    InfoTextView(label: "Expenses", currency: Decimal(string: totalWeekExpenses)!)
+                    InfoTextView(label: "Overall", currency: Decimal(string: totalWeekExpenses)!)
                         .font(.headline)
                 }
                 
@@ -190,15 +190,15 @@ struct ExpenseListView: View {
 
         let daysToMonday = (weekday == 1 ? -6 : 2 - weekday)
         
-        guard let monday = calendar.date(byAdding: .day, value: daysToMonday, to: date)?.localStartOfDate else { return [] }
+        guard let monday = calendar.date(byAdding: .day, value: daysToMonday, to: date) else { return [] }
         
         var currentDate = monday
         
         while currentDate <= date {
-            dates.insert(currentDate.localStartOfDate, at: 0)
+            dates.insert(currentDate.startOfDay, at: 0)
             currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
         }
-                
+        
         return dates
     }
 }

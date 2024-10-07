@@ -101,7 +101,7 @@ struct ExpenseDetailView: View {
     
     func isDoneButtonDisabled() -> Bool {
         
-        guard title != expense.title || amount != expense.amount || date != expense.date || note != expense.note || budget != expense.budget else { return true }
+        guard title != expense.title || amount != expense.amount || date != expense.date || note != expense.note || budget != expense.budget || isTimeEnabled != expense.isTimeEnabled else { return true }
         
         guard title.isNotEmpty else { return true }
         guard let amount, amount >= 0 else { return true }

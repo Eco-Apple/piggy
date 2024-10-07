@@ -101,7 +101,7 @@ struct IncomeDetailView: View {
     }
     
     func isDoneButtonDisabled() -> Bool {
-        guard title != income.title || amount != income.amount || date != income.date || note != income.note || budget != income.budget else { return true }
+        guard title != income.title || amount != income.amount || date != income.date || note != income.note || budget != income.budget || isTimeEnabled != income.isTimeEnabled else { return true }
         
         guard title.isNotEmpty else { return true }
         guard let amount, amount >= 0 else { return true }

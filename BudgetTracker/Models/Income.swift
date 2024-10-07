@@ -206,7 +206,7 @@ extension [Income] {
 
         let daysToMonday = (weekday == 1 ? -6 : 2 - weekday)
         
-        guard let monday = calendar.date(byAdding: .day, value: daysToMonday, to: today)?.localStartOfDate else { return }
+        guard let monday = calendar.date(byAdding: .day, value: daysToMonday, to: today)?.startOfDay else { return }
         
         var totalDeletedItems: Decimal = 0.0
         

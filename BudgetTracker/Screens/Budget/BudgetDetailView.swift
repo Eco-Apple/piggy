@@ -99,7 +99,7 @@ struct BudgetDetailView: View {
     
     func isDoneButtonDisabled() -> Bool {
         
-        guard title != budget.title || date != budget.date || note != budget.note else { return true }
+        guard title != budget.title || date != budget.date || note != budget.note || isTimeEnabled != budget.isTimeEnabled else { return true }
         
         guard title.isNotEmpty else { return true }
         
