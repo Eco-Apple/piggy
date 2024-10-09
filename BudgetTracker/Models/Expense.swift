@@ -20,6 +20,7 @@ class Expense: Codable {
         case createdDate
         case updatedDate
         case isTimeEnabled
+        case budget
     }
     
     private(set) var id: UUID
@@ -32,7 +33,7 @@ class Expense: Codable {
     
     private(set) var isTimeEnabled: Bool
     
-    private(set) var budget: Budget?
+    private(set) var budget: Budget
     
     init(title: String, note: String, amount: Decimal, date: Date, createdDate: Date, updateDate: Date, isTimeEnabled: Bool, budget: Budget) {
         self.id = UUID()
@@ -56,6 +57,7 @@ class Expense: Codable {
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         updatedDate = try container.decode(Date.self, forKey: .updatedDate)
         isTimeEnabled = try container.decode(Bool.self, forKey: .isTimeEnabled)
+        budget = try container.decode(Budget.self, forKey: .budget)
     }
     func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -67,6 +69,7 @@ class Expense: Codable {
         try container.encode(createdDate, forKey: .createdDate)
         try container.encode(updatedDate, forKey: .updatedDate)
         try container.encode(isTimeEnabled, forKey: .isTimeEnabled)
+        try container.encode(budget, forKey: .budget)
     }
 }
 
@@ -76,7 +79,6 @@ extension Expense {
     }
     
     func save(modelContext: ModelContext) {
-        guard let budget = self.budget else { fatalError("Missing budget") }
         
         var totalWeekExpenses: String {
             get {
@@ -139,7 +141,6 @@ extension Expense {
     
     private func setBudget(_ newBudget: Budget, oldAmount: Decimal) {
         
-        guard let budget = self.budget else { fatalError("Missing budget") }
         
         var totalBudget: String {
             get {
@@ -154,8 +155,8 @@ extension Expense {
             budget.decreaseTotalExpense(to: oldAmount)
             budget.increaseTotalExpense(to: amount)
             
-            totalBudget = totalBudget.arithmeticOperation(of: oldAmount, .add)!; #warning ("This will break if user edit budget previous week")
-            totalBudget = totalBudget.arithmeticOperation(of: amount, .sub)!; #warning ("This will break if user edit budget previous week")
+            totalBudget = totalBudget.arithmeticOperation(of: oldAmount, .add)!
+            totalBudget = totalBudget.arithmeticOperation(of: amount, .sub)!
         } else {
             budget.decreaseTotalExpense(to: oldAmount)
             newBudget.increaseTotalExpense(to: amount)
@@ -163,8 +164,9 @@ extension Expense {
             budget.removeExpense(of: self)
             newBudget.addExpense(of: self)
             
-            totalBudget = totalBudget.arithmeticOperation(of: oldAmount, .add)!; #warning ("This will break if user edit budget previous week")
-            totalBudget = totalBudget.arithmeticOperation(of: amount, .sub)!; #warning ("This will break if user edit budget previous week")
+            budget = newBudget
+            totalBudget = totalBudget.arithmeticOperation(of: oldAmount, .add)!
+            totalBudget = totalBudget.arithmeticOperation(of: amount, .sub)!
         }
     }
     
@@ -217,7 +219,7 @@ extension [Expense] {
             
             modelContext.delete(item)
             
-            item.budget!.itemDeletedFor(expense: item, modelContext: modelContext)
+            item.budget.itemDeletedFor(expense: item, modelContext: modelContext)
         }
         
         totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: totalDeletedItems, .sub)!

@@ -61,12 +61,19 @@ struct HomeView: View {
                     IncomeListView(sortDescriptors: incomesSortDescriptors)
                 case .budget:
                     BudgetListView(sortDescriptors: budgetsSortDescriptors)
+                #if DEBUG
+                case .logs:
+                    LogsView()
+                #endif
                 }
                 
                 Picker("Select a segment", selection: $selectedSegment) {
                     Text("Budget").tag(HomeViewSegments.budget)
                     Text("Expense").tag(HomeViewSegments.expense)
                     Text("Income").tag(HomeViewSegments.income)
+                    #if DEBUG
+                    Text("Logs").tag(HomeViewSegments.logs)
+                    #endif
                  }
                  .pickerStyle(SegmentedPickerStyle())
                  .frame(width: 250)
@@ -131,7 +138,12 @@ struct HomeView: View {
                                     ])
                             }
                         }
+                    #if DEBUG
+                    case .logs:
+                        EmptyView()
+                    #endif
                     }
+                    
                     
                     Button("Add button", systemImage: "plus") {
                         isAddViewPresented = true
@@ -146,35 +158,12 @@ struct HomeView: View {
                     AddIncomeView()
                 case .budget:
                     AddBudgetView()
+                #if DEBUG
+                case .logs:
+                    EmptyView()
+                #endif
                 }
             }
-            #if DEBUG
-            .onAppear {
-                    do {
-                        let fetchBudget = try modelContext.fetch(FetchDescriptor<Budget>())
-                        let fetchExpense = try modelContext.fetch(FetchDescriptor<Expense>())
-                        let fetchIncome = try modelContext.fetch(FetchDescriptor<Income>())
-                                                
-                        print("Budget: \(fetchBudget.count)")
-                        
-                        print("Expense: \(fetchExpense.count)")
-                        print("Expense Date: \(expenseFirstDayOfWeek)")
-                        
-                        print("Income: \(fetchIncome.count)")
-                        print("Income Date: \(incomeFirstDayOfWeek)")
-                        
-                        print("isBudgetsEmpty: \(isBudgetsEmpty)")
-                        print("isWeekExpenseEmpty: \(isWeekExpenseEmpty)")
-                        print("isWeekIncomeEmpty: \(isWeekIncomeEmpty)")
-                        
-                        print("totalBudget: \(totalBudget)")
-                        print("totalWeekExpenses: \(totalWeekExpenses)")
-                        print("totalWeekIncomes: \(totalWeekIncomes)")
-                    } catch {
-                        fatalError("Cannot fetch data")
-                    }
-            }
-            #endif
         }
     }
     
@@ -297,6 +286,10 @@ struct HomeView: View {
                 budget.save(incomes: [], expenses: [], modelContext: modelContext)
             }
             budgetDayCounter -= 1
+        #if DEBUG
+        case .logs:
+            print("N/A")
+        #endif
         }
     }
     
@@ -307,13 +300,13 @@ struct HomeView: View {
                 let descriptor = FetchDescriptor<Expense>()
                 let toDeleteData = try modelContext.fetch(descriptor)
                 toDeleteData.delete(modelContext: modelContext)
-                totalWeekIncomes = "0.0"
+                totalWeekExpenses = "0.0"
                 expenseDayCounter += 0
             case .income:
                 let descriptor = FetchDescriptor<Income>()
                 let toDeleteData = try modelContext.fetch(descriptor)
                 toDeleteData.delete(modelContext: modelContext)
-                totalWeekExpenses = "0.0"
+                totalWeekIncomes = "0.0"
                 incomeDayCounter = 0
             case .budget:
                 let descriptor = FetchDescriptor<Budget>()
@@ -321,7 +314,10 @@ struct HomeView: View {
                 toDeleteData.delete(modelContext: modelContext)
                 totalBudget = "0.0"
                 budgetDayCounter += 0
-                break
+            #if DEBUG
+            case .logs:
+                print("N/A")
+            #endif
             }
         } catch {
             fatalError("Something went wrong.")

@@ -20,6 +20,7 @@ class Income: Codable {
         case createdDate
         case updatedDate
         case isTimeEnabled
+        case budget
     }
     
     private(set) var id: UUID
@@ -31,7 +32,7 @@ class Income: Codable {
     private(set) var updatedDate: Date
     private(set) var isTimeEnabled: Bool
     
-    private(set) var budget: Budget?
+    private(set) var budget: Budget
 
     init(title: String, note: String, amount: Decimal, date: Date, createdDate: Date, updatedDate: Date, isTimeEnabled: Bool, budget: Budget) {
         self.id = UUID()
@@ -55,6 +56,7 @@ class Income: Codable {
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         updatedDate = try container.decode(Date.self, forKey: .updatedDate)
         isTimeEnabled = try container.decode(Bool.self, forKey: .isTimeEnabled)
+        budget = try container.decode(Budget.self, forKey: .budget)
     }
     func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -66,6 +68,7 @@ class Income: Codable {
         try container.encode(createdDate, forKey: .createdDate)
         try container.encode(updatedDate, forKey: .updatedDate)
         try container.encode(isTimeEnabled, forKey: .isTimeEnabled)
+        try container.encode(budget, forKey: .budget)
     }
 
 }
@@ -76,7 +79,6 @@ extension Income {
     }
     
     func save(modelContext: ModelContext) {
-        guard let budget = self.budget else { fatalError("Missing budget") }
         
         var totalWeekIncomes: String {
             get {
@@ -128,8 +130,6 @@ extension Income {
     }
     
     private func setBudget(_ newBudget: Budget, oldAmount: Decimal) {
-        
-        guard let budget = self.budget else { fatalError("Missing budget") }
         
         var totalBudget: String {
             get {
@@ -216,7 +216,7 @@ extension [Income] {
             }
             
             modelContext.delete(item)
-            item.budget!.itemDeletedFor(income: item, modelContext: modelContext)
+            item.budget.itemDeletedFor(income: item, modelContext: modelContext)
         }
         
         totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: totalDeletedItems, .sub)!

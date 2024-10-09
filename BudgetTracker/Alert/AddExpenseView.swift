@@ -63,15 +63,15 @@ struct AddExpenseView: View {
                         .frame(height: 150)
                 }
                 
-                if passedBudget == nil || !removeBudget{
+                if passedBudget == nil && !removeBudget{
                     if budget != nil {
                         Picker("Budget", selection: $budget) {
                             ForEach(budgets) { budget in
                                 Text(budget.title).tag(budget)
-                            }
+                            }   
                         }
                     } else {
-                        Button("Add Budget*") {
+                        Button("Add Budget") {
                             isAddBudgetPresented = true
                         }
                     }
@@ -129,9 +129,7 @@ struct AddExpenseView: View {
     
     func addEntry() {
         
-        guard let budget = budget else { return }
-        
-        let newExpense = Expense(title: title, note: note, amount: amount!,date: date, createdDate: .today, updateDate: .today, isTimeEnabled: isTimeEnabled, budget: budget)
+        let newExpense = Expense(title: title, note: note, amount: amount!,date: date, createdDate: .today, updateDate: .today, isTimeEnabled: isTimeEnabled, budget: budget ?? .placeholder)
         
         
         if saveLater {

@@ -13,6 +13,12 @@ extension String {
         case add, sub
     }
     
+    var toDate: Date? {
+        let isoFormatter = ISO8601DateFormatter()
+        
+        return isoFormatter.date(from: self)
+    }
+    
     func arithmeticOperation(of decimal: Decimal, _ operation: ArithmeticOperation ) -> String? {
         
         guard let selfDecimal = Decimal(string: self) else { return nil}

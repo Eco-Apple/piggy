@@ -16,11 +16,19 @@ enum DateStyle {
 enum HomeViewSegments {
     case expense, income, budget
     
+    #if DEBUG
+    case logs
+    #endif
+    
     var title: String {
         switch self {
         case .expense: return "Expense"
         case .income: return "Income"
         case .budget: return "Budget"
+            
+        #if DEBUG
+        case .logs: return "Logs"
+        #endif
         }
     }
 }

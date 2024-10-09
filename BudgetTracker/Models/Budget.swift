@@ -94,6 +94,10 @@ extension Budget {
         case add, sub
     }
     
+    static var placeholder: Budget {
+        Budget(title: "", note: "", date: .distantPast, createdDate: .today, updatedDate: .today, isTimeEnabled: true)
+    }
+    
     static var previewItem: Budget {
         Budget(title: "Shopping", note: "Monthly shopping", date: Date.distantPast, createdDate: .today, updatedDate: .today, isTimeEnabled: true)
     }
@@ -199,13 +203,15 @@ extension Budget {
         
         
         if let expense = expense {
-            expense.budget!.totalExpense -= expense.amount
+            decreaseTotalExpense(to: expense.amount)
             totalBudget = totalBudget.arithmeticOperation(of: expense.amount, .add)!
+            removeExpense(of: expense)
         }
         
         if let income = income {
-            income.budget!.totalIncome -= income.amount
+            decreaseTotalIncome(to: income.amount)
             totalBudget = totalBudget.arithmeticOperation(of: income.amount, .sub)!
+            removeIncome(of: income)
         }
         
     }
@@ -239,11 +245,13 @@ extension Budget {
     
     func removeExpense(of expense: Expense){
         expenses.removeAll { val in
-            val == expense
+            print("Remove \(self.title)")
+            return val == expense
         }
     }
     
     func addExpense(of expense: Expense){
+        print("Add \(expense.title) \(self.title)")
         expenses.append(expense)
     }
 
