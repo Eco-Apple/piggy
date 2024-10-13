@@ -68,6 +68,7 @@ struct BudgetDetailView: View {
             InfoTextView(label: "Total Budget", currency: budget.totalBudget, currencyColor: .budgetFontColor(amount: budget.totalBudget))
         }
         .navigationTitle("Budget")
+        .navigationBarTitleDisplayMode(.inline)
         .scrollBounceBehavior(.basedOnSize)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {

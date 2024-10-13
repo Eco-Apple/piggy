@@ -132,6 +132,7 @@ struct AddBudgetView: View {
             }
             .listSectionSpacing(.compact)
             .navigationTitle("New Budget")
+            .navigationBarTitleDisplayMode(.inline)
             .scrollBounceBehavior(.basedOnSize)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {

@@ -79,6 +79,7 @@ struct AddIncomeView: View {
             }
             .listSectionSpacing(.compact)
             .navigationTitle("New Income")
+            .navigationBarTitleDisplayMode(.inline)
             .scrollBounceBehavior(.basedOnSize)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -136,6 +137,10 @@ struct AddIncomeView: View {
             
             callback(newIncome)
             return
+        }
+        
+        guard budget != nil else {
+            fatalError("Budget must not be nil")
         }
         
         newIncome.save(modelContext: modelContext)

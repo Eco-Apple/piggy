@@ -67,6 +67,7 @@ struct IncomeDetailView: View {
 
         }
         .navigationTitle("Income")
+        .navigationBarTitleDisplayMode(.inline)
         .scrollBounceBehavior(.basedOnSize)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {

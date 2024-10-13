@@ -81,6 +81,7 @@ struct HomeView: View {
             }
             .navigationTitle(selectedSegment.title)
             .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
             .scrollBounceBehavior(.basedOnSize)
             .toolbar {
                 
@@ -145,8 +146,11 @@ struct HomeView: View {
                     }
                     
                     
-                    Button("Add button", systemImage: "plus") {
+                    Button{
                         isAddViewPresented = true
+                    } label: {
+                        Label("Add Button", systemImage: "plus")
+                            .foregroundStyle(Color("Accent"))
                     }
                 }
             }

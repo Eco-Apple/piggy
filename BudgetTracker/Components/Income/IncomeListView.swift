@@ -97,7 +97,6 @@ fileprivate struct IncomeSectionListView: View {
                     }) {
                         Text(limit != limitToExpand ? "See More" : "See Less")
                             .font(.subheadline)
-                            .foregroundColor(.blue)
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                 }

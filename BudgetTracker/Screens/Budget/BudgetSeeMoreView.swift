@@ -45,6 +45,7 @@ struct BudgetSeeMoreView: View {
             }
         }
         .navigationTitle(date.format(.dateOnly, descriptive: true))
+        .navigationBarTitleDisplayMode(.inline)
     }
     
     

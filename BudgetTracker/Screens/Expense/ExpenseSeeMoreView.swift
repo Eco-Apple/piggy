@@ -57,6 +57,7 @@ struct ExpenseSeeMoreView: View {
             }
         }
         .navigationTitle(title)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             if canAdd {
                 ToolbarItem(placement: .topBarTrailing) {

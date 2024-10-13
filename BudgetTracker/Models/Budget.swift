@@ -126,12 +126,12 @@ extension Budget {
         var totalExpense: Decimal = 0.0
         
         for income in incomes {
-            income.save(modelContext: modelContext)
+            income.save(modelContext: modelContext, budget: self)
             totalIncome = totalIncome + income.amount
         }
         
         for expense in expenses {
-            expense.save(modelContext: modelContext)
+            expense.save(modelContext: modelContext, budget: self)
             totalExpense = totalExpense + expense.amount
         }
             

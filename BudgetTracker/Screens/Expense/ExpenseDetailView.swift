@@ -67,6 +67,7 @@ struct ExpenseDetailView: View {
         }
         .listSectionSpacing(.compact)
         .navigationTitle("Expense")
+        .navigationBarTitleDisplayMode(.inline)
         .scrollBounceBehavior(.basedOnSize)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {

@@ -78,7 +78,7 @@ extension Income {
         Income(title: "Shopping", note: "Monthly shopping", amount: 100.0, date: Date.distantPast, createdDate: .today, updatedDate: .today, isTimeEnabled: false, budget: .previewItem)
     }
     
-    func save(modelContext: ModelContext) {
+    func save(modelContext: ModelContext, budget: Budget? = nil) {
         
         var totalWeekIncomes: String {
             get {
@@ -98,9 +98,13 @@ extension Income {
             }
         }
         
+        if let budget {
+            self.budget = budget
+        }
+        
         totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: self.amount, .add)!
         modelContext.insert(self)
-        budget.addOrSub(amount: self.amount, operation: .add, income: self)
+        self.budget.addOrSub(amount: self.amount, operation: .add, income: self)
         isWeekIncomeEmpty = false
     }
     
@@ -153,6 +157,7 @@ extension Income {
             budget.removeIncome(of: self)
             newBudget.addIncome(of: self)
             
+            budget = newBudget
             totalBudget = totalBudget.arithmeticOperation(of: oldAmount, .sub)!; #warning ("This will break if user edit budget previous week")
             totalBudget = totalBudget.arithmeticOperation(of: amount, .add)!; #warning ("This will break if user edit budget previous week")
         }

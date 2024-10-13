@@ -78,7 +78,7 @@ extension Expense {
         Expense(title: "Shopping", note: "Monthly shopping", amount: 100.0, date: Date.distantPast, createdDate: .today, updateDate: .today, isTimeEnabled: false, budget: .previewItem)
     }
     
-    func save(modelContext: ModelContext) {
+    func save(modelContext: ModelContext, budget: Budget? = nil) {
         
         var totalWeekExpenses: String {
             get {
@@ -98,18 +98,13 @@ extension Expense {
             }
         }
         
-        var expenseFirstDayOfWeek: Date {
-            get {
-                UserDefaults.standard.object(forKey: "expenseFirstDayOfWeek") as? Date ?? .distantPast
-            }
-            set {
-                UserDefaults.standard.set(newValue, forKey: "expenseFirstDayOfWeek")
-            }
+        if let budget {
+            self.budget = budget
         }
         
         totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: self.amount, .add)!
         modelContext.insert(self)
-        budget.addOrSub(amount: self.amount, operation: .sub, expense: self)
+        self.budget.addOrSub(amount: self.amount, operation: .sub, expense: self)
         isWeekExpenseEmpty = false
     }
     

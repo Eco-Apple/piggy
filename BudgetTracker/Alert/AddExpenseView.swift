@@ -79,6 +79,7 @@ struct AddExpenseView: View {
             }
             .listSectionSpacing(.compact)
             .navigationTitle("New Expense")
+            .navigationBarTitleDisplayMode(.inline)
             .scrollBounceBehavior(.basedOnSize)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
