@@ -208,5 +208,215 @@
             "totalIncome": 0.0,
             "totalExpense": 0.0,
         },
+    },
+    {
+        "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+        "title": "Gas",
+        "note": "Fuel for the car",
+        "amount": 50.0,
+        "date": "2024-10-12T09:00:00Z",
+        "createdDate": "2024-10-12T08:30:00Z",
+        "updatedDate": "2024-10-12T08:30:00Z",
+        "isTimeEnabled": false,
+        "budget": {
+            "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+            "title": "",
+            "note": "",
+            "date": "2024-10-06T09:45:00Z",
+            "createdDate": "2024-10-06T07:30:00Z",
+            "updatedDate": "2024-10-06T07:30:00Z",
+            "isTimeEnabled": false,
+            "totalIncome": 0.0,
+            "totalExpense": 0.0
+        }
+    },
+    {
+        "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+        "title": "Laundry",
+        "note": "Laundry services",
+        "amount": 30.0,
+        "date": "2024-10-12T10:30:00Z",
+        "createdDate": "2024-10-12T09:00:00Z",
+        "updatedDate": "2024-10-12T09:00:00Z",
+        "isTimeEnabled": false,
+        "budget": {
+            "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+            "title": "",
+            "note": "",
+            "date": "2024-10-06T09:45:00Z",
+            "createdDate": "2024-10-06T07:30:00Z",
+            "updatedDate": "2024-10-06T07:30:00Z",
+            "isTimeEnabled": false,
+            "totalIncome": 0.0,
+            "totalExpense": 0.0
+        }
+    },
+    {
+        "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+        "title": "Movie Tickets",
+        "note": "Watching a movie with friends",
+        "amount": 40.0,
+        "date": "2024-10-12T19:00:00Z",
+        "createdDate": "2024-10-12T17:00:00Z",
+        "updatedDate": "2024-10-12T17:00:00Z",
+        "isTimeEnabled": false,
+        "budget": {
+            "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+            "title": "",
+            "note": "",
+            "date": "2024-10-06T09:45:00Z",
+            "createdDate": "2024-10-06T07:30:00Z",
+            "updatedDate": "2024-10-06T07:30:00Z",
+            "isTimeEnabled": false,
+            "totalIncome": 0.0,
+            "totalExpense": 0.0
+        }
+    },
+    {
+        "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+        "title": "Coffee",
+        "note": "Morning coffee",
+        "amount": 5.0,
+        "date": "2024-10-12T08:15:00Z",
+        "createdDate": "2024-10-12T08:00:00Z",
+        "updatedDate": "2024-10-12T08:00:00Z",
+        "isTimeEnabled": false,
+        "budget": {
+            "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+            "title": "",
+            "note": "",
+            "date": "2024-10-06T09:45:00Z",
+            "createdDate": "2024-10-06T07:30:00Z",
+            "updatedDate": "2024-10-06T07:30:00Z",
+            "isTimeEnabled": false,
+            "totalIncome": 0.0,
+            "totalExpense": 0.0
+        }
+    },
+    {
+        "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+        "title": "Books",
+        "note": "Purchasing books",
+        "amount": 25.0,
+        "date": "2024-10-12T14:00:00Z",
+        "createdDate": "2024-10-12T12:00:00Z",
+        "updatedDate": "2024-10-12T12:00:00Z",
+        "isTimeEnabled": false,
+        "budget": {
+            "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+            "title": "",
+            "note": "",
+            "date": "2024-10-06T09:45:00Z",
+            "createdDate": "2024-10-06T07:30:00Z",
+            "updatedDate": "2024-10-06T07:30:00Z",
+            "isTimeEnabled": false,
+            "totalIncome": 0.0,
+            "totalExpense": 0.0
+        }
+    },
+    {
+        "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+        "title": "Internet Bill",
+        "note": "Monthly internet subscription",
+        "amount": 50.0,
+        "date": "2024-10-12T11:00:00Z",
+        "createdDate": "2024-10-12T10:00:00Z",
+        "updatedDate": "2024-10-12T10:00:00Z",
+        "isTimeEnabled": true,
+        "budget": {
+            "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+            "title": "",
+            "note": "",
+            "date": "2024-10-06T09:45:00Z",
+            "createdDate": "2024-10-06T07:30:00Z",
+            "updatedDate": "2024-10-06T07:30:00Z",
+            "isTimeEnabled": false,
+            "totalIncome": 0.0,
+            "totalExpense": 0.0
+        }
+    },
+    {
+        "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+        "title": "Pet Supplies",
+        "note": "Dog food and toys",
+        "amount": 40.0,
+        "date": "2024-10-12T15:30:00Z",
+        "createdDate": "2024-10-12T14:00:00Z",
+        "updatedDate": "2024-10-12T14:00:00Z",
+        "isTimeEnabled": false,
+        "budget": {
+            "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+            "title": "",
+            "note": "",
+            "date": "2024-10-06T09:45:00Z",
+            "createdDate": "2024-10-06T07:30:00Z",
+            "updatedDate": "2024-10-06T07:30:00Z",
+            "isTimeEnabled": false,
+            "totalIncome": 0.0,
+            "totalExpense": 0.0
+        }
+    },
+    {
+        "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+        "title": "Cleaning Supplies",
+        "note": "Household cleaning products",
+        "amount": 20.0,
+        "date": "2024-10-12T13:00:00Z",
+        "createdDate": "2024-10-12T11:30:00Z",
+        "updatedDate": "2024-10-12T11:30:00Z",
+        "isTimeEnabled": false,
+        "budget": {
+            "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+            "title": "",
+            "note": "",
+            "date": "2024-10-06T09:45:00Z",
+            "createdDate": "2024-10-06T07:30:00Z",
+            "updatedDate": "2024-10-06T07:30:00Z",
+            "isTimeEnabled": false,
+            "totalIncome": 0.0,
+            "totalExpense": 0.0
+        }
+    },
+    {
+        "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+        "title": "Gym Membership",
+        "note": "Monthly subscription",
+        "amount": 30.0,
+        "date": "2024-10-12T17:30:00Z",
+        "createdDate": "2024-10-12T16:00:00Z",
+        "updatedDate": "2024-10-12T16:00:00Z",
+        "isTimeEnabled": false,
+        "budget": {
+            "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+            "title": "",
+            "note": "",
+            "date": "2024-10-06T09:45:00Z",
+            "createdDate": "2024-10-06T07:30:00Z",
+            "updatedDate": "2024-10-06T07:30:00Z",
+            "isTimeEnabled": false,
+            "totalIncome": 0.0,
+            "totalExpense": 0.0
+        }
+    },
+    {
+        "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+        "title": "Groceries",
+        "note": "Weekly grocery shopping",
+        "amount": 75.0,
+        "date": "2024-10-12T16:30:00Z",
+        "createdDate": "2024-10-12T15:30:00Z",
+        "updatedDate": "2024-10-12T15:30:00Z",
+        "isTimeEnabled": false,
+        "budget": {
+            "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+            "title": "",
+            "note": "",
+            "date": "2024-10-06T09:45:00Z",
+            "createdDate": "2024-10-06T07:30:00Z",
+            "updatedDate": "2024-10-06T07:30:00Z",
+            "isTimeEnabled": false,
+            "totalIncome": 0.0,
+            "totalExpense": 0.0
+        }
     }
 ]

@@ -89,7 +89,7 @@ struct BudgetDetailView: View {
         
         self._title = State(initialValue: budget.title)
         self._note = State(initialValue: budget.note)
-        self._date = State(initialValue: budget.date!)
+        self._date = State(initialValue: budget.date)
         self._isTimeEnabled = State(initialValue: budget.isTimeEnabled)
     }
     

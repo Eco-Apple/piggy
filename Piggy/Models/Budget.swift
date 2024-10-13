@@ -26,7 +26,7 @@ class Budget: Codable {
     private(set) var id: UUID
     private(set) var title: String
     private(set) var note: String
-    private(set) var date: Date?
+    private(set) var date: Date
     private(set) var createdDate: Date
     private(set) var updatedDate: Date
     private(set) var isTimeEnabled: Bool

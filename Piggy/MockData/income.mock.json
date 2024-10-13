@@ -229,5 +229,215 @@
             "totalIncome": 0.0,
             "totalExpense": 0.0,
         },
-    }
+    },
+    {
+         "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+         "title": "Salary",
+         "note": "Monthly salary",
+         "amount": 3000.0,
+         "date": "2024-10-01T08:00:00Z",
+         "createdDate": "2024-10-01T07:30:00Z",
+         "updatedDate": "2024-10-01T07:30:00Z",
+         "isTimeEnabled": false,
+         "budget": {
+             "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+             "title": "",
+             "note": "",
+             "date": "2024-10-06T09:45:00Z",
+             "createdDate": "2024-10-06T07:30:00Z",
+             "updatedDate": "2024-10-06T07:30:00Z",
+             "isTimeEnabled": false,
+             "totalIncome": 0.0,
+             "totalExpense": 0.0
+         }
+     },
+     {
+         "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+         "title": "Freelance Project",
+         "note": "Payment for side project",
+         "amount": 500.0,
+         "date": "2024-10-03T10:00:00Z",
+         "createdDate": "2024-10-02T18:00:00Z",
+         "updatedDate": "2024-10-02T18:00:00Z",
+         "isTimeEnabled": true,
+         "budget": {
+             "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+             "title": "",
+             "note": "",
+             "date": "2024-10-06T09:45:00Z",
+             "createdDate": "2024-10-06T07:30:00Z",
+             "updatedDate": "2024-10-06T07:30:00Z",
+             "isTimeEnabled": false,
+             "totalIncome": 0.0,
+             "totalExpense": 0.0
+         }
+     },
+     {
+         "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+         "title": "Gift",
+         "note": "Birthday money from family",
+         "amount": 150.0,
+         "date": "2024-10-04T12:00:00Z",
+         "createdDate": "2024-10-03T14:30:00Z",
+         "updatedDate": "2024-10-03T14:30:00Z",
+         "isTimeEnabled": false,
+         "budget": {
+             "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+             "title": "",
+             "note": "",
+             "date": "2024-10-06T09:45:00Z",
+             "createdDate": "2024-10-06T07:30:00Z",
+             "updatedDate": "2024-10-06T07:30:00Z",
+             "isTimeEnabled": false,
+             "totalIncome": 0.0,
+             "totalExpense": 0.0
+         }
+     },
+     {
+         "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+         "title": "Investment Return",
+         "note": "Quarterly dividends",
+         "amount": 750.0,
+         "date": "2024-10-05T15:00:00Z",
+         "createdDate": "2024-10-05T09:00:00Z",
+         "updatedDate": "2024-10-05T09:00:00Z",
+         "isTimeEnabled": true,
+         "budget": {
+             "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+             "title": "",
+             "note": "",
+             "date": "2024-10-06T09:45:00Z",
+             "createdDate": "2024-10-06T07:30:00Z",
+             "updatedDate": "2024-10-06T07:30:00Z",
+             "isTimeEnabled": false,
+             "totalIncome": 0.0,
+             "totalExpense": 0.0
+         }
+     },
+     {
+         "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+         "title": "Bonus",
+         "note": "Performance bonus",
+         "amount": 1200.0,
+         "date": "2024-10-06T11:30:00Z",
+         "createdDate": "2024-10-06T10:00:00Z",
+         "updatedDate": "2024-10-06T10:00:00Z",
+         "isTimeEnabled": false,
+         "budget": {
+             "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+             "title": "",
+             "note": "",
+             "date": "2024-10-06T09:45:00Z",
+             "createdDate": "2024-10-06T07:30:00Z",
+             "updatedDate": "2024-10-06T07:30:00Z",
+             "isTimeEnabled": false,
+             "totalIncome": 0.0,
+             "totalExpense": 0.0
+         }
+     },
+     {
+         "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+         "title": "Tax Refund",
+         "note": "Annual tax refund",
+         "amount": 850.0,
+         "date": "2024-10-07T09:00:00Z",
+         "createdDate": "2024-10-07T08:00:00Z",
+         "updatedDate": "2024-10-07T08:00:00Z",
+         "isTimeEnabled": false,
+         "budget": {
+             "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+             "title": "",
+             "note": "",
+             "date": "2024-10-06T09:45:00Z",
+             "createdDate": "2024-10-06T07:30:00Z",
+             "updatedDate": "2024-10-06T07:30:00Z",
+             "isTimeEnabled": false,
+             "totalIncome": 0.0,
+             "totalExpense": 0.0
+         }
+     },
+     {
+         "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+         "title": "Rental Income",
+         "note": "Income from rental property",
+         "amount": 1000.0,
+         "date": "2024-10-08T13:00:00Z",
+         "createdDate": "2024-10-08T09:30:00Z",
+         "updatedDate": "2024-10-08T09:30:00Z",
+         "isTimeEnabled": true,
+         "budget": {
+             "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+             "title": "",
+             "note": "",
+             "date": "2024-10-06T09:45:00Z",
+             "createdDate": "2024-10-06T07:30:00Z",
+             "updatedDate": "2024-10-06T07:30:00Z",
+             "isTimeEnabled": false,
+             "totalIncome": 0.0,
+             "totalExpense": 0.0
+         }
+     },
+     {
+         "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+         "title": "Interest",
+         "note": "Bank interest",
+         "amount": 45.0,
+         "date": "2024-10-09T12:00:00Z",
+         "createdDate": "2024-10-09T10:30:00Z",
+         "updatedDate": "2024-10-09T10:30:00Z",
+         "isTimeEnabled": false,
+         "budget": {
+             "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+             "title": "",
+             "note": "",
+             "date": "2024-10-06T09:45:00Z",
+             "createdDate": "2024-10-06T07:30:00Z",
+             "updatedDate": "2024-10-06T07:30:00Z",
+             "isTimeEnabled": false,
+             "totalIncome": 0.0,
+             "totalExpense": 0.0
+         }
+     },
+     {
+         "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+         "title": "Small Loan",
+         "note": "Loan from a friend",
+         "amount": 200.0,
+         "date": "2024-10-10T14:00:00Z",
+         "createdDate": "2024-10-10T13:00:00Z",
+         "updatedDate": "2024-10-10T13:00:00Z",
+         "isTimeEnabled": false,
+         "budget": {
+             "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+             "title": "",
+             "note": "",
+             "date": "2024-10-06T09:45:00Z",
+             "createdDate": "2024-10-06T07:30:00Z",
+             "updatedDate": "2024-10-06T07:30:00Z",
+             "isTimeEnabled": false,
+             "totalIncome": 0.0,
+             "totalExpense": 0.0
+         }
+     },
+     {
+         "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+         "title": "Extra Income",
+         "note": "Miscellaneous income",
+         "amount": 10.0,
+         "date": "2024-10-11T16:00:00Z",
+         "createdDate": "2024-10-11T15:30:00Z",
+         "updatedDate": "2024-10-11T15:30:00Z",
+         "isTimeEnabled": false,
+         "budget": {
+             "id": "D4C7F659-AEEB-4E19-8413-59A400DA7C9E",
+             "title": "",
+             "note": "",
+             "date": "2024-10-06T09:45:00Z",
+             "createdDate": "2024-10-06T07:30:00Z",
+             "updatedDate": "2024-10-06T07:30:00Z",
+             "isTimeEnabled": false,
+             "totalIncome": 0.0,
+             "totalExpense": 0.0
+         }
+     }
 ]

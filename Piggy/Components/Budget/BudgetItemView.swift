@@ -11,8 +11,6 @@ import SwiftUI
 struct BudgetItemView: View {
     var budget: Budget
     
-    
-    
     var body: some View {
         HStack {
             Text(amountEmoji())
@@ -20,8 +18,12 @@ struct BudgetItemView: View {
             VStack(alignment: .leading) {
                 Text(budget.title)
                      .font(.headline)
-                if budget.isTimeEnabled {
-                    Text("@" + budget.date!.format(.timeOnly))
+                if budget.note.isNotEmpty {
+                    Text(budget.note)
+                        .font(.caption)
+                        .lineLimit(1)
+                } else if budget.isTimeEnabled {
+                    Text(budget.date.format(.timeOnly))
                         .font(.caption)
                 }
             }

@@ -236,7 +236,9 @@ struct HomeView: View {
             let expenses: [Expense] = Bundle.main.decode("expense.mock.json")
             var totalExpense: Decimal = 0.0
             
-            for expense in expenses {
+            let shuffledExpenses = expenses.shuffled().prefix(Int.random(in: 1...12))
+            
+            for expense in shuffledExpenses {
                 let date: Date = .today.addingTimeInterval(86400 * expenseDayCounter)
                 expense.setMockDate(at: date)
                 
@@ -260,7 +262,9 @@ struct HomeView: View {
             let incomes: [Income] = Bundle.main.decode("income.mock.json")
             var totalIncome: Decimal = 0.0
             
-            for income in incomes {
+            let shuffledIncomes = incomes.shuffled().prefix(Int.random(in: 1...12))
+            
+            for income in shuffledIncomes {
                 let date: Date = .today.addingTimeInterval(86400 * incomeDayCounter)
                 income.setMockDate(at: date)
                 
