@@ -127,18 +127,18 @@ extension Budget {
         
         for income in incomes {
             income.save(modelContext: modelContext, budget: self)
-            totalIncome = totalIncome + income.amount
         }
         
         for expense in expenses {
             expense.save(modelContext: modelContext, budget: self)
-            totalExpense = totalExpense + expense.amount
         }
-            
-        totalBudget = totalBudget.arithmeticOperation(of: totalIncome - totalExpense, .add)!
+         
+        if incomes.isEmpty && expenses.isEmpty {
+            totalBudget = totalBudget.arithmeticOperation(of: totalIncome - totalExpense, .add)!
+            isBudgetsEmpty = false
+        }
         
         modelContext.insert(self)
-        isBudgetsEmpty = false
     }
     
     func edit(title: String, note: String, date: Date, isTimeEnabled: Bool) {
@@ -147,7 +147,6 @@ extension Budget {
         self.date = date
         self.isTimeEnabled = isTimeEnabled
         self.updatedDate = .today
-
     }
     
     func addOrSub(amount: Decimal, operation: ArithmeticOperation, expense: Expense? = nil, income: Income? = nil) {
