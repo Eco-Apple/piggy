@@ -234,7 +234,6 @@ struct HomeView: View {
         switch selectedSegment {
         case .expense:
             let expenses: [Expense] = Bundle.main.decode("expense.mock.json")
-            var totalExpense: Decimal = 0.0
             
             let shuffledExpenses = expenses.shuffled().prefix(Int.random(in: 1...12))
             
@@ -260,7 +259,6 @@ struct HomeView: View {
             expenseDayCounter -= 1
         case .income:
             let incomes: [Income] = Bundle.main.decode("income.mock.json")
-            var totalIncome: Decimal = 0.0
             
             let shuffledIncomes = incomes.shuffled().prefix(Int.random(in: 1...12))
             
@@ -285,7 +283,6 @@ struct HomeView: View {
             incomeDayCounter -= 1
         case .budget:
             let budgets: [Budget] = Bundle.main.decode("budget.mock.json")
-            let total: Decimal = 0.0
             
             for budget in budgets {
                 let date: Date = .today.addingTimeInterval(86400 * budgetDayCounter)

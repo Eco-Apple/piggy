@@ -120,11 +120,7 @@ extension Budget {
                 UserDefaults.standard.set(newValue, forKey: "isBudgetsEmpty")
             }
         }
-        
-        
-        var totalIncome: Decimal = 0.0
-        var totalExpense: Decimal = 0.0
-        
+                
         for income in incomes {
             income.save(modelContext: modelContext, budget: self)
         }
@@ -173,20 +169,18 @@ extension Budget {
                 totalBudget = totalBudget.arithmeticOperation(of: amount, .add)!
             case .sub:
                 totalBudget = totalBudget.arithmeticOperation(of: amount, .sub)!
-                break
         }
         
-        
         if let expense = expense {
-            self.totalExpense += amount
-            self.expenses.append(expense)
+            totalExpense += amount
+            addExpense(of: expense)
         }
         
         if let income = income {
-            self.totalIncome += amount
-            self.incomes.append(income)
+            totalIncome += amount
+            addIncome(of: income)
         }
-        
+
         isBudgetsEmpty = false
     }
     
@@ -244,13 +238,11 @@ extension Budget {
     
     func removeExpense(of expense: Expense){
         expenses.removeAll { val in
-            print("Remove \(self.title)")
             return val == expense
         }
     }
     
     func addExpense(of expense: Expense){
-        print("Add \(expense.title) \(self.title)")
         expenses.append(expense)
     }
 

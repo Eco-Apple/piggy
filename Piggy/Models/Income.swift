@@ -32,7 +32,7 @@ class Income: Codable {
     private(set) var updatedDate: Date
     private(set) var isTimeEnabled: Bool
     
-    private(set) var budget: Budget
+    private(set) var budget: Budget?
 
     init(title: String, note: String, amount: Decimal, date: Date, createdDate: Date, updatedDate: Date, isTimeEnabled: Bool, budget: Budget) {
         self.id = UUID()
@@ -104,7 +104,7 @@ extension Income {
         
         totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: self.amount, .add)!
         modelContext.insert(self)
-        self.budget.addOrSub(amount: self.amount, operation: .add, income: self)
+        self.budget!.addOrSub(amount: self.amount, operation: .add, income: self)
         isWeekIncomeEmpty = false
     }
     
@@ -135,6 +135,8 @@ extension Income {
     
     private func setBudget(_ newBudget: Budget, oldAmount: Decimal) {
         
+        guard var budget = budget else { fatalError("Budget is nil") }
+        
         var totalBudget: String {
             get {
                 UserDefaults.standard.string(forKey: "totalBudget") ?? "0.0"
@@ -148,8 +150,8 @@ extension Income {
             budget.decreaseTotalIncome(to: oldAmount)
             budget.increaseTotalIncome(to: amount)
             
-            totalBudget = totalBudget.arithmeticOperation(of: oldAmount, .sub)!; #warning ("This will break if user edit budget previous week")
-            totalBudget = totalBudget.arithmeticOperation(of: amount, .add)!; #warning ("This will break if user edit budget previous week")
+            totalBudget = totalBudget.arithmeticOperation(of: oldAmount, .sub)!
+            totalBudget = totalBudget.arithmeticOperation(of: amount, .add)!
         } else {
             budget.decreaseTotalIncome(to: oldAmount)
             newBudget.increaseTotalIncome(to: amount)
@@ -158,8 +160,8 @@ extension Income {
             newBudget.addIncome(of: self)
             
             budget = newBudget
-            totalBudget = totalBudget.arithmeticOperation(of: oldAmount, .sub)!; #warning ("This will break if user edit budget previous week")
-            totalBudget = totalBudget.arithmeticOperation(of: amount, .add)!; #warning ("This will break if user edit budget previous week")
+            totalBudget = totalBudget.arithmeticOperation(of: oldAmount, .sub)!
+            totalBudget = totalBudget.arithmeticOperation(of: amount, .add)!
         }
     }
     
@@ -221,7 +223,11 @@ extension [Income] {
             }
             
             modelContext.delete(item)
-            item.budget.itemDeletedFor(income: item, modelContext: modelContext)
+            
+            if let budget = item.budget {
+                budget.itemDeletedFor(income: item, modelContext: modelContext)
+            }
+            
         }
         
         totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: totalDeletedItems, .sub)!

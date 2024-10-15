@@ -33,7 +33,7 @@ class Expense: Codable {
     
     private(set) var isTimeEnabled: Bool
     
-    private(set) var budget: Budget
+    private(set) var budget: Budget?
     
     init(title: String, note: String, amount: Decimal, date: Date, createdDate: Date, updateDate: Date, isTimeEnabled: Bool, budget: Budget) {
         self.id = UUID()
@@ -102,9 +102,9 @@ extension Expense {
             self.budget = budget
         }
         
-        totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: self.amount, .add)!
+        totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: amount, .add)!
         modelContext.insert(self)
-        self.budget.addOrSub(amount: self.amount, operation: .sub, expense: self)
+        self.budget!.addOrSub(amount: amount, operation: .sub, expense: self)
         isWeekExpenseEmpty = false
     }
     
@@ -136,6 +136,7 @@ extension Expense {
     
     private func setBudget(_ newBudget: Budget, oldAmount: Decimal) {
         
+        guard var budget = budget else { fatalError("Budget is nil") }
         
         var totalBudget: String {
             get {
@@ -214,7 +215,10 @@ extension [Expense] {
             
             modelContext.delete(item)
             
-            item.budget.itemDeletedFor(expense: item, modelContext: modelContext)
+            if let budget = item.budget {
+                budget.itemDeletedFor(expense: item, modelContext: modelContext)
+            }
+            
         }
         
         totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: totalDeletedItems, .sub)!
