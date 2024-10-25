@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ExpenseDetailView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.modelContext) var modelContext
     
     @Query var budgets: [Budget]
     
@@ -95,7 +96,7 @@ struct ExpenseDetailView: View {
     }
     
     func done() {
-        expense.edit(title: title, note: note, amount: amount!, date: date, isTimeEnabled: isTimeEnabled, budget: budget!)
+        expense.edit(modelContext, title: title, note: note, amount: amount!, date: date, isTimeEnabled: isTimeEnabled, budget: budget!)
         
         isEdit.toggle()
     }

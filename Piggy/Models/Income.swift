@@ -12,7 +12,6 @@ import SwiftData
 class Income: Codable {
     
     enum CodingKeys: String, CodingKey {
-        case id
         case title
         case note
         case amount
@@ -23,7 +22,6 @@ class Income: Codable {
         case budget
     }
     
-    private(set) var id: UUID
     private(set) var title: String
     private(set) var note: String
     private(set) var amount: Decimal
@@ -32,10 +30,9 @@ class Income: Codable {
     private(set) var updatedDate: Date
     private(set) var isTimeEnabled: Bool
     
-    private(set) var budget: Budget?
+    private(set) var budget: Budget
 
     init(title: String, note: String, amount: Decimal, date: Date, createdDate: Date, updatedDate: Date, isTimeEnabled: Bool, budget: Budget) {
-        self.id = UUID()
         self.title = title
         self.note = note
         self.amount = amount
@@ -48,7 +45,6 @@ class Income: Codable {
     
     required init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(UUID.self, forKey: .id)
         title = try container.decode(String.self, forKey: .title)
         note = try container.decode(String.self, forKey: .note)
         amount = try container.decode(Decimal.self, forKey: .amount)
@@ -60,7 +56,6 @@ class Income: Codable {
     }
     func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(id, forKey: .id)
         try container.encode(title, forKey: .title)
         try container.encode(note, forKey: .note)
         try container.encode(amount, forKey: .amount)
@@ -103,8 +98,11 @@ extension Income {
         }
         
         totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: self.amount, .add)!
+        
         modelContext.insert(self)
-        self.budget!.addOrSub(amount: self.amount, operation: .add, income: self)
+        try? modelContext.save(); #warning ("Current bug of swift data: see https://www.hackingwithswift.com/quick-start/swiftdata/how-to-save-a-swiftdata-object")
+        
+        self.budget.addOrSub(amount: self.amount, operation: .add, income: self)
         isWeekIncomeEmpty = false
     }
     
@@ -134,8 +132,6 @@ extension Income {
     }
     
     private func setBudget(_ newBudget: Budget, oldAmount: Decimal) {
-        
-        guard var budget = budget else { fatalError("Budget is nil") }
         
         var totalBudget: String {
             get {
@@ -173,10 +169,6 @@ extension Income {
     
     func setMockBudget(at budget: Budget) {
         self.budget = budget
-    }
-    
-    func setMockID() {
-        self.id = UUID()
     }
     #endif
 
@@ -223,11 +215,9 @@ extension [Income] {
             }
             
             modelContext.delete(item)
+            try? modelContext.save(); #warning ("Current bug of swift data: see https://www.hackingwithswift.com/quick-start/swiftdata/how-to-save-a-swiftdata-object")
             
-            if let budget = item.budget {
-                budget.itemDeletedFor(income: item, modelContext: modelContext)
-            }
-            
+            item.budget.itemDeletedFor(income: item, modelContext: modelContext)
         }
         
         totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: totalDeletedItems, .sub)!

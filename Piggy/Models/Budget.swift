@@ -12,7 +12,6 @@ import SwiftData
 class Budget: Codable {
     
     enum CodingKeys: String, CodingKey {
-        case id
         case title
         case note
         case date
@@ -23,7 +22,6 @@ class Budget: Codable {
         case totalExpense
     }
     
-    private(set) var id: UUID
     private(set) var title: String
     private(set) var note: String
     private(set) var date: Date
@@ -50,7 +48,6 @@ class Budget: Codable {
     }
     
     init(title: String, note: String, date: Date, createdDate: Date, updatedDate: Date, isTimeEnabled: Bool) {
-        self.id = UUID()
         self.title = title
         self.note = note
         self.date = date
@@ -63,7 +60,6 @@ class Budget: Codable {
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(UUID.self, forKey: .id)
         title = try container.decode(String.self, forKey: .title)
         note = try container.decode(String.self, forKey: .note)
         date = try container.decode(Date.self, forKey: .date)
@@ -76,7 +72,6 @@ class Budget: Codable {
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(id, forKey: .id)
         try container.encode(title, forKey: .title)
         try container.encode(note, forKey: .note)
         try container.encode(date, forKey: .date)
@@ -92,14 +87,6 @@ extension Budget {
     
     enum ArithmeticOperation {
         case add, sub
-    }
-    
-    static var placeholder: Budget {
-        Budget(title: "", note: "", date: .distantPast, createdDate: .today, updatedDate: .today, isTimeEnabled: true)
-    }
-    
-    static var previewItem: Budget {
-        Budget(title: "Shopping", note: "Monthly shopping", date: Date.distantPast, createdDate: .today, updatedDate: .today, isTimeEnabled: true)
     }
     
     func save(incomes: [Income], expenses: [Expense], modelContext: ModelContext) {
@@ -135,6 +122,7 @@ extension Budget {
         }
         
         modelContext.insert(self)
+        try? modelContext.save(); #warning ("Current bug of swift data: see https://www.hackingwithswift.com/quick-start/swiftdata/how-to-save-a-swiftdata-object")
     }
     
     func edit(title: String, note: String, date: Date, isTimeEnabled: Bool) {
@@ -245,14 +233,19 @@ extension Budget {
     func addExpense(of expense: Expense){
         expenses.append(expense)
     }
+    
+    
+    static var placeholder: Budget {
+        Budget(title: "", note: "", date: .distantPast, createdDate: .today, updatedDate: .today, isTimeEnabled: true)
+    }
+    
+    static var previewItem: Budget {
+        Budget(title: "Shopping", note: "Monthly shopping", date: Date.distantPast, createdDate: .today, updatedDate: .today, isTimeEnabled: true)
+    }
 
     #if DEBUG
     func setMockDate(at date: Date) {
         self.date = date
-    }
-    
-    func setMockID() {
-        self.id = UUID()
     }
     #endif
 
@@ -334,6 +327,7 @@ extension [Budget] {
             }
             
             modelContext.delete(budget)
+            try? modelContext.save(); #warning ("Current bug of swift data: see https://www.hackingwithswift.com/quick-start/swiftdata/how-to-save-a-swiftdata-object")
         }
         
         totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: totalDeletedIncomes, .sub)!

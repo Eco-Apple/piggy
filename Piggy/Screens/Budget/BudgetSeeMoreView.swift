@@ -54,6 +54,7 @@ struct BudgetSeeMoreView: View {
         
         for budget in budgetsToDelete {
             modelContext.delete(budget)
+            try? modelContext.save(); #warning ("Current bug of swift data: see https://www.hackingwithswift.com/quick-start/swiftdata/how-to-save-a-swiftdata-object")
         }
         
         

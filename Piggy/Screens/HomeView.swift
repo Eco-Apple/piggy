@@ -246,7 +246,6 @@ struct HomeView: View {
                     let fetchBudgets = try modelContext.fetch(fetchDescriptor)
                     
                     if !fetchBudgets.isEmpty, let budget = fetchBudgets.randomElement() {
-                        expense.setMockID()
                         expense.setMockBudget(at: budget)
                         expense.save(modelContext: modelContext)
                     }
@@ -271,7 +270,6 @@ struct HomeView: View {
                     let fetchBudgets = try modelContext.fetch(fetchDescriptor)
                     
                     if !fetchBudgets.isEmpty, let budget = fetchBudgets.first {
-                        income.setMockID()
                         income.setMockBudget(at: budget)
                         income.save(modelContext: modelContext)
                     }
@@ -286,7 +284,6 @@ struct HomeView: View {
             
             for budget in budgets {
                 let date: Date = .today.addingTimeInterval(86400 * budgetDayCounter)
-                budget.setMockID()
                 budget.setMockDate(at: date)
                 budget.save(incomes: [], expenses: [], modelContext: modelContext)
             }
