@@ -99,6 +99,9 @@ fileprivate struct IncomeSectionListView: View {
                             .font(.subheadline)
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
+                    .onChange(of: incomes) {
+                        limit = initialLimitValue
+                    }
                 }
             }
         } else {

@@ -97,7 +97,9 @@ extension Expense {
             self.budget = budget
         }
         
-        totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: amount, .add)!
+        if Date.getPreviousStartDayMonday <= self.date {
+            totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: amount, .add)!
+        }
         
         modelContext.insert(self)
         try? modelContext.save(); #warning ("Current bug of swift data: see https://www.hackingwithswift.com/quick-start/swiftdata/how-to-save-a-swiftdata-object")
@@ -126,8 +128,10 @@ extension Expense {
             }
         }
         
-        totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: oldAmount, .sub)!
-        totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: amount, .add)!
+        if Date.getPreviousStartDayMonday <= self.date {
+            totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: oldAmount, .sub)!
+            totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: amount, .add)!
+        }
         
         self.setBudget(budget, oldAmount: oldAmount)
     }
@@ -198,21 +202,20 @@ extension [Expense] {
             }
         }
         
-        var totalDeletedItems: Decimal = 0.0
+        var totalWeekDeletedItems: Decimal = 0.0
         
         for item in self {
             if Date.getPreviousStartDayMonday <= item.date {
-                totalDeletedItems = totalDeletedItems + item.amount
+                totalWeekDeletedItems = totalWeekDeletedItems + item.amount
             }
-            
-            modelContext.delete(item)
-            try? modelContext.save(); #warning ("Current bug of swift data: see https://www.hackingwithswift.com/quick-start/swiftdata/how-to-save-a-swiftdata-object")
             
             item.budget.itemDeletedFor(expense: item, modelContext: modelContext)
             
+            modelContext.delete(item)
+            try? modelContext.save(); #warning ("Current bug of swift data: see https://www.hackingwithswift.com/quick-start/swiftdata/how-to-save-a-swiftdata-object")
         }
         
-        totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: totalDeletedItems, .sub)!
+        totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: totalWeekDeletedItems, .sub)!
         
         do {
             let fetchDescriptor = FetchDescriptor<Expense>()

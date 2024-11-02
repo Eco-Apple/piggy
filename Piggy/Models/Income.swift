@@ -97,7 +97,9 @@ extension Income {
             self.budget = budget
         }
         
-        totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: self.amount, .add)!
+        if Date.getPreviousStartDayMonday <= self.date {
+            totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: self.amount, .add)!
+        }
         
         modelContext.insert(self)
         try? modelContext.save(); #warning ("Current bug of swift data: see https://www.hackingwithswift.com/quick-start/swiftdata/how-to-save-a-swiftdata-object")
@@ -125,8 +127,10 @@ extension Income {
             }
         }
         
-        totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: oldAmount, .sub)!
-        totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: amount, .add)!
+        if Date.getPreviousStartDayMonday <= self.date {
+            totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: oldAmount, .sub)!
+            totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: amount, .add)!
+        }
         
         self.setBudget(budget, oldAmount: oldAmount)
     }
@@ -197,30 +201,21 @@ extension [Income] {
             }
         }
         
-        let today = Date.today
-        let calendar = Calendar.current
-
-        let weekday = calendar.component(.weekday, from: today)
-        
-
-        let daysToMonday = (weekday == 1 ? -6 : 2 - weekday)
-        
-        guard let monday = calendar.date(byAdding: .day, value: daysToMonday, to: today)?.startOfDay else { return }
-        
-        var totalDeletedItems: Decimal = 0.0
+        var totalWeekDeletedItems: Decimal = 0.0
         
         for item in self {
-            if monday <= item.date {
-                totalDeletedItems = totalDeletedItems + item.amount
+            if Date.getPreviousStartDayMonday <= item.date {
+                totalWeekDeletedItems = totalWeekDeletedItems + item.amount
             }
+            
+            item.budget.itemDeletedFor(income: item, modelContext: modelContext)
             
             modelContext.delete(item)
             try? modelContext.save(); #warning ("Current bug of swift data: see https://www.hackingwithswift.com/quick-start/swiftdata/how-to-save-a-swiftdata-object")
             
-            item.budget.itemDeletedFor(income: item, modelContext: modelContext)
         }
         
-        totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: totalDeletedItems, .sub)!
+        totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: totalWeekDeletedItems, .sub)!
         
         do {
             let fetchDescriptor = FetchDescriptor<Income>()

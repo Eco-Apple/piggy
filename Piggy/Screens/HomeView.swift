@@ -34,15 +34,18 @@ struct HomeView: View {
     @State private var isAddViewPresented = false
     
     @State private var expenseSortDescriptors: [SortDescriptor<Expense>] = [
-        SortDescriptor(\Expense.createdDate, order: .reverse),
+        SortDescriptor(\Expense.date, order: .reverse),
+        SortDescriptor(\Expense.title)
     ]
     
     @State private var incomesSortDescriptors: [SortDescriptor<Income>] = [
-        SortDescriptor(\Income.createdDate, order: .reverse),
+        SortDescriptor(\Income.date, order: .reverse),
+        SortDescriptor(\Income.title)
     ]
     
     @State private var budgetsSortDescriptors: [SortDescriptor<Budget>] = [
-        SortDescriptor(\Budget.createdDate, order: .reverse),
+        SortDescriptor(\Budget.date, order: .reverse),
+        SortDescriptor(\Budget.title)
     ]
 
     @State private var selectedSegment: HomeViewSegments = .budget
@@ -111,7 +114,7 @@ struct HomeView: View {
                         }
                     case .income:
                         Menu("Sort", systemImage: "arrow.up.arrow.down") {
-                            Picker("Sort", selection: $expenseSortDescriptors){
+                            Picker("Sort", selection: $incomesSortDescriptors){
                                 Text("Sort by time")
                                     .tag([
                                         SortDescriptor(\Income.date, order: .reverse),
@@ -126,7 +129,7 @@ struct HomeView: View {
                         }
                     case .budget:
                         Menu("Sort", systemImage: "arrow.up.arrow.down") {
-                            Picker("Sort", selection: $expenseSortDescriptors){
+                            Picker("Sort", selection: $budgetsSortDescriptors){
                                 Text("Sort by time")
                                     .tag([
                                         SortDescriptor(\Budget.date, order: .reverse),

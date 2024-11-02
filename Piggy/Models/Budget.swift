@@ -309,6 +309,9 @@ extension [Budget] {
         }
         
         
+        var totalWeekDeletedIncomes: Decimal = 0.0
+        var totalWeekDeletedExpenses: Decimal = 0.0
+        
         var totalDeletedIncomes: Decimal = 0.0
         var totalDeletedExpenses: Decimal = 0.0
         
@@ -316,22 +319,26 @@ extension [Budget] {
             
             for income in budget.incomes {
                 if Date.getPreviousStartDayMonday <= income.date {
-                    totalDeletedIncomes += income.amount
+                    totalWeekDeletedIncomes += income.amount
                 }
             }
             
             for expense in budget.expenses {
                 if Date.getPreviousStartDayMonday <= expense.date {
-                    totalDeletedExpenses += expense.amount
+                    totalWeekDeletedExpenses += expense.amount
                 }
             }
+            
+            totalDeletedIncomes += budget.totalIncome
+            totalDeletedExpenses += budget.totalExpense
             
             modelContext.delete(budget)
             try? modelContext.save(); #warning ("Current bug of swift data: see https://www.hackingwithswift.com/quick-start/swiftdata/how-to-save-a-swiftdata-object")
         }
         
-        totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: totalDeletedIncomes, .sub)!
-        totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: totalDeletedExpenses, .sub)!
+        totalWeekIncomes = totalWeekIncomes.arithmeticOperation(of: totalWeekDeletedIncomes, .sub)!
+        totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: totalWeekDeletedExpenses, .sub)!
+        
         totalBudget = totalBudget.arithmeticOperation(of: totalDeletedIncomes - totalDeletedExpenses, .sub)!
         
         do {

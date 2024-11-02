@@ -99,6 +99,9 @@ fileprivate struct ExpenseSectionListView: View {
                             .font(.subheadline)
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
+                    .onChange(of: expenses) {
+                        limit = initialLimitValue
+                    }
                 }
             }
         } else {
