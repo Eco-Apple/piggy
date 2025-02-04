@@ -61,6 +61,7 @@ struct AddBudgetView: View {
                 DatePicker(
                     "Date",
                     selection: $date,
+                    in: ...Date(),
                     displayedComponents: isTimeEnabled ? [.date, .hourAndMinute] : .date
                 )
 

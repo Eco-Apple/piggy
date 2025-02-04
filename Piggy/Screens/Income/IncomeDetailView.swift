@@ -34,7 +34,7 @@ struct IncomeDetailView: View {
                 } else {
                     TextField("Title", text: $title)
                     CurrencyField("eg. 10.00", value: $amount)
-                    DatePicker("Date", selection: $date, displayedComponents: isTimeEnabled ? [.date, .hourAndMinute] : .date)
+                    DatePicker("Date", selection: $date, in: ...Date(), displayedComponents: isTimeEnabled ? [.date, .hourAndMinute] : .date)
                     
                     Toggle(isOn: $isTimeEnabled) {
                         Text("Time")

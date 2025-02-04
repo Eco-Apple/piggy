@@ -31,7 +31,7 @@ struct BudgetDetailView: View {
                     InfoTextView(label: "Date", date: date, style: isTimeEnabled ? .dateAndTime : .dateOnly)
                 } else {
                     TextField("Title", text: $title)
-                    DatePicker("Date", selection: $date, displayedComponents: isTimeEnabled ? [.date, .hourAndMinute] : .date)
+                    DatePicker("Date", selection: $date, in: ...Date(), displayedComponents: isTimeEnabled ? [.date, .hourAndMinute] : .date)
                     
                     Toggle(isOn: $isTimeEnabled) {
                         Text("Time")
