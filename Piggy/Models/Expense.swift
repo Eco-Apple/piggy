@@ -110,6 +110,7 @@ extension Expense {
     
     func edit(_ modelContext: ModelContext, title: String, note: String, amount: Decimal, date: Date, isTimeEnabled: Bool, budget: Budget){
         let oldAmount = self.amount
+        let oldDate = self.date
         
         self.title = title
         self.note = note
@@ -128,8 +129,12 @@ extension Expense {
             }
         }
         
-        if Date.getPreviousStartDayMonday <= self.date {
+        if Date.getPreviousStartDayMonday <= oldDate && Date.getPreviousStartDayMonday <= self.date {
             totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: oldAmount, .sub)!
+            totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: amount, .add)!
+        } else if Date.getPreviousStartDayMonday <= oldDate && Date.getPreviousStartDayMonday > self.date {
+            totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: oldAmount, .sub)!
+        } else if Date.getPreviousStartDayMonday > oldDate && Date.getPreviousStartDayMonday <= self.date {
             totalWeekExpenses = totalWeekExpenses.arithmeticOperation(of: amount, .add)!
         }
         

@@ -172,6 +172,9 @@ struct HomeView: View {
                 }
             }
         }
+        .onAppear {
+            Scripts.run(modelContext: modelContext)
+        }
     }
     
     func processStartOfTheWeek() {

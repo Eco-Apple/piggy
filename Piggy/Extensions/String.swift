@@ -20,7 +20,6 @@ extension String {
     }
     
     func arithmeticOperation(of decimal: Decimal, _ operation: ArithmeticOperation) -> String? {
-        
         guard let selfDecimal = Decimal(string: self) else { return nil}
         
         switch operation {

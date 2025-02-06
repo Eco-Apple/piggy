@@ -15,6 +15,9 @@
 		200971662C6790180001F510 /* AddExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200971652C6790180001F510 /* AddExpenseView.swift */; };
 		200971682C679A990001F510 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200971672C679A990001F510 /* Extensions.swift */; };
 		202210BE2C7B86FA0044CEA4 /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202210BD2C7B86FA0044CEA4 /* Expense.swift */; };
+		2047CE452D54FC2E00F387BD /* Scripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2047CE442D54FC2E00F387BD /* Scripts.swift */; };
+		2047CE472D54FE7C00F387BD /* AppVersionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2047CE462D54FE7C00F387BD /* AppVersionHelper.swift */; };
+		2047CE492D55027D00F387BD /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2047CE482D55027D00F387BD /* Date.swift */; };
 		20720F8B2C8C703200D01891 /* IncomeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20720F8A2C8C703200D01891 /* IncomeListView.swift */; };
 		20720F8D2C8C730500D01891 /* Income.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20720F8C2C8C730500D01891 /* Income.swift */; };
 		20720F8F2C8C827100D01891 /* IncomeItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20720F8E2C8C827100D01891 /* IncomeItemView.swift */; };
@@ -43,7 +46,7 @@
 		20EF78382C82F8E80057F5AD /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EF78372C82F8E80057F5AD /* Navigation.swift */; };
 		20EF783A2C82FEC80057F5AD /* NavigationRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EF78392C82FEC80057F5AD /* NavigationRoute.swift */; };
 		20EF783C2C82FF0D0057F5AD /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EF783B2C82FF0D0057F5AD /* NavigationRouter.swift */; };
-		20FFBB542CAECF40007BCFAE /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FFBB532CAECF40007BCFAE /* StringExtension.swift */; };
+		20FFBB542CAECF40007BCFAE /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FFBB532CAECF40007BCFAE /* String.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +60,9 @@
 		200971652C6790180001F510 /* AddExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpenseView.swift; sourceTree = "<group>"; };
 		200971672C679A990001F510 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		202210BD2C7B86FA0044CEA4 /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
+		2047CE442D54FC2E00F387BD /* Scripts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scripts.swift; sourceTree = "<group>"; };
+		2047CE462D54FE7C00F387BD /* AppVersionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionHelper.swift; sourceTree = "<group>"; };
+		2047CE482D55027D00F387BD /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		20720F8A2C8C703200D01891 /* IncomeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeListView.swift; sourceTree = "<group>"; };
 		20720F8C2C8C730500D01891 /* Income.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Income.swift; sourceTree = "<group>"; };
 		20720F8E2C8C827100D01891 /* IncomeItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeItemView.swift; sourceTree = "<group>"; };
@@ -85,7 +91,7 @@
 		20EF78372C82F8E80057F5AD /* Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
 		20EF78392C82FEC80057F5AD /* NavigationRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRoute.swift; sourceTree = "<group>"; };
 		20EF783B2C82FF0D0057F5AD /* NavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouter.swift; sourceTree = "<group>"; };
-		20FFBB532CAECF40007BCFAE /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		20FFBB532CAECF40007BCFAE /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +136,8 @@
 				20720F982C8C86B400D01891 /* Alert */,
 				200971352C5B82F40001F510 /* Screens */,
 				200971272C5B82D80001F510 /* PiggyApp.swift */,
+				2047CE442D54FC2E00F387BD /* Scripts.swift */,
+				2047CE462D54FE7C00F387BD /* AppVersionHelper.swift */,
 				2009712D2C5B82D90001F510 /* Preview Content */,
 			);
 			path = Piggy;
@@ -283,7 +291,8 @@
 			isa = PBXGroup;
 			children = (
 				200971672C679A990001F510 /* Extensions.swift */,
-				20FFBB532CAECF40007BCFAE /* StringExtension.swift */,
+				2047CE482D55027D00F387BD /* Date.swift */,
+				20FFBB532CAECF40007BCFAE /* String.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -362,7 +371,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				20EF783C2C82FF0D0057F5AD /* NavigationRouter.swift in Sources */,
-				20FFBB542CAECF40007BCFAE /* StringExtension.swift in Sources */,
+				2047CE492D55027D00F387BD /* Date.swift in Sources */,
+				20FFBB542CAECF40007BCFAE /* String.swift in Sources */,
 				20720F8D2C8C730500D01891 /* Income.swift in Sources */,
 				2002BD212C7AC43600BB3C6F /* ExpenseDetailView.swift in Sources */,
 				20EF783A2C82FEC80057F5AD /* NavigationRoute.swift in Sources */,
@@ -382,6 +392,7 @@
 				20ACD5422C898B7900E08DCA /* TextEditorViewModifier.swift in Sources */,
 				20EB38032C9EA43B003495A1 /* BudgetListView.swift in Sources */,
 				20E442D62C9481A000150488 /* EmptyMessageView.swift in Sources */,
+				2047CE452D54FC2E00F387BD /* Scripts.swift in Sources */,
 				20EB38062C9EA4FA003495A1 /* BudgetSeeMoreView.swift in Sources */,
 				2009712A2C5B82D80001F510 /* HomeView.swift in Sources */,
 				200971282C5B82D80001F510 /* PiggyApp.swift in Sources */,
@@ -392,6 +403,7 @@
 				208271F82C82226300A1BADA /* ExpenseSeeMoreView.swift in Sources */,
 				20EB380A2C9EA893003495A1 /* AddBudgetView.swift in Sources */,
 				20720F972C8C861A00D01891 /* Enums.swift in Sources */,
+				2047CE472D54FE7C00F387BD /* AppVersionHelper.swift in Sources */,
 				20720F932C8C83BF00D01891 /* IncomeDetailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -524,7 +536,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconDebug;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Piggy/Preview Content\"";
 				DEVELOPMENT_TEAM = 37Z7CK9SP4;
 				ENABLE_PREVIEWS = YES;
@@ -541,7 +553,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.21;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ecovillaraza.piggy.debug;
 				PRODUCT_NAME = Piggy;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -556,7 +568,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Piggy/Preview Content\"";
 				DEVELOPMENT_TEAM = 37Z7CK9SP4;
 				ENABLE_PREVIEWS = YES;
@@ -573,7 +585,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.21;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ecovillaraza.piggy;
 				PRODUCT_NAME = Piggy;
 				SWIFT_EMIT_LOC_STRINGS = YES;

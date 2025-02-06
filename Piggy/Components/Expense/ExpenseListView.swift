@@ -179,30 +179,9 @@ struct ExpenseListView: View {
     init(sortDescriptors: [SortDescriptor<Expense>]) {
         self.sortDescriptors = sortDescriptors
         
-        self.sectionsDate = setupDates()
+        self.sectionsDate = Date.getDatesUntilLastMonday()
     }
     
-    
-    func setupDates() -> [Date] {
-        let date = Date.today
-        let calendar = Calendar.current
-        var dates: [Date] = []
-        
-        let weekday = calendar.component(.weekday, from: date)
-
-        let daysToMonday = (weekday == 1 ? -6 : 2 - weekday)
-        
-        guard let monday = calendar.date(byAdding: .day, value: daysToMonday, to: date) else { return [] }
-        
-        var currentDate = monday
-        
-        while currentDate <= date {
-            dates.insert(currentDate.startOfDay, at: 0)
-            currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
-        }
-        
-        return dates
-    }
 }
 
 #Preview {
