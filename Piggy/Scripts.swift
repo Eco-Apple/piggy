@@ -43,7 +43,7 @@ struct Scripts {
             
             let totalWeekExpenseString: String = "\(totalWeekExpense)"
 
-            UserDefaults.standard.set(totalWeekExpenseString, forKey: "totalWeek")
+            UserDefaults.standard.set(totalWeekExpenseString, forKey: "totalWeekExpenses")
         } catch {
             
         }
@@ -67,7 +67,7 @@ struct Scripts {
             
             let totalWeekExpenseString: String = "\(totalWeekExpense)"
 
-            UserDefaults.standard.set(totalWeekExpenseString, forKey: "totalWeek")
+            UserDefaults.standard.set(totalWeekExpenseString, forKey: "totalWeekIncomes")
         } catch {
             
         }
