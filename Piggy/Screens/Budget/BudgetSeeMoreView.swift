@@ -74,7 +74,7 @@ struct BudgetSeeMoreView: View {
             }
             
         } catch {
-            fatalError("Error deleting budget")
+            debugPrint("Error deleting budget")
         }
     }
 

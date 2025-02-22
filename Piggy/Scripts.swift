@@ -45,7 +45,7 @@ struct Scripts {
 
             UserDefaults.standard.set(totalWeekExpenseString, forKey: "totalWeekExpenses")
         } catch {
-            fatalError(error.localizedDescription)
+            debugPrint(error.localizedDescription)
         }
     }
     
@@ -69,7 +69,7 @@ struct Scripts {
 
             UserDefaults.standard.set(totalWeekExpenseString, forKey: "totalWeekIncomes")
         } catch {
-            fatalError(error.localizedDescription)
+            debugPrint(error.localizedDescription)
         }
     }
 }

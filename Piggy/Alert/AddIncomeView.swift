@@ -141,7 +141,7 @@ struct AddIncomeView: View {
         }
         
         guard budget != nil else {
-            fatalError("Budget must not be nil")
+            debugPrint("Budget must not be nil")
         }
         
         newIncome.save(modelContext: modelContext)

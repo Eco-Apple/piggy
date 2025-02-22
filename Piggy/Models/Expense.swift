@@ -231,7 +231,7 @@ extension [Expense] {
             }
             
         } catch {
-            fatalError("Error deleting expenses")
+            debugPrint("Error deleting expenses")
         }
     }
 

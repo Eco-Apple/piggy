@@ -239,7 +239,7 @@ struct HomeView: View {
         
         switch selectedSegment {
         case .expense:
-            let expenses: [Expense] = Bundle.main.decode("expense.mock.json")
+            guard let expenses: [Expense] = Bundle.main.decode("expense.mock.json") else { return }
             
             let shuffledExpenses = expenses.shuffled().prefix(Int.random(in: 1...12))
             
@@ -257,13 +257,13 @@ struct HomeView: View {
                     }
                     
                 } catch {
-                    fatalError("Error deleting budget")
+                    debugPrint("Error deleting budget")
                 }
             }
             
             expenseDayCounter -= 1
         case .income:
-            let incomes: [Income] = Bundle.main.decode("income.mock.json")
+            guard let incomes: [Income] = Bundle.main.decode("income.mock.json") else { return }
             
             let shuffledIncomes = incomes.shuffled().prefix(Int.random(in: 1...12))
             
@@ -281,12 +281,12 @@ struct HomeView: View {
                     }
                     
                 } catch {
-                    fatalError("Error deleting budget")
+                    debugPrint("Error deleting budget")
                 }
             }
             incomeDayCounter -= 1
         case .budget:
-            let budgets: [Budget] = Bundle.main.decode("budget.mock.json")
+            guard let budgets: [Budget] = Bundle.main.decode("budget.mock.json") else { return }
             
             for budget in budgets {
                 let date: Date = .today.addingTimeInterval(86400 * budgetDayCounter)
@@ -328,7 +328,7 @@ struct HomeView: View {
             #endif
             }
         } catch {
-            fatalError("Something went wrong.")
+            debugPrint("Something went wrong.")
         }
     }
     #endif

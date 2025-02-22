@@ -231,7 +231,7 @@ extension [Income] {
             }
             
         } catch {
-            fatalError("Error deleting incomes")
+            debugPrint("Error deleting incomes")
         }
     }
 }
