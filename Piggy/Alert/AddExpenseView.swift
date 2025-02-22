@@ -5,16 +5,17 @@
 //  Created by Jerico Villaraza on 8/10/24.
 //
 
-import StoreKit
 import SwiftData
 import SwiftUI
 
 struct AddExpenseView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
+    @Environment(\.requestReview) var requestReview
     
     @AppStorage("isWeekExpenseEmpty") var isWeekExpenseEmpty = true
     @AppStorage("totalWeekExpenses") var totalWeekExpenses = "0.0"
+    @AppStorage("reviewExpenseCount") var reviewExpenseCount: Int = 0
     
     @Query var budgets: [Budget]
 
@@ -142,6 +143,12 @@ struct AddExpenseView: View {
         }
         
         newExpense.save(modelContext: modelContext)
+        
+        reviewExpenseCount += 1
+        
+        if reviewExpenseCount >= 50 {
+            requestReview()
+        }
         
         callback(newExpense)
         dismiss()
