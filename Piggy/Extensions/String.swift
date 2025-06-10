@@ -28,7 +28,6 @@ extension String {
         case .sub:
             return "\(selfDecimal - decimal)"
         }
-        
     }
     
     

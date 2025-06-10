@@ -70,7 +70,7 @@ class Expense: Codable {
 
 extension Expense {
     static var previewItem: Expense {
-        Expense(title: "Shopping", note: "Monthly shopping", amount: 100.0, date: Date.distantPast, createdDate: .today, updateDate: .today, isTimeEnabled: false, budget: .previewItem)
+        Expense(title: "Shopping", note: "Monthly shopping", amount: 100.0, date: Date.today, createdDate: .today, updateDate: .today, isTimeEnabled: false, budget: .previewItem)
     }
     
     func save(modelContext: ModelContext, budget: Budget? = nil) {

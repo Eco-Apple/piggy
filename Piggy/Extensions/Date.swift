@@ -8,7 +8,6 @@
 import Foundation
 
 extension Date {
-    
     static var today: Date {
         #if DEBUG
             let calendar = Calendar.current
@@ -37,7 +36,6 @@ extension Date {
         
         return startOfDate
     }
-
 
     func format(_ dateStyle: DateStyle, descriptive: Bool = false) -> String {
         let formatter = DateFormatter()
@@ -88,5 +86,4 @@ extension Date {
         
         return dates
     }
-    
 }
