@@ -12,8 +12,7 @@ import SwiftUI
 struct IncomeTrackerApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            HomeScreen()
         }
-        .modelContainer(for: [Expense.self, Income.self, Budget.self])
     }
 }
