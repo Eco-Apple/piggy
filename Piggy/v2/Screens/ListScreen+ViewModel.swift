@@ -10,6 +10,12 @@ import SwiftUI
 extension ListScreen {
     @Observable
     class ViewModel {
-        var showAdd = false
+        var showAdd: Bool
+        let item: BudgetItem
+        
+        init(showAdd: Bool = false, item: BudgetItem) {
+            self.showAdd = showAdd
+            self.item = item
+        }
     }
 }

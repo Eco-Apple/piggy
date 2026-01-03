@@ -13,7 +13,9 @@ struct HomeScreen: View {
     var body: some View {
         NavigationStack {
             List {
-                NavigationLink("August", destination: BudgetScreen())
+                Section("2025") {
+                    NavigationLink("August", destination: BudgetScreen())
+                }
             }
             .navigationTitle("Budget")
             .navigationBarTitleDisplayMode(.inline)

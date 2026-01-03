@@ -21,6 +21,9 @@
 		200971662C6790180001F510 /* AddExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200971652C6790180001F510 /* AddExpenseView.swift */; };
 		200971682C679A990001F510 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200971672C679A990001F510 /* Extensions.swift */; };
 		202210BE2C7B86FA0044CEA4 /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202210BD2C7B86FA0044CEA4 /* Expense.swift */; };
+		202669272F08FAE800F1DB3A /* TextPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202669262F08FAE800F1DB3A /* TextPreview.swift */; };
+		202669292F08FC7000F1DB3A /* enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202669282F08FC7000F1DB3A /* enums.swift */; };
+		2026692B2F08FCFD00F1DB3A /* structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2026692A2F08FCFD00F1DB3A /* structs.swift */; };
 		203519932E1A451300A3B73C /* HomeView+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203519922E1A451300A3B73C /* HomeView+Debug.swift */; };
 		203519972E1A469700A3B73C /* HomeView+Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203519962E1A469700A3B73C /* HomeView+Functions.swift */; };
 		2047CE452D54FC2E00F387BD /* Scripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2047CE442D54FC2E00F387BD /* Scripts.swift */; };
@@ -79,6 +82,9 @@
 		200971652C6790180001F510 /* AddExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpenseView.swift; sourceTree = "<group>"; };
 		200971672C679A990001F510 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		202210BD2C7B86FA0044CEA4 /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
+		202669262F08FAE800F1DB3A /* TextPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextPreview.swift; sourceTree = "<group>"; };
+		202669282F08FC7000F1DB3A /* enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = enums.swift; sourceTree = "<group>"; };
+		2026692A2F08FCFD00F1DB3A /* structs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = structs.swift; sourceTree = "<group>"; };
 		203519922E1A451300A3B73C /* HomeView+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeView+Debug.swift"; sourceTree = "<group>"; };
 		203519962E1A469700A3B73C /* HomeView+Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeView+Functions.swift"; sourceTree = "<group>"; };
 		2047CE442D54FC2E00F387BD /* Scripts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scripts.swift; sourceTree = "<group>"; };
@@ -347,6 +353,7 @@
 			children = (
 				20D0A1802C787BF60054DE5B /* CurrencyField.swift */,
 				208E0A362C8498490027DC5C /* InfoTextView.swift */,
+				202669262F08FAE800F1DB3A /* TextPreview.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -354,6 +361,8 @@
 		20F6002B2E6420F1001B39A0 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				202669282F08FC7000F1DB3A /* enums.swift */,
+				2026692A2F08FCFD00F1DB3A /* structs.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -446,6 +455,7 @@
 				20FFBB542CAECF40007BCFAE /* String.swift in Sources */,
 				20720F8D2C8C730500D01891 /* Income.swift in Sources */,
 				2002BD212C7AC43600BB3C6F /* ExpenseDetailView.swift in Sources */,
+				2026692B2F08FCFD00F1DB3A /* structs.swift in Sources */,
 				20EF783A2C82FEC80057F5AD /* NavigationRoute.swift in Sources */,
 				20E5660D2C7E26CF0008CD79 /* ExpenseListView.swift in Sources */,
 				20D0A1812C787BF60054DE5B /* CurrencyField.swift in Sources */,
@@ -457,6 +467,7 @@
 				20EB38012C9EA2DE003495A1 /* BudgetItemView.swift in Sources */,
 				20E3AC9B2C679CBF00D53664 /* ExpenseItemView.swift in Sources */,
 				20F600252E642058001B39A0 /* BudgetScreen.swift in Sources */,
+				202669292F08FC7000F1DB3A /* enums.swift in Sources */,
 				20720F8B2C8C703200D01891 /* IncomeListView.swift in Sources */,
 				20ACD5482C89A71A00E08DCA /* BundleDecodable.swift in Sources */,
 				208E0A372C8498490027DC5C /* InfoTextView.swift in Sources */,
@@ -488,6 +499,7 @@
 				20720F972C8C861A00D01891 /* Enums.swift in Sources */,
 				2047CE472D54FE7C00F387BD /* AppVersionHelper.swift in Sources */,
 				20720F932C8C83BF00D01891 /* IncomeDetailView.swift in Sources */,
+				202669272F08FAE800F1DB3A /* TextPreview.swift in Sources */,
 				20057CB42E7664CB00546AF0 /* CreateBudgetScreen+ViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

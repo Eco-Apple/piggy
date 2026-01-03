@@ -10,28 +10,12 @@ import SwiftUI
 struct BudgetScreen: View {
     @State private var viewModel = ViewModel()
     
-    let titles = ["Income", "Essentials", "Non-Essentials", "Savings", "Total Expenses", "Extra"]
-    
-    let items: [BudgetListItem] = [
-        .init(title: "Income", amount: 100, icon: "creditcard"),
-        .init(title: "Essentials", amount: 200, icon: "basket"),
-        .init(title: "Non-Essentials", amount: 300, icon: "gamecontroller"),
-        .init(title: "Savings", amount: 400, icon: "wallet.bifold"),
-        .init(title: "Total Expenses", amount: 500, icon: "cart"),
-        .init(title: "Extra", amount: 600, icon: "heart")
-    ]
-    
-    let columns = [
-        GridItem(.flexible(), spacing: 10),
-        GridItem(.flexible(), spacing: 10)
-    ]
-    
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVGrid(columns: columns, spacing: 15) {
-                    ForEach(items) { item in
-                        NavigationLink(destination: ListScreen()) {
+                LazyVGrid(columns: viewModel.columns, spacing: 15) {
+                    ForEach(viewModel.items) { item in
+                        NavigationLink(destination: ListScreen(item: item)) {
                             BudgetCard(item: item)
                         }
                     }
@@ -44,15 +28,8 @@ struct BudgetScreen: View {
     }
 }
 
-struct BudgetListItem: Identifiable {
-    let id = UUID()
-    let title: String
-    var amount: Decimal
-    let icon: String
-}
-
 private struct BudgetCard: View {
-    let item: BudgetListItem
+    let item: BudgetItem
     
     var body: some View {
         VStack(alignment: .leading) {
