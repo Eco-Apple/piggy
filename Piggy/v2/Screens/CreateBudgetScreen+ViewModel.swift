@@ -10,6 +10,10 @@ import SwiftUI
 extension CreateBudgetScreen {
     @Observable
     class ViewModel {
+        var fromDate: Date = .today
+        var toDate: Date = .today
+        var expectedIncome: Decimal?
+        
         func create() {
             
         }

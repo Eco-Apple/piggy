@@ -15,6 +15,19 @@ struct CreateBudgetScreen: View {
     var body: some View {
         NavigationStack {
             Form {
+                Section {
+                    DatePicker("From", selection: $viewModel.fromDate, in: ...Date(), displayedComponents: .date)
+                    
+                    DatePicker("To", selection: $viewModel.toDate, in: ...Date(), displayedComponents: .date)
+                    
+                    CurrencyField("Expected salary", value: $viewModel.expectedIncome)
+                }
+                
+                Section {
+                    InfoTextView(label: "Essential (40%):", currency: 100.00)
+                    InfoTextView(label: "Non-Essential (40%):", currency: 100.00)
+                    InfoTextView(label: "Savings (40%):", currency: 100.00)
+                }
                 
                 Section {
                     Button("Save", action: viewModel.create)
