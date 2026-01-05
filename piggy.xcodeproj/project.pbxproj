@@ -24,6 +24,7 @@
 		202669272F08FAE800F1DB3A /* TextPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202669262F08FAE800F1DB3A /* TextPreview.swift */; };
 		202669292F08FC7000F1DB3A /* enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202669282F08FC7000F1DB3A /* enums.swift */; };
 		2026692B2F08FCFD00F1DB3A /* structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2026692A2F08FCFD00F1DB3A /* structs.swift */; };
+		202669972F0BC5AE00F1DB3A /* constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202669962F0BC5AE00F1DB3A /* constants.swift */; };
 		203519932E1A451300A3B73C /* HomeView+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203519922E1A451300A3B73C /* HomeView+Debug.swift */; };
 		203519972E1A469700A3B73C /* HomeView+Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203519962E1A469700A3B73C /* HomeView+Functions.swift */; };
 		2047CE452D54FC2E00F387BD /* Scripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2047CE442D54FC2E00F387BD /* Scripts.swift */; };
@@ -85,6 +86,7 @@
 		202669262F08FAE800F1DB3A /* TextPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextPreview.swift; sourceTree = "<group>"; };
 		202669282F08FC7000F1DB3A /* enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = enums.swift; sourceTree = "<group>"; };
 		2026692A2F08FCFD00F1DB3A /* structs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = structs.swift; sourceTree = "<group>"; };
+		202669962F0BC5AE00F1DB3A /* constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = constants.swift; sourceTree = "<group>"; };
 		203519922E1A451300A3B73C /* HomeView+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeView+Debug.swift"; sourceTree = "<group>"; };
 		203519962E1A469700A3B73C /* HomeView+Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeView+Functions.swift"; sourceTree = "<group>"; };
 		2047CE442D54FC2E00F387BD /* Scripts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scripts.swift; sourceTree = "<group>"; };
@@ -363,6 +365,7 @@
 			children = (
 				202669282F08FC7000F1DB3A /* enums.swift */,
 				2026692A2F08FCFD00F1DB3A /* structs.swift */,
+				202669962F0BC5AE00F1DB3A /* constants.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -469,6 +472,7 @@
 				20F600252E642058001B39A0 /* BudgetScreen.swift in Sources */,
 				202669292F08FC7000F1DB3A /* enums.swift in Sources */,
 				20720F8B2C8C703200D01891 /* IncomeListView.swift in Sources */,
+				202669972F0BC5AE00F1DB3A /* constants.swift in Sources */,
 				20ACD5482C89A71A00E08DCA /* BundleDecodable.swift in Sources */,
 				208E0A372C8498490027DC5C /* InfoTextView.swift in Sources */,
 				20EB37FC2C9E9D49003495A1 /* Budget.swift in Sources */,

@@ -16,17 +16,21 @@ struct CreateBudgetScreen: View {
         NavigationStack {
             Form {
                 Section {
-                    DatePicker("From", selection: $viewModel.fromDate, in: ...Date(), displayedComponents: .date)
-                    
-                    DatePicker("To", selection: $viewModel.toDate, in: ...Date(), displayedComponents: .date)
-                    
-                    CurrencyField("Expected salary", value: $viewModel.expectedIncome)
+                    HStack {
+                        DatePicker("From", selection: $viewModel.fromDate, in: ...Date(), displayedComponents: .date)
+                        
+                        DatePicker("To", selection: $viewModel.toDate, in: ...Date(), displayedComponents: .date)
+                    }
                 }
                 
-                Section {
-                    InfoTextView(label: "Essential (40%):", currency: 100.00)
-                    InfoTextView(label: "Non-Essential (40%):", currency: 100.00)
-                    InfoTextView(label: "Savings (40%):", currency: 100.00)
+                Section("Expected Income") {
+                    CurrencyField("eg. \(Cons.curr)20,000.00", value: $viewModel.expectedIncome)
+                }
+                
+                Section("Expenses") {
+                    InfoTextView(label: "Essential:", currency: $viewModel.essential, placeholder: "eg. \(Cons.curr)10,000.00")
+                    InfoTextView(label: "Non-Essential:", currency: $viewModel.nonEssential, placeholder: "eg. \(Cons.curr)6,000.00")
+                    InfoTextView(label: "Savings:", currency: $viewModel.saving, placeholder: "eg. \(Cons.curr)4,000.00")
                 }
                 
                 Section {

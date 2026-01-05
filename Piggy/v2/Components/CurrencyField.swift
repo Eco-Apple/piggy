@@ -30,7 +30,6 @@ struct CurrencyField: View {
                 }
             }
             .onAppear {
-                
                 if var value {
                     let stringAmount = "\(value)"
                     

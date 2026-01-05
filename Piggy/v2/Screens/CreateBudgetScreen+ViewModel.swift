@@ -13,6 +13,9 @@ extension CreateBudgetScreen {
         var fromDate: Date = .today
         var toDate: Date = .today
         var expectedIncome: Decimal?
+        var essential: Decimal?
+        var nonEssential: Decimal?
+        var saving: Decimal?
         
         func create() {
             
